@@ -20,16 +20,10 @@ protected trait FSClient {
   def datePieces(date: DateTime): List[String] =
     List(date.toString("yyyy"), date.toString("MM"), date.toString("dd"))
 
-  def getToJson[T](t: Class[T], pathParts: String*): Promise[Either[Throwable, T]] =
-    for {
-      a <- getWithCreds(pathParts:_*).right
-      p <- promiseFromJson(t, a).right
-    } yield p
+  def getAndDeserialize[T](t: Class[T], pathParts: String*): Promise[Either[Throwable, T]] =
+    for ( a <- getWithCreds(pathParts:_*).right ) yield mapFromJson(t, a)
 
   protected def getWithCreds(pathParts: String*): Promise[Either[Throwable, String]]
-  private def promiseFromJson[T](t: Class[T], a: String): Promise[Either[Throwable, T]] =
-    Promise(Right(mapFromJson(t, a)))
-
 }
 
 trait FSClientReboot extends FSClient {
