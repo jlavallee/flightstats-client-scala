@@ -53,8 +53,8 @@ class FSAirportsTest extends FSTest {
   @Test def byIcaoCodeOnDate =
     checkAirport(airports.byIcaoCodeOnDate("KPDX", date), "PDX")
 
-  @Test def withinRaidius =
-    checkAirportList(airports.withinRaidius(-122, 45, 50))
+  @Test def withinRadius =
+    checkAirportList(airports.withinRadius(-122, 45, 50))
 
 
   def checkAirportList(airportList: Promise[Either[Throwable, Seq[FSAirport]]]) = {

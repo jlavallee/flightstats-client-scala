@@ -95,7 +95,7 @@ abstract class FSAirports(val appId: String, val appKey: String) extends FSClien
   /** Airports within radius of location
    * /v1/json/withinRadius/{longitude}/{latitude}/{radiusMiles} GET
    */
-  def withinRaidius(long: Integer, lat: Integer, radius: Integer): Promise[Either[Throwable, Seq[FSAirport]]] =
+  def withinRadius(long: Integer, lat: Integer, radius: Integer): Promise[Either[Throwable, Seq[FSAirport]]] =
     airportsFor("withinRadius", long.toString(), lat.toString(), radius.toString())
 
   private def airportsFor(pathPieces: String*) =
