@@ -16,28 +16,32 @@ protected trait FSClient {
 
   val appId: String
   val appKey: String
+  def url = requestBase // a shortcut-name for brevity
   def requestBase: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
-  def datePieces(date: DateTime): List[String] =
-    List(date.toString("yyyy"), date.toString("MM"), date.toString("dd"))
 
-  def getAndDeserialize[T](t: Class[T], pathParts: String*): Promise[Either[Throwable, T]] =
-    for ( a <- getWithCreds(pathParts:_*).right ) yield mapFromJson(t, a)
+  protected def getWithCreds(url: RequestBuilder): Promise[Either[Throwable, String]]
 
-  protected def getWithCreds(pathParts: String*): Promise[Either[Throwable, String]]
+  def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[Either[Throwable, T]] =
+    for ( a <- getWithCreds(url).right ) yield mapFromJson(t, a)
+
+  protected def addParams(url: RequestBuilder) =
+      url <<? Map("appId" -> appId,
+                   "appKey" -> appKey,
+                   // TODO: add mechanism for users to add more extendedOptions
+                   "extendedOptions" ->"useHttpErrors"
+                  )
 }
 
+class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
+  def / (date: DateTime): RequestBuilder =
+    subject / date.toString("yyyy") / date.toString("MM") / date.toString("dd")
+}
+
+
 trait FSClientReboot extends FSClient {
-  def getWithCreds(pathParts: String*): Promise[Either[Throwable, String]] = {
-    getWithCreds(pathParts.foldLeft(requestBase)(_ / _))
-  }
 
   def getWithCreds(url: RequestBuilder) =
-      Http(url <<? Map("appId" -> appId,
-                       "appKey" -> appKey,
-                       // TODO: add mechanism for users to add more extendedOptions
-                       "extendedOptions" ->"useHttpErrors"
-                      )
-          OK as.String).either
+      Http( addParams(url) OK as.String).either
 }
 
 private object JacksonMapper {

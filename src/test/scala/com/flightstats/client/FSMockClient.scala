@@ -6,10 +6,12 @@ import io.Source
 import java.io.File
 
 trait FSMockClient extends FSClient with JacksonMapper {
-  def startDir = Seq("src", "test", "resources")
+  def startDir = "src/test/resources/"
 
-  def getWithCreds(pathParts: String*): Promise[Either[Throwable, String]] = {
-    val path = (startDir ++ apiLocation ++ pathParts.toSeq).foldLeft(".")(_ + File.separator + _)
+  def getWithCreds(url: RequestBuilder): Promise[Either[Throwable, String]] = {
+    // could use addParams(url) if we wanted out .json file paths to include our query params
+    val queryPathWithHost = url.build().getRawUrl().split("://")(1)
+    val path = startDir + queryPathWithHost.substring(queryPathWithHost.indexOf("/"))
     val json = Source.fromFile(path + ".json", "utf-8").mkString
     Promise(Right(json))
   }

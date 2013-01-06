@@ -1,6 +1,7 @@
 package com.flightstats.client
 
 import dispatch._
+import com.flightstats.client._
 import com.ning.http.client.RequestBuilder
 import com.flightstats.api.v1.FSAirport
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -24,83 +25,84 @@ abstract class FSAirports(val appId: String, val appKey: String) extends FSClien
    * /v1/json/active GET
    */
   def active: Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("active")
+    airportsFor(url / "active")
 
   /** Active airports for date
    * /v1/json/active/{year}/{month}/{day} GET
    */
   def activeOnDate(date: DateTime): Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor(("active" :: datePieces(date)):_*)
+    airportsFor(url / "active" / date)
 
   /** All airports (active and inactive)
    * /v1/json/all GET
    */
   def all: Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("all")
+    airportsFor(url / "all")
 
   /** Current airport by code (code type chosen via precedence order)
    * /v1/json/{code}/today GET
    */
   def byCode(code: String): Promise[Either[Throwable, FSAirport]] =
-    airportFor(code, "today")
+    airportFor(url / code / "today")
 
   /** Airport on date by code (code type chosen via precedence order)
    * /v1/json/{code}/{year}/{month}/{day} GET
    */
   def onDateByCode(date: DateTime, code: String): Promise[Either[Throwable, FSAirport]] =
-    airportFor((code :: datePieces(date)):_*)
+    airportFor(url / code / date )
 
   /** Airports by city code
    * /v1/json/cityCode/{cityCode} GET
    */
   def byCityCode(code: String): Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("cityCode", code)
+    airportsFor(url / "cityCode" / code)
 
   /** Airports by country code
    * /v1/json/countryCode/{countryCode} GET
    */
   def byCountryCode(code: String): Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("countryCode", code)
+    airportsFor(url / "countryCode" / code)
 
   /** Airport by FlightStats code
    * /v1/json/fs/{code} GET
    */
   def byFlightStatsCode(code: String): Promise[Either[Throwable, FSAirport]] =
-    airportFor("fs", code)
+    airportFor(url / "fs" / code)
 
   /** Airports by IATA code
    * /v1/json/iata/{iataCode} GET
    */
   def byIataCode(code: String): Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("iata", code)
+    airportsFor(url / "iata" / code)
 
   /** Airport by IATA code on date
    * /v1/json/iata/{iataCode}/{year}/{month}/{day} GET
    */
   def byIataCodeOnDate(code: String, date: DateTime): Promise[Either[Throwable, FSAirport]] =
-    airportFor(("iata" :: (code :: datePieces(date))):_*)
+    airportFor(url / "iata" / code / date)
+
 
   /** Airports by ICAO code
    * /v1/json/icao/{icaoCode} GET
    */
   def byIcaoCode(code: String): Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("icao", code)
+    airportsFor(url / "icao" / code)
 
   /** Airport by ICAO code on date
    * /v1/json/icao/{icaoCode}/{year}/{month}/{day} GET
    */
   def byIcaoCodeOnDate(code: String, date: DateTime): Promise[Either[Throwable, FSAirport]] =
-    airportFor(("icao" :: (code :: datePieces(date))):_*)
+    airportFor(url / "icao" / code / date)
 
   /** Airports within radius of location
    * /v1/json/withinRadius/{longitude}/{latitude}/{radiusMiles} GET
    */
   def withinRadius(long: Integer, lat: Integer, radius: Integer): Promise[Either[Throwable, Seq[FSAirport]]] =
-    airportsFor("withinRadius", long.toString(), lat.toString(), radius.toString())
+    airportsFor(url / "withinRadius" / long.toString() / lat.toString() / radius.toString())
 
-  private def airportsFor(pathPieces: String*) =
-    for ( a <- getAndDeserialize(classOf[FSAirportsHolder], pathPieces:_*).right ) yield a.airports
+  private def airportsFor(url: RequestBuilder) =
+    for ( a <- getAndDeserialize(classOf[FSAirportsHolder], url).right ) yield a.airports
 
-  private def airportFor(pathPieces: String*) =
-    for ( a <- getAndDeserialize(classOf[FSAirportHolder], pathPieces:_*).right ) yield a.airport
+  private def airportFor(url: RequestBuilder) =
+    for ( a <- getAndDeserialize(classOf[FSAirportHolder], url).right ) yield a.airport
 }
