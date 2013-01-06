@@ -57,7 +57,8 @@ class FSAirportsTest extends FSTest {
     checkAirportList(airports.withinRadius(-122, 45, 50))
 
 
-  def checkAirportList(airportList: Promise[Either[Throwable, Seq[FSAirport]]]) = {
+  def checkAirportList(airportList: Promise[Either[Throwable, Seq[FSAirport]]]) {
+    debug(airportList)
     airportList() match {
       case Left(exception) => fail(exception)
       case Right(list) => {
@@ -67,7 +68,8 @@ class FSAirportsTest extends FSTest {
     }
   }
 
-  def checkAirport(airport: Promise[Either[Throwable, FSAirport]], code: String) = {
+  def checkAirport(airport: Promise[Either[Throwable, FSAirport]], code: String) {
+    debug(airport)
     airport() match {
       case Left(exception) => fail(exception)
       case Right(airport) => {
@@ -77,4 +79,8 @@ class FSAirportsTest extends FSTest {
     }
   }
 
+  def debug(promise: Promise[Either[Throwable, AnyRef]]) {
+    if(appId.isDefined && appKey.isDefined)
+      println(promise) // it's cool to see that we're really async when we test w/creds
+  }
 }
