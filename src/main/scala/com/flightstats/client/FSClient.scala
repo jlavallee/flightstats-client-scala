@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.databind.DeserializationFeature
+import org.joda.time.DateTime
 
 protected trait FSClient {
   val HOST = "api.flightstats.com"
@@ -16,7 +17,13 @@ protected trait FSClient {
   val appId: String
   val appKey: String
   def requestBase: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
-  def getToJson[T](t: Class[T], pathParts: String*) =
+  def datePieces(date: DateTime): List[String] =
+    List(date.toString("yyyy"), date.toString("MM"), date.toString("dd"))
+    /*
+  def getToJson[T](t: Class[T], date: DateTime, pathParts: String*): Promise[Either[Throwable, T]] =
+    getToJson(t, pathParts:_*, date.toString("yyyy"), date.toString("MM"), date.toString("dd"))
+    */
+  def getToJson[T](t: Class[T], pathParts: String*): Promise[Either[Throwable, T]] =
     for {
       a <- getWithCreds(pathParts:_*).right
       p <- promiseFromJson(t, a).right

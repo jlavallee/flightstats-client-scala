@@ -10,6 +10,11 @@ case class FSAirportsHolder(
 )
 
 @JsonCreator
+case class FSAirportHolder(
+    @JsonProperty("airport") airport: FSAirport
+)
+
+@JsonCreator
 case class FSAirport(
    @JsonProperty("fs") fs: String, // "CLO",
    @JsonProperty("iata") iata: String, // "CLO",
