@@ -19,10 +19,7 @@ protected trait FSClient {
   def requestBase: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
   def datePieces(date: DateTime): List[String] =
     List(date.toString("yyyy"), date.toString("MM"), date.toString("dd"))
-    /*
-  def getToJson[T](t: Class[T], date: DateTime, pathParts: String*): Promise[Either[Throwable, T]] =
-    getToJson(t, pathParts:_*, date.toString("yyyy"), date.toString("MM"), date.toString("dd"))
-    */
+
   def getToJson[T](t: Class[T], pathParts: String*): Promise[Either[Throwable, T]] =
     for {
       a <- getWithCreds(pathParts:_*).right
@@ -41,7 +38,11 @@ trait FSClientReboot extends FSClient {
   }
 
   def getWithCreds(url: RequestBuilder) =
-      Http(url <<? Map("appId" -> appId, "appKey" -> appKey)
+      Http(url <<? Map("appId" -> appId,
+                       "appKey" -> appKey,
+                       // TODO: add mechanism for users to add more extendedOptions
+                       "extendedOptions" ->"useHttpErrors"
+                      )
           OK as.String).either
 }
 

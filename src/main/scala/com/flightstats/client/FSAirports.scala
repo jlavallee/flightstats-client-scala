@@ -99,8 +99,8 @@ abstract class FSAirports(val appId: String, val appKey: String) extends FSClien
     airportsFor("withinRadius", long.toString(), lat.toString(), radius.toString())
 
   private def airportsFor(pathPieces: String*) =
-    for { a <- getToJson(classOf[FSAirportsHolder], pathPieces:_*).right} yield a.airports
+    for ( a <- getToJson(classOf[FSAirportsHolder], pathPieces:_*).right ) yield a.airports
 
   private def airportFor(pathPieces: String*) =
-    for { a <- getToJson(classOf[FSAirportHolder], pathPieces:_*).right} yield a.airport
+    for ( a <- getToJson(classOf[FSAirportHolder], pathPieces:_*).right ) yield a.airport
 }
