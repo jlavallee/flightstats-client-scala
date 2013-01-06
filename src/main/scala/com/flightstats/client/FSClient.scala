@@ -10,13 +10,16 @@ import org.joda.time.DateTime
 
 protected trait FSClient {
   val HOST = "api.flightstats.com"
+  val appId: String
+  val appKey: String
+
   def flightStatsHost = host(HOST).secure
   def apiLocation: Seq[String]
   def mapFromJson[T](t: Class[T], json: String): T
 
-  val appId: String
-  val appKey: String
   def url = requestBase // a shortcut-name for brevity
+  def extendedOptions: Seq[String] = Seq.empty
+
   def requestBase: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
 
   protected def getWithCreds(url: RequestBuilder): Promise[Either[Throwable, String]]
@@ -28,7 +31,7 @@ protected trait FSClient {
       url <<? Map("appId" -> appId,
                    "appKey" -> appKey,
                    // TODO: add mechanism for users to add more extendedOptions
-                   "extendedOptions" ->"useHttpErrors"
+                   "extendedOptions" -> extendedOptions.foldLeft("useHttpErrors")( _ + "," + _)
                   )
 }
 
@@ -39,7 +42,6 @@ class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends
 
 
 trait FSClientReboot extends FSClient {
-
   def getWithCreds(url: RequestBuilder) =
       Http( addParams(url) OK as.String).either
 }

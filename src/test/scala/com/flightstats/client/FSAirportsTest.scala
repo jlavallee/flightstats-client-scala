@@ -78,9 +78,4 @@ class FSAirportsTest extends FSTest {
       }
     }
   }
-
-  def debug(promise: Promise[Either[Throwable, AnyRef]]) {
-    if(appId.isDefined && appKey.isDefined)
-      println(promise) // it's cool to see that we're really async when we test w/creds
-  }
 }

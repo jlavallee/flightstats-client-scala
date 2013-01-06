@@ -35,5 +35,4 @@ case class FSAirport(
    @JsonProperty("active") active: Boolean, // true,
    @JsonProperty("delayIndexUrl") delayIndexUrl: String, // "https://api.flightstats.com/flex/delayindex/rest/v1/json/airports/CLO?codeType=fs",
    @JsonProperty("weatherUrl") weatherUrl: String // "https://api.flightstats.com/flex/weather/rest/v1/json/all/CLO?codeType=fs"
-
 )
