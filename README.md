@@ -2,9 +2,9 @@
 
 ## Example usage:
 
-  val airports = FSAirports(appId, appKey)
+    val airports = FSAirports(appId, appKey)
 
-  val activeAirports = airports.active
+    val activeAirports = airports.active
 
 ## Under the hood
 
