@@ -17,46 +17,57 @@ class FSAirportsTest extends FSTest {
           new FSAirports("mockId", "mockKey")
             with FSMockClient
 
-  @Test def active {
+  @Test def active =
     checkAirportList(airports.active)
-  }
 
-  @Test def activeWithDate {
-    checkAirportList(airports.active(date))
-  }
+  @Test def activeOnDate =
+    checkAirportList(airports.activeOnDate(date))
 
-  @Test def all {
+  @Test def all =
     checkAirportList(airports.all)
-  }
-  
-  @Test def byCode {
-    checkAirport(airports.byCode("PDX"), "PDX")
-  }
 
-  @Test def onDateByCode {
+  @Test def byCode =
+    checkAirport(airports.byCode("PDX"), "PDX")
+
+  @Test def onDateByCode =
     checkAirport(airports.onDateByCode(date, "PDX"), "PDX")
-  }
+
+  @Test def byCityCode =
+    checkAirportList(airports.byCityCode("ABC"))
+
+  @Test def byCountryCode =
+    checkAirportList(airports.byCountryCode("FR"))
+
+  @Test def byFlightStatsCode =
+    checkAirport(airports.byFlightStatsCode("PDX"), "PDX")
+
+  @Test def byIataCode =
+    checkAirportList(airports.byIataCode("PDX"))
+
+  @Test def byIataCodeOnDate =
+    checkAirport(airports.byIataCodeOnDate("PDX", date), "PDX")
+
+  @Test def byIcaoCode =
+    checkAirportList(airports.byIcaoCode("KPDX"))
+
+  @Test def byIcaoCodeOnDate =
+    checkAirport(airports.byIcaoCodeOnDate("KPDX", date), "PDX")
+
+  @Test def withinRaidius =
+    checkAirportList(airports.withinRaidius(-122, 45, 50))
+
 
   def checkAirportList(airportList: Promise[Either[Throwable, Seq[FSAirport]]]) = {
-    println(airportList)
-    for(a <- airportList)
-      println(a)  // should be Promise(-incomplete-) when hitting FlightStats
-
     airportList() match {
       case Left(exception) => fail(exception)
       case Right(list) => {
           assert(list != null)
           assert(list.length > 0)
-          println(list(0))
       }
     }
   }
 
   def checkAirport(airport: Promise[Either[Throwable, FSAirport]], code: String) = {
-    println(airport)
-    for(a <- airport)
-      println(a)  // should be Promise(-incomplete-) when hitting FlightStats
-
     airport() match {
       case Left(exception) => fail(exception)
       case Right(airport) => {
