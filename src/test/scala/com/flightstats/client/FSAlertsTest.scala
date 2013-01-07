@@ -11,13 +11,7 @@ import com.flightstats.api.v1.alerts.FSAlert
 class FSAlertsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-07T21:12:23.048-08:00")
 
-  val alerts: FSAlerts =
-    (appId, appKey) match {
-      case (Some(id), Some(key)) =>
-        new FSAlerts(id, key) with FSTestRun
-      case (_, _) =>
-        new FSAlerts("mockId", "mockKey") with FSMockClient
-    }
+  val alerts = FSTestClients.alerts
 
   @Test def createRuleByArrival =
     checkAlertRequest(

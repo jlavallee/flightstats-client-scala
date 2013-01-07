@@ -4,6 +4,28 @@ import org.scalatest.Assertions
 import dispatch.Promise
 import com.ning.http.client.RequestBuilder
 
+
+object FSTestClients extends FSTest {
+  def airports: FSAirports = (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSAirports(id, key) with FSTestRun
+      case (_, _) =>
+        new FSAirports("mockId", "mockKey") with FSMockClient
+    }
+  
+  def alerts: FSAlerts =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSAlerts(id, key) with FSTestRun
+      case (_, _) =>
+        new FSAlerts("mockId", "mockKey") with FSMockClient
+    }
+}
+
+class FSTestClients {
+  
+}
+
 trait FSTest extends Assertions {
   val appId = sys.props.get("flightstats.appid")
   val appKey = sys.props.get("flightstats.appkey")
