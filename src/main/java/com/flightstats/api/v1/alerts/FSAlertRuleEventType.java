@@ -17,7 +17,8 @@ public enum FSAlertRuleEventType {
     ARRIVAL_GATE("arrGate"),
     BAGGAGE("bag"),
     TIME_ADJUSTMENT(null),
-    UNKNOWN(null);
+    UNKNOWN(null),
+    ALL_CHANGES(null);
 
     private Option<String> triggerCode;
 

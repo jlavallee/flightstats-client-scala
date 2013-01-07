@@ -10,12 +10,12 @@ import dispatch.Promise
 class FSAirportsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
 
-  val airports: FSAirports =
-        if(appId.isDefined && appKey.isDefined)
-          FSAirports(appId.get, appKey.get)
-        else
-          new FSAirports("mockId", "mockKey")
-            with FSMockClient
+  val airports: FSAirports = (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSAirports(id, key) with FSTestRun
+      case (_, _) =>
+        new FSAirports("mockId", "mockKey") with FSMockClient
+    }
 
   @Test def active =
     checkAirportList(airports.active)

@@ -22,18 +22,27 @@ trait FSTestRun extends FSClient
 
   override def extendedOptions = Seq("testRun")
 
-  override def getWithCreds(url: RequestBuilder) : Promise[Either[Throwable, String]] =
+  override def getWithCreds(url: RequestBuilder) : Promise[Either[Throwable, String]] = {
+    println("URL: " + url.build().getRawUrl())
     for (x <- super.getWithCreds(url).right) yield {
       capture match {
         case Some(v) if v.toBoolean => capture(url, x)
         case _ => x
       }
     }
+  }
 
   // write the string to a file & return it
+  // this is pretty awful
   def capture(url: RequestBuilder, contents: String): String = {
-    import sys.process._
-    contents #> new java.io.File(filePathForUrl(url)) !
+    import java.io.{File, PrintWriter}
+    val filePath = filePathForUrl(url)
+    val dirPath = filePath.substring(0, filePath.lastIndexOf("/"))
+    (new File(dirPath)).mkdirs()
+    
+    val out = new PrintWriter( new File(filePath) )
+    try { out.print( contents ) }
+    finally { out.close }
 
     contents
   }
@@ -43,6 +52,11 @@ trait FSStaticTestJson {
   val startDir = "src/test/resources/"
   def filePathForUrl(url: RequestBuilder): String = {
     val queryPathWithHost =  url.build().getRawUrl().split("://")(1)
-    return startDir + queryPathWithHost.substring(queryPathWithHost.indexOf("/"))
+    val queryPathWithoutHost = queryPathWithHost.substring(queryPathWithHost.indexOf("/"))
+    val queryPathWithoutQuery = queryPathWithoutHost.indexOf("?") match {
+      case -1 => queryPathWithoutHost
+      case  x => queryPathWithoutHost.substring(0, x)
+    }
+    return startDir + queryPathWithoutQuery + ".json"
   }
 }

@@ -27,12 +27,18 @@ protected trait FSClient {
   def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[Either[Throwable, T]] =
     for ( a <- getWithCreds(url).right ) yield mapFromJson(t, a)
 
-  protected def addParams(url: RequestBuilder) =
-      url <<? Map("appId" -> appId,
-                   "appKey" -> appKey,
-                   // TODO: add mechanism for users to add more extendedOptions
-                   "extendedOptions" -> extendedOptions.foldLeft("useHttpErrors")( _ + "," + _)
-                  )
+  protected def addParams(url: RequestBuilder): RequestBuilder = {
+    for((name, value) <- defaultParams)
+      url.addQueryParameter(name, value)
+    url
+  }
+
+  private val defaultParams =
+    Map("appId" -> appId,
+        "appKey" -> appKey,
+        // TODO: add mechanism for users to add more extendedOptions
+        "extendedOptions" -> extendedOptions.foldLeft("useHttpErrors")( _ + "," + _)
+       )
 }
 
 class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
