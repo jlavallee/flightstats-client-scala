@@ -12,14 +12,14 @@ class FSAlertsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-06T21:12:23.048-08:00")
 
   val alerts: FSAlerts =
-        if(appId.isDefined && appKey.isDefined)
-          new FSAlerts(appId.get, appKey.get)
-            with FSClientReboot
-            with JacksonMapper
-            with FSTestRun
-        else
-          new FSAlerts("mockId", "mockKey")
-            with FSMockClient
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+            new FSAlerts(id, key)
+              with FSTestRun
+      case (_, _) =>
+            new FSAlerts("mockId", "mockKey")
+              with FSMockClient
+  }
 
   @Test def createRuleByArrival =
     checkAlertRequest(

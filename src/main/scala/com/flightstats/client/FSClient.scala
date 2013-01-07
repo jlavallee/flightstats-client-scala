@@ -42,7 +42,7 @@ class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends
 
 
 trait FSClientReboot extends FSClient {
-  def getWithCreds(url: RequestBuilder) =
+  def getWithCreds(url: RequestBuilder) : Promise[Either[Throwable, String]] =
       Http( addParams(url) OK as.String).either
 }
 
