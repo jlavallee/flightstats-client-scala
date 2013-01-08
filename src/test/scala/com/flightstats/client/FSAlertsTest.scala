@@ -61,9 +61,10 @@ class FSAlertsTest extends FSTest {
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )
 
-  def checkAlertRequest(request: Promise[Either[Throwable, FSAlert]]) {
-    debug(request)
-    request() match {
+  def checkAlertRequest(alertPromise: Promise[FSAlert]) {
+    val alert = alertPromise.either
+    debug(alert)
+    alert() match {
       case Left(exception) => fail(exception)
       case Right(request) => {
           assert(request != null)

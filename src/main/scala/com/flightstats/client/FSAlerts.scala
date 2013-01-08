@@ -59,6 +59,6 @@ abstract class FSAlerts(val appId: String, val appKey: String) extends FSClient 
 
 
   private def alert(url: RequestBuilder) =
-    for ( r <- getAndDeserialize(classOf[FSAlert], url).right ) yield r
+    for ( r <- getAndDeserialize(classOf[FSAlert], url) ) yield r
 
 }

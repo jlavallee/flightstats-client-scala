@@ -21,60 +21,22 @@ public class FSJavaExampleTest {
 
     @Test
     public void usingApply(){
-        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("PDX");
+        Promise<FSAirport> promise = airports.byCode("PDX");
 
         // this call blocks - not what we want
-        Either<Throwable, FSAirport> either = promise.apply();
+        FSAirport airport = promise.apply();
 
-        assertNotNull(either);
+        assertNotNull(airport);
 
-        System.out.println("Got: " + ( either.isRight()
-                           ? either.right().get().iata()
-                           : "Error: " + either.left().get().getMessage()
-                           )
-                );
-
-        assertTrue(either.isRight());
+        System.out.println("Got: " + airport.iata());
     }
 
     @Test
     public void onComplete(){
-        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("PDX");
+        Promise<FSAirport> promise = airports.byCode("PDX");
 
         promise.onComplete(
-            new AbstractFunction1<Either<Throwable, Either<Throwable, FSAirport>>, FSAirport>(){
-                @Override
-                public FSAirport apply(Either<Throwable, Either<Throwable, FSAirport>> arg0) {
-                    if(arg0.isRight()){
-                        if(arg0.right().get().isRight()){
-                            System.out.println("succesful response: " + arg0.right().get().right().get().iata());
-                            return arg0.right().get().right().get();
-                        }else{
-                            System.out.println("Failed!" + arg0.right().get().left().get().getMessage());
-                            fail("whoops!" + arg0.right().get().left().get().getMessage());
-                            throw new RuntimeException(arg0.right().get().left().get());
-                        }
-                    }else{
-                        System.out.println("Failed!" + arg0.left().get().getMessage());
-                        fail("whoops!" + arg0.left().get().getMessage());
-                        throw new RuntimeException(arg0.left().get());
-                    }
-                }
-            });
-
-        // *now* block
-        promise.apply();
-    }
- 
-    /*
-     * this test shows what's necessary to handle success on the promise returned by airports.byCode
-     */
-    @Test
-    public void onSuccess(){
-        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("PDX");
-        
-        promise.onSuccess( 
-            new AbstractPartialFunction<Either<Throwable, FSAirport>, FSAirport>(){
+            new AbstractFunction1<Either<Throwable, FSAirport>, FSAirport>(){
                 @Override
                 public FSAirport apply(Either<Throwable, FSAirport> arg0) {
                     if(arg0.isRight()){
@@ -86,8 +48,28 @@ public class FSJavaExampleTest {
                         throw new RuntimeException(arg0.left().get());
                     }
                 }
+            });
+
+        // *now* block
+        promise.apply();
+    }
+
+    /*
+     * this test shows what's necessary to handle success on the promise returned by airports.byCode
+     */
+    @Test
+    public void onSuccess(){
+        Promise<FSAirport> promise = airports.byCode("PDX");
+
+        promise.onSuccess(
+            new AbstractPartialFunction<FSAirport, FSAirport>(){
                 @Override
-                public boolean isDefinedAt(Either<Throwable, FSAirport> arg0) {
+                public FSAirport apply(FSAirport arg0) {
+                    System.out.println("succesful response: " + arg0.iata());
+                    return arg0;
+                }
+                @Override
+                public boolean isDefinedAt(FSAirport arg0) {
                     return true;
                 }
             });
@@ -96,51 +78,28 @@ public class FSJavaExampleTest {
         promise.apply();
     }
 
-    volatile Boolean onFailureGot = true;
     /*
      * this test shows what's necessary to handle failure on the promise returned by airports.byCode
      */
     @Test
     public void onFailure(){
-        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("blarg!");
-        
-        promise.onFailure( 
+        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("blarg!").either();
+
+        promise.onFailure(
             new AbstractPartialFunction<Throwable, FSAirport>(){
                 @Override
                 public FSAirport apply(Throwable arg0) {
-                        System.out.println("hey Chet, Failed!" + arg0.getMessage());
-                        onFailureGot = false;
-                        return null;
+                    System.out.println("Failed!" + arg0.getMessage());
+                    return null;
                 }
                 @Override
                 public boolean isDefinedAt(Throwable arg0) {
                     return true;
                 }
             });
-        promise.onSuccess( 
-            new AbstractPartialFunction<Either<Throwable, FSAirport>, FSAirport>(){
-                @Override
-                public FSAirport apply(Either<Throwable, FSAirport> arg0) {
-                    if(arg0.isRight()){
-                        System.out.println("succesful response: " + arg0.right().get().iata());
-                        return arg0.right().get();
-                    }else{
-                        onFailureGot = false;  // THIS is the one that gets called.  Nasty
-                        System.out.println("Failed!" + arg0.left().get().getMessage());
-                        fail("whoops!" + arg0.left().get().getMessage());
-                        throw new RuntimeException(arg0.left().get());
-                    }
-                }
-                @Override
-                public boolean isDefinedAt(Either<Throwable, FSAirport> arg0) {
-                    return true;
-                }
-            });
 
         // *now* block
         promise.apply();
-        assertFalse(onFailureGot);
-        
     }
 
 }

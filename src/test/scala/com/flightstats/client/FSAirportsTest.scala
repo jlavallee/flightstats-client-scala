@@ -11,7 +11,7 @@ class FSAirportsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
 
   val airports = FSTestClients.airports
-  
+
   @Test def active =
     checkAirportList(airports.active)
 
@@ -52,7 +52,8 @@ class FSAirportsTest extends FSTest {
     checkAirportList(airports.withinRadius(-122, 45, 50))
 
 
-  def checkAirportList(airportList: Promise[Either[Throwable, Seq[FSAirport]]]) {
+  def checkAirportList(airportListPromise: Promise[Seq[FSAirport]]) {
+    val airportList = airportListPromise.either
     debug(airportList)
     airportList() match {
       case Left(exception) => fail(exception)
@@ -63,7 +64,8 @@ class FSAirportsTest extends FSTest {
     }
   }
 
-  def checkAirport(airport: Promise[Either[Throwable, FSAirport]], code: String) {
+  def checkAirport(airportPromise: Promise[FSAirport], code: String) {
+    val airport = airportPromise.either
     debug(airport)
     airport() match {
       case Left(exception) => fail(exception)

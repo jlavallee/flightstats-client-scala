@@ -22,10 +22,10 @@ protected trait FSClient {
 
   def requestBase: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
 
-  protected def getWithCreds(url: RequestBuilder): Promise[Either[Throwable, String]]
+  protected def getWithCreds(url: RequestBuilder): Promise[String]
 
-  def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[Either[Throwable, T]] =
-    for ( a <- getWithCreds(url).right ) yield mapFromJson(t, a)
+  def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
+    for ( a <- getWithCreds(url) ) yield mapFromJson(t, a)
 
   protected def addParams(url: RequestBuilder): RequestBuilder = {
     for((name, value) <- defaultParams)
@@ -48,8 +48,8 @@ class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends
 
 
 trait FSClientReboot extends FSClient {
-  def getWithCreds(url: RequestBuilder) : Promise[Either[Throwable, String]] =
-      Http( addParams(url) OK as.String).either
+  def getWithCreds(url: RequestBuilder) : Promise[String] =
+      Http( addParams(url) OK as.String)
 }
 
 private object JacksonMapper {

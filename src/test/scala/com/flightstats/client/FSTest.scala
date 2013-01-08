@@ -12,7 +12,7 @@ object FSTestClients extends FSTest {
       case (_, _) =>
         new FSAirports("mockId", "mockKey") with FSMockClient
     }
-  
+
   def alerts: FSAlerts =
     (appId, appKey) match {
       case (Some(id), Some(key)) =>
@@ -23,7 +23,7 @@ object FSTestClients extends FSTest {
 }
 
 class FSTestClients {
-  
+
 }
 
 trait FSTest extends Assertions {
@@ -44,9 +44,9 @@ trait FSTestRun extends FSClient
 
   override def extendedOptions = Seq("testRun")
 
-  override def getWithCreds(url: RequestBuilder) : Promise[Either[Throwable, String]] = {
+  override def getWithCreds(url: RequestBuilder) : Promise[String] = {
     println("URL: " + url.build().getRawUrl())
-    for (x <- super.getWithCreds(url).right) yield {
+    for (x <- super.getWithCreds(url)) yield {
       capture match {
         case Some(v) if v.toBoolean => capture(url, x)
         case _ => x
@@ -61,7 +61,7 @@ trait FSTestRun extends FSClient
     val filePath = filePathForUrl(url)
     val dirPath = filePath.substring(0, filePath.lastIndexOf("/"))
     (new File(dirPath)).mkdirs()
-    
+
     val out = new PrintWriter( new File(filePath) )
     try { out.print( contents ) }
     finally { out.close }
