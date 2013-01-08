@@ -3,14 +3,15 @@ package com.flightstats.api.v1.alerts
 import org.joda.time.DateTime
 import java.net.URL
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
-import com.flightstats.api.v1.{FSAirport, FSAirline, FSRequestedInterpreted, FSRequestedCodeFsCode, FSRequestedError}
+import com.flightstats.api.v1._
 
 @JsonCreator
 case class FSAlert (
   @JsonProperty("rule") rule: FSAlertRule,
   @JsonProperty("alertCapabilities") alertCapabilities: FSAlertCapabilities,
   @JsonProperty("appendix") appendix: FSAlertAppendix,
-  @JsonProperty("request") request: FSAlertRequest
+  @JsonProperty("request") request: FSAlertRequest,
+  @JsonProperty("error") error: FSError
 )
 
 @JsonCreator
@@ -57,25 +58,17 @@ case class FSAlertAppendix (
 
 @JsonCreator
 case class FSAlertRequest (
-  @JsonProperty("extendedOptions") extendedOptions: FSRequestedInterpreted,
-  @JsonProperty("codeType") codeType: FSRequestedInterpreted,
-    // ignoring nameValues
-  @JsonProperty("events") events: Seq[FSRequestedError],
-  @JsonProperty("deliverTo") deliverTo: FSRequestedInterpreted,
-  @JsonProperty("airport") airport: FSRequestedCodeFsCode,
+  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
+  @JsonProperty("codeType") codeType: FSRequested[String],
+  @JsonProperty("nameValues") nameValues: Seq[FSRequested[String]],
+  @JsonProperty("events") events: Seq[FSRequested[String]],
+  @JsonProperty("deliverTo") deliverTo: FSRequested[String],
+  @JsonProperty("airport") airport: FSRequestedCode,
   @JsonProperty("url") url: URL,
-  @JsonProperty("airlineCode") airlineCode: FSRequestedCodeFsCode,
-  @JsonProperty("flightNumber") flightNumber: FSRequestedInterpreted,
-  @JsonProperty("date") date: FSAlertRequestDate,
-  @JsonProperty("name") name: FSRequestedInterpreted,
-  @JsonProperty("description") description: FSRequestedInterpreted,
-  @JsonProperty("type") `type`: FSRequestedInterpreted
-)
-
-@JsonCreator
-case class FSAlertRequestDate(
-  @JsonProperty("interpreted") interpreted: String,
-  @JsonProperty("day") day: String,
-  @JsonProperty("month") month: String,
-  @JsonProperty("year") year: String
+  @JsonProperty("airlineCode") airlineCode: FSRequestedCode,
+  @JsonProperty("flightNumber") flightNumber: FSRequested[String],
+  @JsonProperty("date") date: FSAlertRequestedDate,
+  @JsonProperty("name") name: FSRequested[String],
+  @JsonProperty("description") description: FSRequested[String],
+  @JsonProperty("type") `type`: FSRequested[String]
 )

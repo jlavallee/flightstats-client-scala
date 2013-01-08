@@ -1,25 +1,27 @@
 package com.flightstats.api.v1.delayindex
 
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
-import com.flightstats.api.v1.{FSRequestedCodeFsCode, FSRequestedInterpreted}
+import com.flightstats.api.v1.{FSRequestedCode, FSRequested}
 import java.net.URL
 import org.joda.time.DateTime
 import com.flightstats.api.v1.FSAirport
+import com.flightstats.api.v1.FSError
 
 @JsonCreator
 case class FSDelayIndexResponse (
   @JsonProperty("request") request: FSDelayIndexRequest,
-  @JsonProperty("airportCodes") airportCodes: FSRequestedCodeFsCode,
-  @JsonProperty("codeType") codeType: FSRequestedInterpreted,
+  @JsonProperty("airportCodes") airportCodes: FSRequestedCode,
+  @JsonProperty("codeType") codeType: FSRequested[String],
   @JsonProperty("url") url: URL,
-  @JsonProperty("classification") classification: FSRequestedInterpreted,
-  @JsonProperty("score") score: FSRequestedInterpreted,
-  @JsonProperty("delayIndexes") delayIndexes: Seq[FSDelayIndex]
+  @JsonProperty("classification") classification: FSRequested[Integer],
+  @JsonProperty("score") score: FSRequested[BigDecimal],
+  @JsonProperty("delayIndexes") delayIndexes: Seq[FSDelayIndex],
+  @JsonProperty("error") error: FSError
 )
 
 @JsonCreator
 case class FSDelayIndexRequest (
-  @JsonProperty("airportCodes") airportCodes: Seq[FSRequestedCodeFsCode]
+  @JsonProperty("airportCodes") airportCodes: Seq[FSRequestedCode]
 )
 
 @JsonCreator
