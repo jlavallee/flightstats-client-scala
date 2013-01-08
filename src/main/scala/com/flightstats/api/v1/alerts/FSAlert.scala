@@ -1,9 +1,9 @@
 package com.flightstats.api.v1.alerts
 
 import org.joda.time.DateTime
-import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import java.net.URL
-import com.flightstats.api.v1.{FSAirport, FSAirline, FSRequestedInterpreted, FSRequestedCodeFsCode}
+import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
+import com.flightstats.api.v1.{FSAirport, FSAirline, FSRequestedInterpreted, FSRequestedCodeFsCode, FSRequestedError}
 
 @JsonCreator
 case class FSAlert (
@@ -58,9 +58,9 @@ case class FSAlertAppendix (
 @JsonCreator
 case class FSAlertRequest (
     @JsonProperty("extendedOptions") extendedOptions: FSRequestedInterpreted,
-    // ignoring codeType
+    @JsonProperty("codeType") codeType: FSRequestedInterpreted,
     // ignoring nameValues
-    @JsonProperty("events") events: Seq[FSRequestedInterpreted],
+    @JsonProperty("events") events: Seq[FSRequestedError],
     @JsonProperty("deliverTo") deliverTo: FSRequestedInterpreted,
     @JsonProperty("airport") airport: FSRequestedCodeFsCode,
     @JsonProperty("url") url: URL,
