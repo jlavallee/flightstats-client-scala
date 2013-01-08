@@ -1,7 +1,6 @@
 package com.flightstats.api.v1
 
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 
 @JsonCreator
 case class FSAirline(

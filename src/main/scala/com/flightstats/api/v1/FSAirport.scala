@@ -1,8 +1,7 @@
 package com.flightstats.api.v1
 
 import org.joda.time.DateTime
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 
 @JsonCreator
 case class FSAirportsHolder(

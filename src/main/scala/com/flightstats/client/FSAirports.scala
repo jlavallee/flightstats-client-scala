@@ -1,14 +1,10 @@
 package com.flightstats.client
 
 import dispatch._
-import com.flightstats.client._
-import com.ning.http.client.RequestBuilder
-import com.flightstats.api.v1.FSAirport
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.flightstats.api.v1.FSAirportsHolder
 import org.joda.time.DateTime
-import com.flightstats.api.v1.FSAirportHolder
+import com.ning.http.client.RequestBuilder
+import com.flightstats.client._
+import com.flightstats.api.v1.{FSAirport, FSAirportHolder, FSAirportsHolder}
 
 object FSAirports {
   def apply(appId: String, appKey: String): FSAirports = {
