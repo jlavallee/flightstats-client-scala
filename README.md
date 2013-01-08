@@ -2,9 +2,20 @@
 
 ## Example usage:
 
-    val airports = FSAirports(appId, appKey)
+:::scala
+// create an instance of a client for the Airports API
+val airports = FSAirports(appId, appKey)
 
-    val activeAirports = airports.active
+val activeAirports = airports.active
+
+
+:::scala
+// create an instance of a client for the Delay Indexes API
+val delayIndexes = FSDelayIndexes(appId, appKey)
+
+val delayIndex = delayIndexes.byRegion("Caribbean",
+                     Map("classification" -> "3", "score" -> "3")
+                 )
 
 ## Under the hood
 
