@@ -1,8 +1,7 @@
 package com.flightstats.client.example;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import scala.runtime.AbstractFunction1;
@@ -15,6 +14,10 @@ import com.flightstats.client.FSTestClients;
 
 import dispatch.Promise;
 
+/* This "test" doesn't really test anything, it just shows examples of
+ * how to handle the Promises returned by Dispatch in Java
+ *
+ */
 public class FSJavaExampleTest {
 
     FSAirports airports = FSTestClients.airports();
@@ -23,12 +26,10 @@ public class FSJavaExampleTest {
     public void usingApply(){
         Promise<FSAirport> promise = airports.byCode("PDX");
 
-        // this call blocks - not what we want
+        // this call blocks
         FSAirport airport = promise.apply();
 
         assertNotNull(airport);
-
-        System.out.println("Got: " + airport.iata());
     }
 
     @Test
@@ -40,18 +41,12 @@ public class FSJavaExampleTest {
                 @Override
                 public FSAirport apply(Either<Throwable, FSAirport> arg0) {
                     if(arg0.isRight()){
-                        System.out.println("succesful response: " + arg0.right().get().iata());
                         return arg0.right().get();
                     }else{
-                        System.out.println("Failed!" + arg0.left().get().getMessage());
-                        fail("whoops!" + arg0.left().get().getMessage());
                         throw new RuntimeException(arg0.left().get());
                     }
                 }
             });
-
-        // *now* block
-        promise.apply();
     }
 
     /*
@@ -65,7 +60,6 @@ public class FSJavaExampleTest {
             new AbstractPartialFunction<FSAirport, FSAirport>(){
                 @Override
                 public FSAirport apply(FSAirport arg0) {
-                    System.out.println("succesful response: " + arg0.iata());
                     return arg0;
                 }
                 @Override
@@ -73,9 +67,6 @@ public class FSJavaExampleTest {
                     return true;
                 }
             });
-
-        // *now* block
-        promise.apply();
     }
 
     /*
@@ -89,7 +80,6 @@ public class FSJavaExampleTest {
             new AbstractPartialFunction<Throwable, FSAirport>(){
                 @Override
                 public FSAirport apply(Throwable arg0) {
-                    System.out.println("Failed!" + arg0.getMessage());
                     return null;
                 }
                 @Override
@@ -97,9 +87,6 @@ public class FSJavaExampleTest {
                     return true;
                 }
             });
-
-        // *now* block
-        promise.apply();
     }
 
 }
