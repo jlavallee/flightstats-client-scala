@@ -1,4 +1,4 @@
-package com.flightstats.client.api.v1
+package com.flightstats.api.v1
 
 import java.util.UUID
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
