@@ -9,7 +9,6 @@
     val activeAirports = airports.active
 
 
-    :::scala
     // create an instance of a client for the Delay Indexes API
     val delayIndexes = FSDelayIndexes(appId, appKey)
 
