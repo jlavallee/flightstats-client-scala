@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 
 @JsonCreator
 case class FSAirportsHolder(
-    @JsonProperty("airports") airports: Seq[FSAirport]
+  @JsonProperty("airports") airports: Seq[FSAirport]
 )
 
 @JsonCreator
 case class FSAirportHolder(
-    @JsonProperty("airport") airport: FSAirport
+  @JsonProperty("airport") airport: FSAirport
 )
 
 @JsonCreator
