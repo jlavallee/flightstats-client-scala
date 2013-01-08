@@ -70,7 +70,7 @@ trait FSTestRun extends FSClient
     val dirPath = filePath.substring(0, filePath.lastIndexOf("/"))
     (new File(dirPath)).mkdirs()
 
-    val out = new PrintWriter( new File(filePath) )
+    val out = new PrintWriter( new File(filePath), "UTF-8" )
     try { out.print( contents ) }
     finally { out.close }
 
