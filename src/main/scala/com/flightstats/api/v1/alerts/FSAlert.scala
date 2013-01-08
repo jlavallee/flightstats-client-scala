@@ -1,11 +1,9 @@
 package com.flightstats.api.v1.alerts
 
 import org.joda.time.DateTime
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import java.net.URL
-import com.flightstats.api.v1.FSAirport
-import com.flightstats.api.v1.FSAirline
+import com.flightstats.api.v1.{FSAirport, FSAirline, FSRequestedInterpreted, FSRequestedCodeFsCode}
 
 @JsonCreator
 case class FSAlert (
@@ -58,32 +56,20 @@ case class FSAlertAppendix (
 )
 
 @JsonCreator
-case class FSAlertRequestedInterpreted (
-    @JsonProperty("requested") requested: Option[String],
-    @JsonProperty("interpreted") interpreted: Option[String]
-)
-
-@JsonCreator
-case class FSAlertRequestedCodeFsCode (
-    @JsonProperty("reqestedCode") reqestedCode: String,
-    @JsonProperty("fsCode") fsCode: String
-)
-
-@JsonCreator
 case class FSAlertRequest (
-    @JsonProperty("extendedOptions") extendedOptions: FSAlertRequestedInterpreted,
+    @JsonProperty("extendedOptions") extendedOptions: FSRequestedInterpreted,
     // ignoring codeType
     // ignoring nameValues
-    @JsonProperty("events") events: Seq[FSAlertRequestedInterpreted],
-    @JsonProperty("deliverTo") deliverTo: FSAlertRequestedInterpreted,
-    @JsonProperty("airport") airport: FSAlertRequestedCodeFsCode,
+    @JsonProperty("events") events: Seq[FSRequestedInterpreted],
+    @JsonProperty("deliverTo") deliverTo: FSRequestedInterpreted,
+    @JsonProperty("airport") airport: FSRequestedCodeFsCode,
     @JsonProperty("url") url: URL,
-    @JsonProperty("airlineCode") airlineCode: FSAlertRequestedCodeFsCode,
-    @JsonProperty("flightNumber") flightNumber: FSAlertRequestedInterpreted,
+    @JsonProperty("airlineCode") airlineCode: FSRequestedCodeFsCode,
+    @JsonProperty("flightNumber") flightNumber: FSRequestedInterpreted,
     @JsonProperty("date") date: FSAlertRequestDate,
-    @JsonProperty("name") name: FSAlertRequestedInterpreted,
-    @JsonProperty("description") description: FSAlertRequestedInterpreted,
-    @JsonProperty("type") `type`: FSAlertRequestedInterpreted
+    @JsonProperty("name") name: FSRequestedInterpreted,
+    @JsonProperty("description") description: FSRequestedInterpreted,
+    @JsonProperty("type") `type`: FSRequestedInterpreted
 )
 
 @JsonCreator

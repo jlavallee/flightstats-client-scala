@@ -20,6 +20,14 @@ object FSTestClients extends FSTest {
       case (_, _) =>
         new FSAlerts("mockId", "mockKey") with FSMockClient
     }
+
+  def delayIndexes: FSDelayIndexes =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSDelayIndexes(id, key) with FSTestRun
+      case (_, _) =>
+        new FSDelayIndexes("mockId", "mockKey") with FSMockClient
+    }
 }
 
 class FSTestClients {
