@@ -25,20 +25,21 @@ protected trait FSClient {
   protected def getWithCreds(url: RequestBuilder): Promise[String]
 
   def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
-    for ( a <- getWithCreds(url) ) yield mapFromJson(t, a)
+    for ( a <- getWithCreds(addParams(url)) ) yield mapFromJson(t, a)
 
   protected def addParams(url: RequestBuilder): RequestBuilder = {
-    for((name, value) <- defaultParams)
-      url.addQueryParameter(name, value)
+    // TODO: add mechanism for users to add more extendedOptions
+    url.addQueryParameter("extendedOptions",
+        extendedOptions.foldLeft("useHttpErrors")( _ + "," + _))
+
+    for((name, value) <- authParams)
+      url.addHeader(name, value)
     url
   }
 
-  private val defaultParams =
+  private val authParams =
     Map("appId" -> appId,
-        "appKey" -> appKey,
-        // TODO: add mechanism for users to add more extendedOptions
-        "extendedOptions" -> extendedOptions.foldLeft("useHttpErrors")( _ + "," + _)
-       )
+        "appKey" -> appKey)
 }
 
 class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
@@ -49,7 +50,7 @@ class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends
 
 trait FSClientReboot extends FSClient {
   def getWithCreds(url: RequestBuilder) : Promise[String] =
-      Http( addParams(url) OK as.String)
+      Http( url OK as.String)
 }
 
 private object JacksonMapper {
