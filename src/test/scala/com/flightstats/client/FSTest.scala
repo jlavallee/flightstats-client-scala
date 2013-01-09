@@ -1,7 +1,7 @@
 package com.flightstats.client
 
-import org.scalatest.Assertions
 import dispatch.Promise
+import org.scalatest.Assertions
 import com.ning.http.client.RequestBuilder
 
 
@@ -30,9 +30,7 @@ object FSTestClients extends FSTest {
     }
 }
 
-class FSTestClients {
-
-}
+class FSTestClients { }
 
 trait FSTest extends Assertions {
   val appId = sys.props.get("flightstats.appid")
@@ -44,10 +42,9 @@ trait FSTest extends Assertions {
   }
 }
 
-trait FSTestRun extends FSClient
+trait FSTestRun extends FSClientBase
     with FSStaticTestJson
-    with FSClientReboot
-    with JacksonMapper {
+    with FSClientReboot {
   val capture = sys.props.get("test.capture")
 
   override def extendedOptions = Seq("testRun")

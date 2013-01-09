@@ -10,21 +10,27 @@ import org.joda.time.DateTime
 
 protected trait FSClient {
   private val HOST = "api.flightstats.com"
-  protected val appId: String
-  protected val appKey: String
 
-  private def flightStatsHost = host(HOST).secure
-  protected def apiLocation: Seq[String]
+  def appId: String
+  def appKey: String
+
+  def apiLocation: Seq[String]
   def mapFromJson[T](t: Class[T], json: String): T
 
-  protected def url = requestBase // a shortcut-name for brevity
-  protected def extendedOptions: Seq[String] = Seq.empty
+  def fs: RequestBuilder  // base URL for API
+  def extendedOptions: Seq[String] = Seq.empty
 
-  private def requestBase: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
+  def flightStatsHost = host(HOST).secure
 
+  protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T]
   protected def getWithCreds(url: RequestBuilder): Promise[String]
+}
 
-  protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
+protected trait FSClientBase extends FSClient with JacksonMapper {
+
+  override def fs: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
+
+  override protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
     for ( a <- getWithCreds(addParams(url)) ) yield mapFromJson(t, a)
 
   protected def addParams(url: RequestBuilder): RequestBuilder = {
@@ -37,34 +43,34 @@ protected trait FSClient {
     url
   }
 
-  private val authParams =
-    Map("appId" -> appId,
-        "appKey" -> appKey)
+  private val authParams = Map("appId" -> appId, "appKey" -> appKey)
 }
 
-class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
+/**
+ * adds support for adding /YYYY/MM/DD to a RequestBuilder URL using the / operator
+ */
+protected class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
   def / (date: DateTime): RequestBuilder =
     subject / date.toString("yyyy") / date.toString("MM") / date.toString("dd")
 }
 
 
 trait FSClientReboot extends FSClient {
-  def getWithCreds(url: RequestBuilder) : Promise[String] =
+  override protected def getWithCreds(url: RequestBuilder): Promise[String] =
       Http( url OK as.String)
 }
 
+trait JacksonMapper {
+  def mapFromJson[T](t: Class[T], json: String): T =
+    JacksonMapper.mapper.readValue(json, t)
+}
+
 private object JacksonMapper {
-  def mapper = initMapper
-  private def initMapper = {
+  def mapper = {
     val m = new ObjectMapper()
     m.registerModule(DefaultScalaModule)
     m.registerModule(new JodaModule())
     m.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     m
   }
-}
-
-trait JacksonMapper {
-  def mapFromJson[T](t: Class[T], json: String): T =
-    JacksonMapper.mapper.readValue(json, t)
 }

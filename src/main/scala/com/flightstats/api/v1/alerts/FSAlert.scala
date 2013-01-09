@@ -1,7 +1,7 @@
 package com.flightstats.api.v1.alerts
 
-import org.joda.time.DateTime
 import java.net.URL
+import org.joda.time.DateTime
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import com.flightstats.api.v1._
 

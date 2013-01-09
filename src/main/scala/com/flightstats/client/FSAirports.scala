@@ -12,7 +12,7 @@ object FSAirports {
   }
 }
 
-abstract class FSAirports(val appId: String, val appKey: String) extends FSClient {
+abstract class FSAirports(val appId: String, val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/airports/rest/v1/json
   def apiLocation = Seq("flex", "airports", "rest", "v1", "json")
 
@@ -21,80 +21,80 @@ abstract class FSAirports(val appId: String, val appKey: String) extends FSClien
    * /v1/json/active GET
    */
   def active: Promise[Seq[FSAirport]] =
-    airportsFor(url / "active")
+    airportsFor(fs / "active")
 
   /** Active airports for date
    * /v1/json/active/{year}/{month}/{day} GET
    */
   def activeOnDate(date: DateTime): Promise[Seq[FSAirport]] =
-    airportsFor(url / "active" / date)
+    airportsFor(fs / "active" / date)
 
   /** All airports (active and inactive)
    * /v1/json/all GET
    */
   def all: Promise[Seq[FSAirport]] =
-    airportsFor(url / "all")
+    airportsFor(fs / "all")
 
   /** Current airport by code (code type chosen via precedence order)
    * /v1/json/{code}/today GET
    */
   def byCode(code: String): Promise[FSAirport] =
-    airportFor(url / code / "today")
+    airportFor(fs / code / "today")
 
   /** Airport on date by code (code type chosen via precedence order)
    * /v1/json/{code}/{year}/{month}/{day} GET
    */
   def onDateByCode(date: DateTime, code: String): Promise[FSAirport] =
-    airportFor(url / code / date )
+    airportFor(fs / code / date )
 
   /** Airports by city code
    * /v1/json/cityCode/{cityCode} GET
    */
   def byCityCode(code: String): Promise[Seq[FSAirport]] =
-    airportsFor(url / "cityCode" / code)
+    airportsFor(fs / "cityCode" / code)
 
   /** Airports by country code
    * /v1/json/countryCode/{countryCode} GET
    */
   def byCountryCode(code: String): Promise[Seq[FSAirport]] =
-    airportsFor(url / "countryCode" / code)
+    airportsFor(fs / "countryCode" / code)
 
   /** Airport by FlightStats code
    * /v1/json/fs/{code} GET
    */
   def byFlightStatsCode(code: String): Promise[FSAirport] =
-    airportFor(url / "fs" / code)
+    airportFor(fs / "fs" / code)
 
   /** Airports by IATA code
    * /v1/json/iata/{iataCode} GET
    */
   def byIataCode(code: String): Promise[Seq[FSAirport]] =
-    airportsFor(url / "iata" / code)
+    airportsFor(fs / "iata" / code)
 
   /** Airport by IATA code on date
    * /v1/json/iata/{iataCode}/{year}/{month}/{day} GET
    */
   def byIataCodeOnDate(code: String, date: DateTime): Promise[FSAirport] =
-    airportFor(url / "iata" / code / date)
+    airportFor(fs / "iata" / code / date)
 
 
   /** Airports by ICAO code
    * /v1/json/icao/{icaoCode} GET
    */
   def byIcaoCode(code: String): Promise[Seq[FSAirport]] =
-    airportsFor(url / "icao" / code)
+    airportsFor(fs / "icao" / code)
 
   /** Airport by ICAO code on date
    * /v1/json/icao/{icaoCode}/{year}/{month}/{day} GET
    */
   def byIcaoCodeOnDate(code: String, date: DateTime): Promise[FSAirport] =
-    airportFor(url / "icao" / code / date)
+    airportFor(fs / "icao" / code / date)
 
   /** Airports within radius of location
    * /v1/json/withinRadius/{longitude}/{latitude}/{radiusMiles} GET
    */
   def withinRadius(long: Integer, lat: Integer, radius: Integer): Promise[Seq[FSAirport]] =
-    airportsFor(url / "withinRadius" / long.toString() / lat.toString() / radius.toString())
+    airportsFor(fs / "withinRadius" / long.toString() / lat.toString() / radius.toString())
 
   private def airportsFor(url: RequestBuilder) =
     for ( a <- getAndDeserialize(classOf[FSAirportsHolder], url) ) yield a.airports
