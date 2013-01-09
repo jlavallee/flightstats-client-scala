@@ -6,6 +6,7 @@
     // create an instance of a client for the Airports API
     val airports = FSAirports(appId, appKey)
 
+    // fetch active airports
     val activeAirports = airports.active
 
 
@@ -18,7 +19,7 @@
 
 ## Under the hood
 
-`flightstats-client-scala` makes use of [reboot][2] and [Jackson][3]
+`flightstats-client-scala` makes use of [Dispatch][2] and [Jackson][3]
 to provide a dead-simple asynchronous client for [FlightStats][1] API.
 
 See the excellent [Dispatch docs][4] for a primer on working with the

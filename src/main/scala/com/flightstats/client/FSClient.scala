@@ -9,26 +9,19 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import org.joda.time.DateTime
 
 protected trait FSClient {
-  private val HOST = "api.flightstats.com"
-
-  def appId: String
-  def appKey: String
-
-  def apiLocation: Seq[String]
+  def api: RequestBuilder  // base URL for API
+  def extendedOptions: Seq[String] = Seq.empty
   def mapFromJson[T](t: Class[T], json: String): T
 
-  def fs: RequestBuilder  // base URL for API
-  def extendedOptions: Seq[String] = Seq.empty
-
-  def flightStatsHost = host(HOST).secure
-
+  protected def appId: String
+  protected def appKey: String
   protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T]
   protected def getWithCreds(url: RequestBuilder): Promise[String]
 }
 
 protected trait FSClientBase extends FSClient with JacksonMapper {
-
-  override def fs: RequestBuilder = apiLocation.foldLeft(flightStatsHost)(_ / _)
+  private val HOST = "api.flightstats.com"
+  def fsHost = host(HOST).secure
 
   override protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
     for ( a <- getWithCreds(addParams(url)) ) yield mapFromJson(t, a)
@@ -38,12 +31,12 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
     url.addQueryParameter("extendedOptions",
         extendedOptions.foldLeft("useHttpErrors")( _ + "," + _))
 
-    for((name, value) <- authParams)
+    for((name, value) <- credentials)
       url.addHeader(name, value)
     url
   }
 
-  private val authParams = Map("appId" -> appId, "appKey" -> appKey)
+  private val credentials = Map("appId" -> appId, "appKey" -> appKey)
 }
 
 /**
