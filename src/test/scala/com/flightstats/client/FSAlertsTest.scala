@@ -55,8 +55,10 @@ class FSAlertsTest extends FSTest {
             date = date
         ))
 
-  @Test def delete =
+  @Test def delete = {
+    // first we need to actually create a rule!
     checkAlertRequest( alerts.delete(119281340) )
+  }
 
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )

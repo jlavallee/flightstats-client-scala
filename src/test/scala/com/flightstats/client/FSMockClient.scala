@@ -7,8 +7,9 @@ import scala.concurrent.{future, promise}
 
 trait FSMockClient extends FSClientBase with FSStaticTestJson {
 
+  override def extendedOptions = Seq("testRun")
+
   def getWithCreds(url: RequestBuilder): Promise[String] = {
-    // could use addParams(url) if we wanted out .json file paths to include our query params
 
     new Promise[String] {
       def claim = Source.fromFile(filePathForUrl(url), "utf-8").mkString

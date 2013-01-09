@@ -3,14 +3,19 @@ package com.flightstats.client
 import dispatch.Promise
 import org.scalatest.Assertions
 import com.ning.http.client.RequestBuilder
+import com.ning.http.client.FluentStringsMap
+import java.io.{File => JFile, PrintWriter => JPrintWriter}
 
 
 object FSTestClients extends FSTest {
+  val testAppId = "testId"
+  val testAppKey = "testKey"
+  
   def airports: FSAirports = (appId, appKey) match {
       case (Some(id), Some(key)) =>
         new FSAirports(id, key) with FSTestRun
       case (_, _) =>
-        new FSAirports("mockId", "mockKey") with FSMockClient
+        new FSAirports(testAppId, testAppKey) with FSMockClient
     }
 
   def alerts: FSAlerts =
@@ -18,7 +23,7 @@ object FSTestClients extends FSTest {
       case (Some(id), Some(key)) =>
         new FSAlerts(id, key) with FSTestRun
       case (_, _) =>
-        new FSAlerts("mockId", "mockKey") with FSMockClient
+        new FSAlerts(testAppId, testAppKey) with FSMockClient
     }
 
   def delayIndexes: FSDelayIndexes =
@@ -26,7 +31,7 @@ object FSTestClients extends FSTest {
       case (Some(id), Some(key)) =>
         new FSDelayIndexes(id, key) with FSTestRun
       case (_, _) =>
-        new FSDelayIndexes("mockId", "mockKey") with FSMockClient
+        new FSDelayIndexes(testAppId, testAppKey) with FSMockClient
     }
 }
 
@@ -62,12 +67,11 @@ trait FSTestRun extends FSClientBase
   // write the string to a file & return it
   // this is pretty awful
   def capture(url: RequestBuilder, contents: String): String = {
-    import java.io.{File, PrintWriter}
     val filePath = filePathForUrl(url)
     val dirPath = filePath.substring(0, filePath.lastIndexOf("/"))
-    (new File(dirPath)).mkdirs()
+    (new JFile(dirPath)).mkdirs()
 
-    val out = new PrintWriter( new File(filePath), "UTF-8" )
+    val out = new JPrintWriter( new JFile(filePath), "UTF-8" )
     try { out.print( contents ) }
     finally { out.close }
 
@@ -76,14 +80,14 @@ trait FSTestRun extends FSClientBase
 }
 
 trait FSStaticTestJson {
-  val startDir = "src/test/resources/"
+  
+  private val startDir = "src/test/resources/"
+  private def urlPath2filePath(path: String): String =
+    path.split('/').mkString(JFile.separator)
+  
   def filePathForUrl(url: RequestBuilder): String = {
-    val queryPathWithHost =  url.build().getRawUrl().split("://")(1)
+    val queryPathWithHost =  url.build().getUrl().split("://")(1) // yuck!
     val queryPathWithoutHost = queryPathWithHost.substring(queryPathWithHost.indexOf("/"))
-    val queryPathWithoutQuery = queryPathWithoutHost.indexOf("?") match {
-      case -1 => queryPathWithoutHost
-      case  x => queryPathWithoutHost.substring(0, x)
-    }
-    return startDir + queryPathWithoutQuery + ".json"
+    urlPath2filePath(startDir + queryPathWithoutHost) + ".json"
   }
 }

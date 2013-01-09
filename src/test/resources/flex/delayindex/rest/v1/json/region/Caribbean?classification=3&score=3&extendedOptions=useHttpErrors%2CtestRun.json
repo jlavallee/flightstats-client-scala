@@ -1,0 +1,1 @@
+{"request":{"region":{"requested":"Caribbean","interpreted":"CARIBBEAN"},"url":"https://api.flightstats.com/flex/delayindex/rest/v1/json/region/Caribbean","classification":{"requested":"3","interpreted":3},"score":{"requested":"3","interpreted":3.0}},"delayIndexes":[]}

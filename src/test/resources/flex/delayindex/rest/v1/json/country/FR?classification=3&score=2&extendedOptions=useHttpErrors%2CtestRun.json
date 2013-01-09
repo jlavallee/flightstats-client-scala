@@ -1,0 +1,1 @@
+{"request":{"country":{"requested":"FR","interpreted":"FR"},"url":"https://api.flightstats.com/flex/delayindex/rest/v1/json/country/FR","classification":{"requested":"3","interpreted":3},"score":{"requested":"2","interpreted":2.0}},"delayIndexes":[]}

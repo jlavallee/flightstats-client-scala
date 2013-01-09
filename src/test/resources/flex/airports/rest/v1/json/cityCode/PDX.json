@@ -1,1 +1,0 @@
-{"error":{"httpStatusCode":403,"errorCode":"AUTH_FAILURE","errorId":"70c99d46-d073-431d-9f6a-13908dc2c7f8","errorMessage":"Authorization failed. application_not_found:application with id=\"fwoopy\" was not found"}}
