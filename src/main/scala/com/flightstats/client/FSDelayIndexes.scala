@@ -23,7 +23,7 @@ abstract class FSDelayIndexes(val appId: String, val appKey: String) extends FSC
    * /v1/json/airports/{airports} GET
    */    // airports: String* would be cool except then args would have to be the first param...
   def byAirports(airports: Seq[String], args: ArgMap = Map.empty): Promise[FSDelayIndexResponse] =
-    delays(url / "airports" / airports.foldLeft("")(_ + "," + _) <<? args)
+    delays(url / "airports" / airports.mkString(",") <<? args)
 
   /* Delay Indexes by Country code
    * /v1/json/country/{country} GET
