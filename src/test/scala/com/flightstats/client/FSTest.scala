@@ -16,6 +16,17 @@ trait FSTest {
     if(appId.isDefined && appKey.isDefined)
       println(promise) // it's cool to see that we're really async when we test w/creds
   }
+
+  def exerciseCaseClass(foo: AnyRef) {
+    // import scala.reflect.runtime.universe._
+    //val mirror = scala.reflect.runtime.currentMirror;
+    //val aType:Type = mirror.typeOfInstance(foo)
+
+    foo match {
+      case None => Unit
+      case _ => Unit
+    }
+  }
 }
 
 object FSTestClients extends FSTest {

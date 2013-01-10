@@ -69,6 +69,8 @@ class FSAlertsTest extends FSTest {
       case Right(request) => {
           assertNotNull(request)
           assertNotNull(request.rule.name)
+          assertNotNull(request.appendix.airlines)
+          assertNotNull(request.appendix.airports)
       }
     }
   }
