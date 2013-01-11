@@ -7,15 +7,19 @@
     val airports = FSAirports(appId, appKey)
 
     // fetch active airports
-    val activeAirports = airports.active
+    val activeAirports:Promise[Seq[FSAirport]] = airports.active
+
+    // to handle errors gracefully, use .either (see Dispatch docs)
+    val activeAirportsEither:Promise[Either[Throwable, Seq[FSAirport]]] = airports.active.either
 
 
     // create an instance of a client for the Delay Indexes API
     val delayIndexes = FSDelayIndexes(appId, appKey)
 
-    val delayIndex = delayIndexes.byRegion("Caribbean",
-                         Map("classification" -> "3", "score" -> "3")
-                     )
+    // optional arguments passed as a map
+    val delayIndex:Promise[FSDelayIndexResponse] =
+      delayIndexes.byRegion("Caribbean", Map("classification" -> "3", "score" -> "3"))
+
 
 ## Under the hood
 
