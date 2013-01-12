@@ -9,7 +9,7 @@ import com.flightstats.api.v1._
 case class FSAlert (
   @JsonProperty("rule") rule: FSAlertRule,
   @JsonProperty("alertCapabilities") alertCapabilities: FSAlertCapabilities,
-  @JsonProperty("appendix") appendix: FSAlertAppendix,
+  @JsonProperty("appendix") appendix: FSAppendix,
   @JsonProperty("request") request: FSAlertRequest,
   @JsonProperty("error") error: Option[FSError]
 )
@@ -60,26 +60,20 @@ case class FSAlertCapabilities(
 )
 
 @JsonCreator
-case class FSAlertAppendix (
-  @JsonProperty("airports") airports: Seq[FSAirport],
-  @JsonProperty("airlines") airlines: Seq[FSAirline]
-)
-
-@JsonCreator
 case class FSAlertRequest (
   @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
   @JsonProperty("codeType") codeType: FSRequested[String],
   @JsonProperty("nameValues") nameValues: Seq[FSRequested[String]],
   @JsonProperty("events") events: Seq[FSRequested[String]],
   @JsonProperty("deliverTo") deliverTo: FSRequested[String],
-  @JsonProperty("airport") airport: FSRequestedCode,
+  @JsonProperty("airport") airport: FSRequestedAirport,
   @JsonProperty("url") url: URL,
   @JsonProperty("ruleId") ruleId: FSRequested[String],
-  @JsonProperty("departureAirport") departureAirport: FSRequestedCode,
-  @JsonProperty("arrivalAirport") arrivalAirport: FSRequestedCode,
-  @JsonProperty("airlineCode") airlineCode: FSRequestedCode,
+  @JsonProperty("departureAirport") departureAirport: FSRequestedAirport,
+  @JsonProperty("arrivalAirport") arrivalAirport: FSRequestedAirport,
+  @JsonProperty("airlineCode") airlineCode: FSRequestedAirline,
   @JsonProperty("flightNumber") flightNumber: FSRequested[String],
-  @JsonProperty("date") date: FSAlertRequestedDate,
+  @JsonProperty("date") date: FSRequestedDate,
   @JsonProperty("name") name: FSRequested[String],
   @JsonProperty("description") description: FSRequested[String],
   @JsonProperty("type") `type`: FSRequested[String]

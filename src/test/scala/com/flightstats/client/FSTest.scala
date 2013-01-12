@@ -34,6 +34,14 @@ object FSTestClients extends FSTest {
       case (_, _) =>
         new FSDelayIndexes(testAppId, testAppKey) with FSMockClient with StrictJacksonMapper
     }
+
+  def flightStatusByFlight: FSFlightStatusByFlight =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSFlightStatusByFlight(id, key) with FSTestRun
+      case (_, _) =>
+        new FSFlightStatusByFlight(testAppId, testAppKey) with FSMockClient
+    }
 }
 
 class FSTestClients { }

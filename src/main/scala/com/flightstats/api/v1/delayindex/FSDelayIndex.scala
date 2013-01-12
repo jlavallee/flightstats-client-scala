@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import java.net.URL
 import org.joda.time.DateTime
 import java.math.BigDecimal  // Java's BigDecimal string & integer constructors
-import com.flightstats.api.v1.{FSAirport, FSError, FSRequestedCode, FSRequested}
+import com.flightstats.api.v1.{FSAirport, FSError, FSRequested, FSRequestedAirport}
 
 @JsonCreator
 case class FSDelayIndexResponse (
   @JsonProperty("request") request: FSDelayIndexRequest,
-  @JsonProperty("airportCodes") airportCodes: FSRequestedCode,
+  @JsonProperty("airportCodes") airportCodes: FSRequestedAirport,
+  @JsonProperty("codeType") codeType: FSRequested[String],
   @JsonProperty("url") url: URL,
   @JsonProperty("classification") classification: FSRequested[Integer],
   @JsonProperty("score") score: FSRequested[BigDecimal],
@@ -19,7 +20,7 @@ case class FSDelayIndexResponse (
 
 @JsonCreator
 case class FSDelayIndexRequest (
-  @JsonProperty("airportCodes") airportCodes: Seq[FSRequestedCode],
+  @JsonProperty("airportCodes") airportCodes: Seq[FSRequestedAirport],
   @JsonProperty("codeType") codeType: FSRequested[String],
   @JsonProperty("country") country: FSRequested[String],
   @JsonProperty("region") region: FSRequested[String],
