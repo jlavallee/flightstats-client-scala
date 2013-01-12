@@ -53,11 +53,11 @@ class FSAlertsTest extends FSTest {
             date = date
         ))
 
-  @Test def delete = {
-    // first we need to actually create a rule!
+  // this test will fail on capture - first we need to actually create a rule!
+  @Test def delete =
     checkAlertRequest( alerts.delete(119281340) )
-  }
 
+  // this test will pass misleadingly on capture - we need to creat a rule to get
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )
 
