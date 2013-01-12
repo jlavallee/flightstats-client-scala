@@ -1,7 +1,6 @@
 package com.flightstats.client
 
 import dispatch.Promise
-import org.scalatest.Assertions
 import com.ning.http.client.RequestBuilder
 import com.ning.http.client.FluentStringsMap
 import java.io.{File => JFile, PrintWriter => JPrintWriter}
@@ -37,7 +36,7 @@ object FSTestClients extends FSTest {
 
 class FSTestClients { }
 
-trait FSTest extends Assertions {
+trait FSTest {
   val appId = sys.props.get("flightstats.appid")
   val appKey = sys.props.get("flightstats.appkey")
 

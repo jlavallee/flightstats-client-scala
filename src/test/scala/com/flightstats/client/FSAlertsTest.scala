@@ -1,11 +1,9 @@
 package com.flightstats.client
 
-import org.scalatest.Assertions
-import org.junit.Test
-import org.junit.Before
-import com.flightstats.api.v1.FSAirport
-import org.joda.time.DateTime
 import dispatch.Promise
+import org.junit.Test
+import org.junit.Assert._
+import org.joda.time.DateTime
 import com.flightstats.api.v1.alerts.FSAlert
 
 class FSAlertsTest extends FSTest {
@@ -67,10 +65,10 @@ class FSAlertsTest extends FSTest {
     val alert = alertPromise.either
     debug(alert)
     alert() match {
-      case Left(exception) => fail(exception)
+      case Left(exception) => fail(exception.getMessage())
       case Right(request) => {
-          assert(request != null)
-          assert(request.rule.name != null)
+          assertNotNull(request)
+          assertNotNull(request.rule.name)
       }
     }
   }

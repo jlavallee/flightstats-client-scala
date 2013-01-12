@@ -1,11 +1,10 @@
 package com.flightstats.client
 
-import org.scalatest.Assertions
-import org.junit.Test
-import org.junit.Before
-import com.flightstats.api.v1.FSAirport
-import org.joda.time.DateTime
 import dispatch.Promise
+import org.junit.Test
+import org.junit.Assert._
+import org.joda.time.DateTime
+import com.flightstats.api.v1.FSAirport
 
 class FSAirportsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
@@ -56,10 +55,10 @@ class FSAirportsTest extends FSTest {
     val airportList = airportListPromise.either
     debug(airportList)
     airportList() match {
-      case Left(exception) => fail(exception)
+      case Left(exception) => fail(exception.getMessage())
       case Right(list) => {
-          assert(list != null)
-          assert(list.length > 0)
+          assertNotNull(list)
+          assertTrue(list.length > 0)
       }
     }
   }
@@ -68,10 +67,10 @@ class FSAirportsTest extends FSTest {
     val airport = airportPromise.either
     debug(airport)
     airport() match {
-      case Left(exception) => fail(exception)
+      case Left(exception) => fail(exception.getMessage())
       case Right(airport) => {
-          assert(airport != null)
-          assert(airport.fs == code)
+          assertNotNull(airport)
+          assertEquals(code, airport.fs)
       }
     }
   }

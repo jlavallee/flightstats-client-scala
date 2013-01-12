@@ -1,8 +1,9 @@
 package com.flightstats.client
 
-import org.junit.Test
-import com.flightstats.api.v1.delayindex.FSDelayIndexResponse
 import dispatch.Promise
+import org.junit.Test
+import org.junit.Assert._
+import com.flightstats.api.v1.delayindex.FSDelayIndexResponse
 
 class FSDelayIndexesTest extends FSTest {
 
@@ -35,9 +36,9 @@ class FSDelayIndexesTest extends FSTest {
     debug(delayIndex)
 
     delayIndex() match {
-      case Left(exception) => fail(exception)
+      case Left(exception) => fail(exception.getMessage())
       case Right(delayIndex) => {
-          assert(delayIndex != null)
+          assertNotNull(delayIndex)
       }
     }
   }
