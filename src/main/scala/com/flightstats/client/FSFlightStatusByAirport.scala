@@ -31,29 +31,29 @@ abstract class FSFlightStatusByAirport(protected val appId: String, protected va
     *
     * /v2/json/airport/status/{airport}/dep/{year}/{month}/{day}/{hourOfDay} GET
     */
-  def departureStatus(airportCode: String, date: DateTime) =
-    statuses(api / "airport" / "status" / airportCode / "dep" / date / date.toString("HH"))
+  def departureStatus(airportCode: String, date: DateTime, args: ArgMap = Map.empty) =
+    statuses( api / "airport" / "status" / airportCode / "dep" / date / date.toString("HH") <<? args )
 
   /** Airport status (arrivals)
     *
     * /v2/json/airport/status/{airport}/arr/{year}/{month}/{day}/{hourOfDay} GET
     */
-  def arrivalStatus(airportCode: String, date: DateTime) =
-    statuses(api / "airport" / "status" / airportCode / "arr" / date / date.toString("HH"))
+  def arrivalStatus(airportCode: String, date: DateTime, args: ArgMap = Map.empty) =
+    statuses( api / "airport" / "status" / airportCode / "arr" / date / date.toString("HH") <<? args )
 
   /** Airport tracks (arrivals)
     *
     * /v2/json/airport/tracks/{airport}/arr GET
     */
-  def arrivalTracks(airportCode: String) =
-    tracks(api / "airport" / "tracks" / airportCode / "arr" )
+  def arrivalTracks(airportCode: String, args: ArgMap = Map.empty) =
+    tracks( api / "airport" / "tracks" / airportCode / "arr" <<? args )
 
   /** Airport tracks (departures)
     *
     * /v2/json/airport/tracks/{airport}/dep GET
     */
-  def departureTracks(airportCode: String) =
-    tracks(api / "airport" / "tracks" / airportCode / "dep" )
+  def departureTracks(airportCode: String, args: ArgMap = Map.empty) =
+    tracks( api / "airport" / "tracks" / airportCode / "dep" <<? args )
 
 
   private def statuses(url: RequestBuilder) =
