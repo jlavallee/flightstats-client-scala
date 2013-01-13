@@ -30,8 +30,8 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
     url.addQueryParameter("extendedOptions",
         extendedOptions.foldLeft("useHttpErrors")( _ + "," + _))
 
-    for((name, value) <- credentials)
-      url.addHeader(name, value)
+    credentials.foreach {case (name, value) => url.addHeader(name, value)}
+
     url
   }
 
