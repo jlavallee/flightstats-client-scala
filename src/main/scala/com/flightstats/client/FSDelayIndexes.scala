@@ -10,17 +10,16 @@ object FSDelayIndexes {
     new FSDelayIndexes(appId, appKey) with FSClientReboot
   }
 }
-/**
- * A client for FlightStats Delay Index API
- *
- * Use companion object to obtain an instance:
- *
- * {{{
- *   val delayIndexClient = FSDelayIndexes("my app id", "my app key")
- * }}}
- *
- * @see <a target="_top" href="https://developer.flightstats.com/api-docs/delayindex/v1">FlightStats Delay Index API Documentation</a>
- */
+/** A client for FlightStats Delay Index API
+  *
+  * Use companion object to obtain an instance:
+  *
+  * {{{
+  *   val delayIndexClient = FSDelayIndexes("my app id", "my app key")
+  * }}}
+  *
+  * @see <a target="_top" href="https://developer.flightstats.com/api-docs/delayindex/v1">FlightStats Delay Index API Documentation</a>
+  */
 abstract class FSDelayIndexes(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/delayindex/rest/v1/json
   def api = fsHost / "flex" / "delayindex" / "rest" / "v1" / "json"

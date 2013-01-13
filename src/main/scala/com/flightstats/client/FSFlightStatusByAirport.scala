@@ -12,17 +12,16 @@ object FSFlightStatusByAirport {
     new FSFlightStatusByAirport(appId, appKey) with FSClientReboot
   }
 }
-/**
- * A client for FlightStats Flight Status & Track by Airport API
- *
- * Use companion object to obtain an instance:
- *
- * {{{
- *   val statusClient = FSFlightStatusByAirport("my app id", "my app key")
- * }}}
- *
- * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/airport">FlightStats Flight Status & Track by Airport API Documentation</a>
- */
+/** A client for FlightStats Flight Status & Track by Airport API
+  *
+  * Use companion object to obtain an instance:
+  *
+  * {{{
+  *   val statusClient = FSFlightStatusByAirport("my app id", "my app key")
+  * }}}
+  *
+  * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/airport">FlightStats Flight Status & Track by Airport API Documentation</a>
+  */
 abstract class FSFlightStatusByAirport(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/flightstatus/rest/v2/json
   def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"

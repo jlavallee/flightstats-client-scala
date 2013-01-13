@@ -11,17 +11,16 @@ object FSAlerts {
     new FSAlerts(appId, appKey) with FSClientReboot
   }
 }
-/**
- * A client for FlightStats Alerts API
- *
- * Use companion object to obtain an instance:
- *
- * {{{
- *   val alertsClient = FSAlerts("my app id", "my app key")
- * }}}
- *
- * @see <a target="_top" href="https://developer.flightstats.com/api-docs/alerts/v1">FlightStats Alerts API Documentation</a>
- */
+/** A client for FlightStats Alerts API
+  *
+  * Use companion object to obtain an instance:
+  *
+  * {{{
+  *   val alertsClient = FSAlerts("my app id", "my app key")
+  * }}}
+  *
+  * @see <a target="_top" href="https://developer.flightstats.com/api-docs/alerts/v1">FlightStats Alerts API Documentation</a>
+  */
 abstract class FSAlerts(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/alerts/rest/v1/json
   def api = fsHost / "flex" / "alerts" / "rest" / "v1" / "json"

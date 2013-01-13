@@ -12,17 +12,16 @@ object FSAirports {
     new FSAirports(appId, appKey) with FSClientReboot
   }
 }
-/**
- * A client for FlightStats Airports API
- *
- * Use companion object to obtain an instance:
- *
- * {{{
- *   val airportsClient = FSAirports("my app id", "my app key")
- * }}}
- *
- * @see <a target="_top" href="https://developer.flightstats.com/api-docs/airports/v1">FlightStats Airports API Documentation</a>
- */
+/** A client for FlightStats Airports API
+  *
+  * Use companion object to obtain an instance:
+  *
+  * {{{
+  *   val airportsClient = FSAirports("my app id", "my app key")
+  * }}}
+  *
+  * @see <a target="_top" href="https://developer.flightstats.com/api-docs/airports/v1">FlightStats Airports API Documentation</a>
+  */
 abstract class FSAirports(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/airports/rest/v1/json
   def api = fsHost / "flex" / "airports" / "rest" / "v1" / "json"
