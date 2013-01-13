@@ -8,6 +8,16 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.DeserializationFeature
 
 
+trait FSTest {
+  val appId = sys.props.get("flightstats.appid")
+  val appKey = sys.props.get("flightstats.appkey")
+
+  def debug(promise: Promise[Either[Throwable, AnyRef]]) {
+    if(appId.isDefined && appKey.isDefined)
+      println(promise) // it's cool to see that we're really async when we test w/creds
+  }
+}
+
 object FSTestClients extends FSTest {
   val testAppId = "testId"
   val testAppKey = "testKey"
@@ -50,19 +60,18 @@ object FSTestClients extends FSTest {
       case (_, _) =>
         new FSFlightStatusByAirport(testAppId, testAppKey) with FSMockClient
     }
+
+  def flightsNear: FSFlightsNear =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSFlightsNear(id, key) with FSTestRun
+      case (_, _) =>
+        new FSFlightsNear(testAppId, testAppKey) with FSMockClient
+    }
+
 }
 
 class FSTestClients { }
-
-trait FSTest {
-  val appId = sys.props.get("flightstats.appid")
-  val appKey = sys.props.get("flightstats.appkey")
-
-  def debug(promise: Promise[Either[Throwable, AnyRef]]) {
-    if(appId.isDefined && appKey.isDefined)
-      println(promise) // it's cool to see that we're really async when we test w/creds
-  }
-}
 
 trait FSTestRun extends FSClientBase
     with FSStaticTestJson
@@ -81,8 +90,7 @@ trait FSTestRun extends FSClientBase
     }
   }
 
-  // write the string to a file & return it
-  // this is pretty awful
+  // Write the string to a file & return it.  This is pretty awful.
   def capture(url: RequestBuilder, contents: String): String = {
     val filePath = filePathForUrl(url)
     val dirPath = filePath.substring(0, filePath.lastIndexOf("/"))
@@ -97,7 +105,6 @@ trait FSTestRun extends FSClientBase
 }
 
 trait FSStaticTestJson {
-
   private val startDir = "src/test/resources/"
   private def urlPath2filePath(path: String): String =
     path.split('/').mkString(JFile.separator)

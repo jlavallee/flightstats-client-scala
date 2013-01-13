@@ -42,9 +42,11 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
 /**
  * adds support for adding /YYYY/MM/DD to a RequestBuilder URL using the / operator
  */
-protected class RequestVerbsWithDateHandling(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
+protected class EnhancedRequestVerbs(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
   def / (date: DateTime): RequestBuilder =
     subject / date.toString("yyyy") / date.toString("MM") / date.toString("dd")
+  def / (decimal: BigDecimal): RequestBuilder =
+    subject / decimal.toString
 }
 
 

@@ -200,3 +200,13 @@ case class FSAirportResources (
   @JsonProperty("arrivalGate") arrivalGate: String,
   @JsonProperty("baggage") baggage: String
 )
+
+@JsonCreator
+case class FSPosition (
+  @JsonProperty("lon") lon: BigDecimal,
+  @JsonProperty("lat") lat: BigDecimal,
+  @JsonProperty("speedMph") speedMph: Option[Integer],
+  @JsonProperty("altitudeFt") altitudeFt: Option[Integer],
+  @JsonProperty("source") source: Option[String],
+  @JsonProperty("date") date: DateTime
+)

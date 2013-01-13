@@ -18,7 +18,7 @@ object FSFlightStatusByAirport {
  * Use companion object to obtain an instance:
  *
  * {{{
- *   val statusClient = FSFlightStatuses("my app id", "my app key")
+ *   val statusClient = FSFlightStatusByAirport("my app id", "my app key")
  * }}}
  *
  * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/airport">FlightStats Flight Status & Track by Airport API Documentation</a>
@@ -58,7 +58,7 @@ abstract class FSFlightStatusByAirport(protected val appId: String, protected va
 
   private def statuses(url: RequestBuilder) =
     getAndDeserialize(classOf[FSFlightStatusesResponse], url)
-    
+
   private def tracks(url: RequestBuilder) =
     getAndDeserialize(classOf[FSFlightTracksResponse], url)
 }

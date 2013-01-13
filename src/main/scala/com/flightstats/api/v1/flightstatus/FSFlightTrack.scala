@@ -45,16 +45,6 @@ case class FSFlightTrack (
 )
 
 @JsonCreator
-case class FSPosition (
-  @JsonProperty("lon") lon: BigDecimal,
-  @JsonProperty("lat") lat: BigDecimal,
-  @JsonProperty("speedMph") speedMph: Option[Integer],
-  @JsonProperty("altitudeFt") altitudeFt: Option[Integer],
-  @JsonProperty("source") source: Option[String],
-  @JsonProperty("date") date: String
-)
-
-@JsonCreator
 case class FSWaypoint (
   @JsonProperty("lon") lon: BigDecimal,
   @JsonProperty("lat") lat: BigDecimal
