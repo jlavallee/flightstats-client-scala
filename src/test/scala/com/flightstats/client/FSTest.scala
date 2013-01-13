@@ -77,6 +77,14 @@ object FSTestClients extends FSTest {
         new FSFlightsNear(testAppId, testAppKey) with FSMockClient
     }
 
+  def ratings: FSRatings =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSRatings(id, key) with FSTestRun
+      case (_, _) =>
+        new FSRatings(testAppId, testAppKey) with FSMockClient
+    }
+
 }
 
 class FSTestClients { }

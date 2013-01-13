@@ -2,6 +2,7 @@ package com.flightstats.api.v1.flightstatus
 
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import com.flightstats.api.v1._
+import java.net.URL
 
 @JsonCreator
 case class FSFlightTrackResponse (
@@ -27,7 +28,8 @@ case class FSFlightTrackRequest (
   @JsonProperty("includeFlightPlan") includeFlightPlan: FSRequested[Boolean],
   @JsonProperty("maxPositions") maxPositions: FSRequested[Integer],
   @JsonProperty("maxPositionAgeMinutes") maxPositionAgeMinutes: FSRequested[Integer],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String]
+  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
+  @JsonProperty("url") url: URL
 )
 
 @JsonCreator
