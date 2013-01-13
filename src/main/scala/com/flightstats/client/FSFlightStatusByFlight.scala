@@ -6,14 +6,14 @@ import com.ning.http.client.RequestBuilder
 import com.flightstats.client._
 import com.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
 
-/** Factory for [[com.flightstats.client.FSFlightStatuses]] instances. */
+/** Factory for [[com.flightstats.client.FSFlightStatusByFlight]] instances. */
 object FSFlightStatusByFlight {
   def apply(appId: String, appKey: String): FSFlightStatusByFlight = {
     new FSFlightStatusByFlight(appId, appKey) with FSClientReboot
   }
 }
 /**
- * A client for FlightStats FlightStatus API
+ * A client for FlightStats Flight Status & Track by Flight API
  *
  * Use companion object to obtain an instance:
  *
@@ -24,7 +24,7 @@ object FSFlightStatusByFlight {
  * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/flight">FlightStats Flight Status & Track by Flight API Documentation</a>
  */
 abstract class FSFlightStatusByFlight(protected val appId: String, protected val appKey: String) extends FSClientBase {
-  // https://api.flightstats.com/flex/airports/rest/v2/json
+  // https://api.flightstats.com/flex/flightstatus/rest/v2/json
   def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"
 
 
