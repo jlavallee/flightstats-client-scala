@@ -11,7 +11,7 @@ case class FSAlert (
   @JsonProperty("alertCapabilities") alertCapabilities: FSAlertCapabilities,
   @JsonProperty("appendix") appendix: FSAlertAppendix,
   @JsonProperty("request") request: FSAlertRequest,
-  @JsonProperty("error") error: FSError
+  @JsonProperty("error") error: Option[FSError]
 )
 
 @JsonCreator
@@ -20,12 +20,21 @@ case class FSAlertRule (
   @JsonProperty("name") name: String,
   @JsonProperty("carrierFsCode") carrierFsCode: String,
   @JsonProperty("flightNumber") flightNumber: String,
-  @JsonProperty("departureAirportFsCode") departureAirportFsCode: Option[String],
-  @JsonProperty("arrivalAirportFsCode") arrivalAirportFsCode: Option[String],
   @JsonProperty("departure") departure: DateTime,
+  @JsonProperty("departureAirport") departureAirport: Option[String],
+  @JsonProperty("departureAirportFsCode") departureAirportFsCode: Option[String],
   @JsonProperty("arrival") arrival: DateTime,
+  @JsonProperty("arrivalAirport") arrivalAirport: Option[String],
+  @JsonProperty("arrivalAirportFsCode") arrivalAirportFsCode: Option[String],
+  @JsonProperty("nameValues") nameValues: Seq[FSNameValue],
   @JsonProperty("ruleEvents") ruleEvents: Seq[FSAlertRuleEvent],
   @JsonProperty("delivery") delivery: FSAlertRuleDelivery
+)
+
+@JsonCreator
+case class FSNameValue (
+  @JsonProperty("name") name: String,
+  @JsonProperty("value") value: String
 )
 
 @JsonCreator
@@ -65,6 +74,9 @@ case class FSAlertRequest (
   @JsonProperty("deliverTo") deliverTo: FSRequested[String],
   @JsonProperty("airport") airport: FSRequestedCode,
   @JsonProperty("url") url: URL,
+  @JsonProperty("ruleId") ruleId: FSRequested[String],
+  @JsonProperty("departureAirport") departureAirport: FSRequestedCode,
+  @JsonProperty("arrivalAirport") arrivalAirport: FSRequestedCode,
   @JsonProperty("airlineCode") airlineCode: FSRequestedCode,
   @JsonProperty("flightNumber") flightNumber: FSRequested[String],
   @JsonProperty("date") date: FSAlertRequestedDate,

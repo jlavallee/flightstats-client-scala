@@ -1,27 +1,32 @@
 package com.flightstats.api.v1.delayindex
 
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
-import com.flightstats.api.v1.{FSRequestedCode, FSRequested}
 import java.net.URL
 import org.joda.time.DateTime
-import com.flightstats.api.v1.FSAirport
-import com.flightstats.api.v1.FSError
+import java.math.BigDecimal  // Java's BigDecimal string & integer constructors
+import com.flightstats.api.v1.{FSAirport, FSError, FSRequestedCode, FSRequested}
 
 @JsonCreator
 case class FSDelayIndexResponse (
   @JsonProperty("request") request: FSDelayIndexRequest,
   @JsonProperty("airportCodes") airportCodes: FSRequestedCode,
-  @JsonProperty("codeType") codeType: FSRequested[String],
   @JsonProperty("url") url: URL,
   @JsonProperty("classification") classification: FSRequested[Integer],
   @JsonProperty("score") score: FSRequested[BigDecimal],
   @JsonProperty("delayIndexes") delayIndexes: Seq[FSDelayIndex],
-  @JsonProperty("error") error: FSError
+  @JsonProperty("error") error: Option[FSError]
 )
 
 @JsonCreator
 case class FSDelayIndexRequest (
-  @JsonProperty("airportCodes") airportCodes: Seq[FSRequestedCode]
+  @JsonProperty("airportCodes") airportCodes: Seq[FSRequestedCode],
+  @JsonProperty("codeType") codeType: FSRequested[String],
+  @JsonProperty("country") country: FSRequested[String],
+  @JsonProperty("region") region: FSRequested[String],
+  @JsonProperty("state") state: FSRequested[String],
+  @JsonProperty("score") score: FSRequested[String],
+  @JsonProperty("classification") classification: FSRequested[Integer],
+  @JsonProperty("url") url: Option[URL]
 )
 
 @JsonCreator

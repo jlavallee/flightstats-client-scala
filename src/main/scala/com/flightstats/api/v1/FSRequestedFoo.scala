@@ -11,8 +11,9 @@ case class FSRequested[T] (
 
 @JsonCreator
 case class FSRequestedCode (
-  @JsonProperty("reqestedCode") reqestedCode: String,
-  @JsonProperty("fsCode") fsCode: String
+  @JsonProperty("requestedCode") requestedCode: String,
+  @JsonProperty("fsCode") fsCode: String,
+  @JsonProperty("codeType") codeType: Option[String]
 )
 
 @JsonCreator

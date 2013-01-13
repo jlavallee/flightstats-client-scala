@@ -53,8 +53,8 @@ trait FSClientReboot extends FSClient {
       Http( url OK as.String)
 }
 
-trait JacksonMapper {
-  def mapFromJson[T](t: Class[T], json: String): T =
+trait JacksonMapper extends FSClient {
+  override def mapFromJson[T](t: Class[T], json: String): T =
     JacksonMapper.mapper.readValue(json, t)
 }
 
