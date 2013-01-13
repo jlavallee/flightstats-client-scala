@@ -24,7 +24,7 @@ object FSRatings {
   */
 abstract class FSRatings(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/ratings/rest/v1/json
-  def api = fsHost / "flex" / "ratings" / "rest" / "v1" / "json"
+  protected def api = fsHost / "flex" / "ratings" / "rest" / "v1" / "json"
 
 
   /** Ratings for flight

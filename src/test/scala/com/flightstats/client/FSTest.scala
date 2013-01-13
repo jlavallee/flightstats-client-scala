@@ -102,9 +102,9 @@ trait FSTestRun extends FSClientBase
     with FSClientReboot {
   val capture = sys.props.get("test.capture")
 
-  override def extendedOptions = Seq("testRun")
+  override protected def extendedOptions = Seq("testRun")
 
-  override def getWithCreds(url: RequestBuilder) : Promise[String] = {
+  override protected def getWithCreds(url: RequestBuilder) : Promise[String] = {
     println("URL: " + url.build().getRawUrl())
     for (x <- super.getWithCreds(url)) yield {
       capture match {
@@ -141,7 +141,7 @@ trait FSStaticTestJson {
 }
 
 trait StrictJacksonMapper extends FSClient {
-  override def mapFromJson[T](t: Class[T], json: String): T =
+  override protected def mapFromJson[T](t: Class[T], json: String): T =
     StrictJacksonMapper.mapper.readValue(json, t)
 }
 

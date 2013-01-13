@@ -23,7 +23,7 @@ object FSAlerts {
   */
 abstract class FSAlerts(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/alerts/rest/v1/json
-  def api = fsHost / "flex" / "alerts" / "rest" / "v1" / "json"
+  protected def api = fsHost / "flex" / "alerts" / "rest" / "v1" / "json"
 
   /** Create flight rule by arrival
     *

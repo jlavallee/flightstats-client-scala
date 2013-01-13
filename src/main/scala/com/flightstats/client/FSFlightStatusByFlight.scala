@@ -24,7 +24,7 @@ object FSFlightStatusByFlight {
   */
 abstract class FSFlightStatusByFlight(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/flightstatus/rest/v2/json
-  def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"
+  protected def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"
 
 
   /** Flight Status (by flight ID)

@@ -24,7 +24,7 @@ object FSAirports {
   */
 abstract class FSAirports(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/airports/rest/v1/json
-  def api = fsHost / "flex" / "airports" / "rest" / "v1" / "json"
+  protected def api = fsHost / "flex" / "airports" / "rest" / "v1" / "json"
 
   /** Active airports
     *

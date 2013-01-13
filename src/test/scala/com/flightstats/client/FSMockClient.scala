@@ -7,10 +7,9 @@ import scala.concurrent.{future, promise}
 
 trait FSMockClient extends FSClientBase with FSStaticTestJson {
 
-  override def extendedOptions = Seq("testRun")
+  override protected def extendedOptions = Seq("testRun")
 
-  def getWithCreds(url: RequestBuilder): Promise[String] = {
-
+  override protected def getWithCreds(url: RequestBuilder): Promise[String] = {
     new Promise[String] {
       def claim = Source.fromFile(filePathForUrl(url), "utf-8").mkString
       def replay = this

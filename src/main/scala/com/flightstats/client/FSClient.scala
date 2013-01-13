@@ -9,19 +9,19 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import org.joda.time.DateTime
 
 protected trait FSClient {
-  def api: RequestBuilder  // base URL for API
-  def extendedOptions: Seq[String] = Seq.empty
-  def mapFromJson[T](t: Class[T], json: String): T
+  protected def api: RequestBuilder  // base URL for API
 
   protected def appId: String
   protected def appKey: String
   protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T]
   protected def getWithCreds(url: RequestBuilder): Promise[String]
+  protected def mapFromJson[T](t: Class[T], json: String): T
+  protected def extendedOptions: Seq[String] = Seq.empty
 }
 
 protected trait FSClientBase extends FSClient with JacksonMapper {
   private val HOST = "api.flightstats.com"
-  def fsHost = host(HOST).secure
+  protected def fsHost = host(HOST).secure
 
   override protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
     for ( a <- getWithCreds(addParams(url)) ) yield mapFromJson(t, a)
@@ -56,7 +56,7 @@ trait FSClientReboot extends FSClient {
 }
 
 trait JacksonMapper extends FSClient {
-  override def mapFromJson[T](t: Class[T], json: String): T =
+  override protected def mapFromJson[T](t: Class[T], json: String): T =
     JacksonMapper.mapper.readValue(json, t)
 }
 

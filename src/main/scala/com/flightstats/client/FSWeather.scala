@@ -24,7 +24,7 @@ object FSWeather {
   */
 abstract class FSWeather(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/weather/rest/v1/json
-  def api = fsHost / "flex" / "weather" / "rest" / "v1" / "json"
+  protected def api = fsHost / "flex" / "weather" / "rest" / "v1" / "json"
 
 
   /** All weather products for airport

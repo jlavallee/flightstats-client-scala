@@ -22,7 +22,7 @@ object FSDelayIndexes {
   */
 abstract class FSDelayIndexes(protected val appId: String, protected val appKey: String) extends FSClientBase {
   // https://api.flightstats.com/flex/delayindex/rest/v1/json
-  def api = fsHost / "flex" / "delayindex" / "rest" / "v1" / "json"
+  protected def api = fsHost / "flex" / "delayindex" / "rest" / "v1" / "json"
 
   /** Delay Indexes by Airport
     *
