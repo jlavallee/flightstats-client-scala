@@ -10,7 +10,6 @@ import org.joda.time.DateTime
 
 protected trait FSClient {
   protected def api: RequestBuilder  // base URL for API
-
   protected def appId: String
   protected def appKey: String
   protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T]
@@ -39,9 +38,7 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
   private val credentials = Map("appId" -> appId, "appKey" -> appKey)
 }
 
-/**
- * adds support for adding /YYYY/MM/DD to a RequestBuilder URL using the / operator
- */
+/** adds support for DateTime & BigDecimal handling using / to RequestBuilder */
 protected class EnhancedRequestVerbs(override val subject: RequestBuilder) extends DefaultRequestVerbs(subject) {
   def / (date: DateTime): RequestBuilder =
     subject / date.toString("yyyy") / date.toString("MM") / date.toString("dd")
@@ -49,12 +46,13 @@ protected class EnhancedRequestVerbs(override val subject: RequestBuilder) exten
     subject / decimal.toString
 }
 
-
+/** implements HTTP support using Dispatch Reboot */
 trait FSClientReboot extends FSClient {
   override protected def getWithCreds(url: RequestBuilder): Promise[String] =
       Http( url OK as.String)
 }
 
+/** implements JSON mapping using Jackson, ignoring unknown properties */
 trait JacksonMapper extends FSClient {
   override protected def mapFromJson[T](t: Class[T], json: String): T =
     JacksonMapper.mapper.readValue(json, t)
