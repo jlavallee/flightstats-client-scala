@@ -61,6 +61,14 @@ object FSTestClients extends FSTest {
         new FSFlightStatusByAirport(testAppId, testAppKey) with FSMockClient
     }
 
+  def flightStatusByRoute: FSFlightStatusByRoute =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSFlightStatusByRoute(id, key) with FSTestRun
+      case (_, _) =>
+        new FSFlightStatusByRoute(testAppId, testAppKey) with FSMockClient
+    }
+
   def flightsNear: FSFlightsNear =
     (appId, appKey) match {
       case (Some(id), Some(key)) =>
