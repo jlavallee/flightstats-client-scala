@@ -85,6 +85,14 @@ object FSTestClients extends FSTest {
         new FSRatings(testAppId, testAppKey) with FSMockClient
     }
 
+  def weather: FSWeather =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSWeather(id, key) with FSTestRun
+      case (_, _) =>
+        new FSWeather(testAppId, testAppKey) with FSMockClient
+    }
+
 }
 
 class FSTestClients { }

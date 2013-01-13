@@ -1,0 +1,54 @@
+package com.flightstats.client
+
+import dispatch.Promise
+import org.junit.Test
+import org.junit.Assert._
+import org.joda.time.DateTime
+import com.flightstats.api.v1.weather.{FSWeatherMetar, FSWeatherTaf, FSWeatherZoneForecast, FSMetar, FSTaf, FSZoneForecast, FSWeatherAll}
+
+class FSWeatherTest extends FSTest {
+  val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
+
+  val weather = FSTestClients.weather
+
+  @Test def all =
+    checkWeatherResponse(weather.all("PDX"))
+
+  @Test def metar =
+    checkWeatherResponse(weather.metar("PDX"))
+
+  @Test def taf =
+    checkWeatherResponse(weather.taf("PDX"))
+
+  @Test def zoneForecast =
+    checkWeatherResponse(weather.zoneForecast("PDX"))
+
+
+  def checkWeatherResponse(weatherPromise: Promise[AnyRef]) {
+    val weatherResponse = weatherPromise.either
+    debug(weatherResponse)
+    weatherResponse() match {
+      case Left(exception) => fail(exception.getMessage())
+      case Right(FSWeatherMetar(req, appendix, metar)) => checkMetar(metar)
+      case Right(FSWeatherTaf(req, appendix, taf)) => checkTaf(taf)
+      case Right(FSWeatherZoneForecast(req, appendix, weather)) => checkZoneForecast(weather)
+      case Right(FSWeatherAll(req, appendix, metar, taf, zoneForcast)) => {
+        checkMetar(metar)
+        checkTaf(taf)
+        checkZoneForecast(zoneForcast)
+      }
+      case x => fail("Whoops, got unexpected response " + x)
+    }
+  }
+
+  def checkMetar(weather: FSMetar) {
+    assertNotNull(weather)
+  }
+  def checkTaf(weather: FSTaf) {
+    assertNotNull(weather)
+  }
+  def checkZoneForecast(forecast: FSZoneForecast) {
+    assertNotNull(forecast)
+    assertTrue(forecast.cities.length > 0)
+  }
+}

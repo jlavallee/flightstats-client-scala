@@ -4,7 +4,6 @@ import dispatch._
 import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.flightstats.client._
-import com.flightstats.api.v1.{FSAirport, FSAirportHolder, FSAirportsHolder}
 import com.flightstats.api.v1.ratings.{FSRatingsForFlight, FSRatingsForRoute}
 
 /** Factory for [[com.flightstats.client.FSRatings]] instances. */
@@ -19,7 +18,7 @@ object FSRatings {
   * Use companion object to obtain an instance:
   *
   * {{{
-  *   val airportsClient = FSRatings("my app id", "my app key")
+  *   val ratingsClient = FSRatings("my app id", "my app key")
   * }}}
   *
   * @see <a target="_top" href="https://developer.flightstats.com/api-docs/ratings/v1">FlightStats Ratings API Documentation</a>
