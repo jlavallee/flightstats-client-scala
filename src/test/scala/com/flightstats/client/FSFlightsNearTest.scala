@@ -10,8 +10,6 @@ import com.flightstats.api.v1.flightstatus.FSFlightsNearPointAndDistance
 import com.flightstats.api.v1.flightstatus.FSFlightPosition
 
 class FSFlightsNearTest extends FSTest {
-  val date: DateTime = DateTime.parse("2013-01-12T21:12:23.048-08:00")
-
   def flightsNear = FSTestClients.flightsNear
 
   @Test def boundingBox =

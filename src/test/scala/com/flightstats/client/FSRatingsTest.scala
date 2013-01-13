@@ -7,8 +7,6 @@ import org.joda.time.DateTime
 import com.flightstats.api.v1.ratings.{FSRating, FSRatingsForFlight, FSRatingsForRoute}
 
 class FSRatingsTest extends FSTest {
-  val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
-
   val ratings = FSTestClients.ratings
 
   @Test def forFlight =
