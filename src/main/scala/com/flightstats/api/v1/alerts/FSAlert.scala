@@ -6,11 +6,20 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import com.flightstats.api.v1._
 
 @JsonCreator
-case class FSAlert (
+case class FSCreateAlert (
   @JsonProperty("rule") rule: FSAlertRule,
   @JsonProperty("alertCapabilities") alertCapabilities: Option[FSAlertCapabilities],
   @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("request") request: FSAlertRequest,
+  @JsonProperty("request") request: FSCreateAlertRequest,
+  @JsonProperty("error") error: Option[FSError]
+)
+
+@JsonCreator
+case class FSGetAlert (
+  @JsonProperty("rule") rule: FSAlertRule,
+  @JsonProperty("alertCapabilities") alertCapabilities: Option[FSAlertCapabilities],
+  @JsonProperty("appendix") appendix: FSAppendix,
+  @JsonProperty("request") request: FSGetAlertRequest,
   @JsonProperty("error") error: Option[FSError]
 )
 
@@ -60,21 +69,27 @@ case class FSAlertCapabilities(
 )
 
 @JsonCreator
-case class FSAlertRequest (
+case class FSCreateAlertRequest (
   @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
   @JsonProperty("codeType") codeType: Option[FSRequested[String]],
   @JsonProperty("nameValues") nameValues: Option[Seq[FSRequested[String]]],
   @JsonProperty("events") events: Option[Seq[FSRequested[String]]],
   @JsonProperty("deliverTo") deliverTo: FSRequested[String],
-  @JsonProperty("airport") airport: FSRequestedAirport,
+  @JsonProperty("airport") airport: Option[FSRequestedAirport],
   @JsonProperty("url") url: URL,
-  @JsonProperty("ruleId") ruleId: FSRequested[String],
-  @JsonProperty("departureAirport") departureAirport: FSRequestedAirport,
-  @JsonProperty("arrivalAirport") arrivalAirport: FSRequestedAirport,
+  @JsonProperty("departureAirport") departureAirport: Option[FSRequestedAirport],
+  @JsonProperty("arrivalAirport") arrivalAirport: Option[FSRequestedAirport],
   @JsonProperty("airlineCode") airlineCode: FSRequestedAirline,
   @JsonProperty("flightNumber") flightNumber: FSRequested[String],
   @JsonProperty("date") date: FSRequestedDate,
   @JsonProperty("name") name: FSRequested[String],
   @JsonProperty("description") description: FSRequested[String],
   @JsonProperty("type") `type`: FSRequested[String]
+)
+
+@JsonCreator
+case class FSGetAlertRequest (
+  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
+  @JsonProperty("url") url: URL,
+  @JsonProperty("ruleId") ruleId: FSRequested[String]
 )

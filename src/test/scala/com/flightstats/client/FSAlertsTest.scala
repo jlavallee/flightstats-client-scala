@@ -4,7 +4,6 @@ import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
-import com.flightstats.api.v1.alerts.FSAlert
 
 class FSAlertsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-14T21:12:23.048-08:00")
@@ -61,14 +60,14 @@ class FSAlertsTest extends FSTest {
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )
 
-  def checkAlertRequest(alertPromise: Promise[FSAlert]) {
+  def checkAlertRequest(alertPromise: Promise[AnyRef]) {
     val alert = alertPromise.either
     debug(alert)
     alert() match {
       case Left(exception) => fail(exception.getMessage())
       case Right(request) => {
           assertNotNull(request)
-          //exerciseCaseClass(request)
+          exerciseCaseClass(request)
       }
     }
   }
