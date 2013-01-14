@@ -109,7 +109,6 @@ case class FSRequestedDate(
 case class FSRequestedAirport(
   @JsonProperty("requestedCode") requestedCode: String,
   @JsonProperty("fsCode") fsCode: String,
-  @JsonProperty("airport") airport: FSAirport,
   @JsonProperty("error") error: Option[FSError]
 )
 
@@ -117,7 +116,6 @@ case class FSRequestedAirport(
 case class FSRequestedAirline (
   @JsonProperty("requestedCode") reqeustedCode: String,
   @JsonProperty("fsCode") fsCode: String,
-  @JsonProperty("airline") airline: FSAirline,
   @JsonProperty("error") error: Option[FSError]
 )
 

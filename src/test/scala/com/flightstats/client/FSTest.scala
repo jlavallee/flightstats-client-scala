@@ -18,7 +18,7 @@ trait FSTest {
       println(promise) // it's cool to see that we're really async when we test w/creds
   }
 
-  def exerciseCaseClass(foo: Any, exceptions: Map[String, Seq[String]] = Map.empty) {
+  def exerciseCaseClass(foo: Any) {
     import scala.reflect.runtime.universe._
     import scala.reflect.runtime.{currentMirror => mirror};
     val im = mirror.reflect(foo)
@@ -33,18 +33,14 @@ trait FSTest {
       val ca = im.reflectMethod(a.asMethod)
       val r = ca()
 
-      if(exceptions.getOrElse(im.symbol.name.toString(), Seq.empty).contains(a.name.toString())){
-        println("skipping exempted field " + im.symbol.name + "." + a.name + " = " + r)
-      } else{
-        assertNotNull(im.symbol.name + "." + a.name + " = " + r, r)
-      }
+      assertNotNull(im.symbol.name + "." + a.name + " = " + r, r)
 
       r match {
         case None => Unit
         case Some(null) => fail("found Some(null)")
         case null => fail(im.symbol.name + "." + a.name + " = null")
-        case Some(i) => exerciseCaseClass(i, exceptions)
-        case x => exerciseCaseClass(x, exceptions)
+        case Some(i) => exerciseCaseClass(i)
+        case x => exerciseCaseClass(x)
       }
     }
   }
@@ -133,8 +129,6 @@ trait FSTestRun extends FSClientBase
     with FSStaticTestJson
     with FSClientReboot {
   val capture = sys.props.get("test.capture")
-
-  override protected def extendedOptions = Seq("testRun")
 
   override protected def getWithCreds(url: RequestBuilder) : Promise[String] = {
     println("URL: " + url.build().getRawUrl())

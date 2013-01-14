@@ -15,7 +15,6 @@ protected trait FSClient {
   protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T]
   protected def getWithCreds(url: RequestBuilder): Promise[String]
   protected def mapFromJson[T](t: Class[T], json: String): T
-  protected def extendedOptions: Seq[String] = Seq.empty
 }
 
 protected trait FSClientBase extends FSClient with JacksonMapper {
@@ -27,8 +26,7 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
 
   protected def addParams(url: RequestBuilder): RequestBuilder = {
     // TODO: add mechanism for users to add more extendedOptions
-    url.addQueryParameter("extendedOptions",
-        extendedOptions.foldLeft("useHttpErrors")( _ + "," + _))
+    url.addQueryParameter("extendedOptions", "useHttpErrors")
 
     credentials.foreach {case (name, value) => url.addHeader(name, value)}
 
