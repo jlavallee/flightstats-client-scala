@@ -1,6 +1,7 @@
 package com.flightstats.client
 
 import dispatch.Promise
+import org.junit.Assert._
 import com.ning.http.client.RequestBuilder
 import com.ning.http.client.FluentStringsMap
 import java.io.{File => JFile, PrintWriter => JPrintWriter}
@@ -17,14 +18,24 @@ trait FSTest {
       println(promise) // it's cool to see that we're really async when we test w/creds
   }
 
-  def exerciseCaseClass(foo: AnyRef) {
-    // import scala.reflect.runtime.universe._
-    //val mirror = scala.reflect.runtime.currentMirror;
-    //val aType:Type = mirror.typeOfInstance(foo)
+  def exerciseCaseClass(foo: Any) {
+    import scala.reflect.runtime.universe._
+    import scala.reflect.runtime.{currentMirror => mirror};
+    val im = mirror.reflect(foo)
 
-    foo match {
-      case None => Unit
-      case _ => Unit
+    val accessors = im.symbol.asClass.typeSignature.declarations.collect {
+      case m: MethodSymbol if m.isCaseAccessor => m
+    }
+
+    accessors.foreach { a =>
+      val ca = im.reflectMethod(a.asMethod)
+      val r = ca()
+      //println(m.name + " = " + r)
+      assertNotNull(r)
+
+      if(a.asMethod.returnType.typeSymbol.isClass
+         && a.asMethod.returnType.typeSymbol.asClass.isCaseClass)
+        exerciseCaseClass(r)
     }
   }
 }

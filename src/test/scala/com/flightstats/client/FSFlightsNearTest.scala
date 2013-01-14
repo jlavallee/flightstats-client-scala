@@ -25,14 +25,21 @@ class FSFlightsNearTest extends FSTest {
 
     either() match {
       case Left(exception) => fail(exception.getMessage)
-      case Right(FSFlightsNearBoundingBox(req, appendix, flightPositions)) => checkFlightPositions(flightPositions)
-      case Right(FSFlightsNearPointAndDistance(req, appendix, flightPositions)) => checkFlightPositions(flightPositions)
+      case Right(x) => {
+        exerciseCaseClass(x)
+        x match {
+          case FSFlightsNearBoundingBox(req, appendix, flightPositions) => checkFlightPositions(flightPositions)
+          case FSFlightsNearPointAndDistance(req, appendix, flightPositions) => checkFlightPositions(flightPositions)
+          case x => fail("didn't expect " + x.toString)
+        }
+      }
       case x => fail("didn't expect " + x.toString)
     }
   }
 
   def checkFlightPositions(flightPositions: Seq[FSFlightPosition]) {
     for(flightPosition <- flightPositions) {
+
       assertNotNull(flightPosition)
       assertNotNull(flightPosition.flightId)
       assertNotNull(flightPosition.heading)

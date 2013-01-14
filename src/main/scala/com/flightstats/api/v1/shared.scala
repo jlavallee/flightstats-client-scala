@@ -60,8 +60,8 @@ class FSAirport (  // too many parameters for a case class...
 
 @JsonCreator
 case class FSAppendix (
-  @JsonProperty("airports") airports: Seq[FSAirport],
-  @JsonProperty("airlines") airlines: Seq[FSAirline],
+  @JsonProperty("airports") airports: Option[Seq[FSAirport]],
+  @JsonProperty("airlines") airlines: Option[Seq[FSAirline]],
   @JsonProperty("equipments") equipment: Option[Seq[FSEquipment]]
 )
 
@@ -91,8 +91,8 @@ case class FSError(
 
 @JsonCreator
 case class FSRequested[T] (
-  @JsonProperty("requested") requested: String,
-  @JsonProperty("interpreted") interpreted: T,
+  @JsonProperty("requested") requested: Option[String],
+  @JsonProperty("interpreted") interpreted: Option[T],
   @JsonProperty("error") error: Option[FSError]
 )
 
