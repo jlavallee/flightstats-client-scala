@@ -18,10 +18,12 @@ trait FSTest {
       println(promise) // it's cool to see that we're really async when we test w/creds
   }
 
-  def exerciseCaseClass(foo: Any) {
+  def exerciseCaseClass(foo: Any, exceptions: Map[String, Seq[String]] = Map.empty) {
     import scala.reflect.runtime.universe._
     import scala.reflect.runtime.{currentMirror => mirror};
     val im = mirror.reflect(foo)
+
+    if(!im.symbol.isCaseClass) return
 
     val accessors = im.symbol.asClass.typeSignature.declarations.collect {
       case m: MethodSymbol if m.isCaseAccessor => m
@@ -30,12 +32,20 @@ trait FSTest {
     accessors.foreach { a =>
       val ca = im.reflectMethod(a.asMethod)
       val r = ca()
-      //println(m.name + " = " + r)
-      assertNotNull(r)
 
-      if(a.asMethod.returnType.typeSymbol.isClass
-         && a.asMethod.returnType.typeSymbol.asClass.isCaseClass)
-        exerciseCaseClass(r)
+      if(exceptions.getOrElse(im.symbol.name.toString(), Seq.empty).contains(a.name.toString())){
+        println("skipping exempted field " + im.symbol.name + "." + a.name + " = " + r)
+      } else{
+        assertNotNull(im.symbol.name + "." + a.name + " = " + r, r)
+      }
+
+      r match {
+        case None => Unit
+        case Some(null) => fail("found Some(null)")
+        case null => fail(im.symbol.name + "." + a.name + " = null")
+        case Some(i) => exerciseCaseClass(i, exceptions)
+        case x => exerciseCaseClass(x, exceptions)
+      }
     }
   }
 }

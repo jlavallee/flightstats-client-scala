@@ -8,7 +8,7 @@ import com.flightstats.api.v1._
 @JsonCreator
 case class FSAlert (
   @JsonProperty("rule") rule: FSAlertRule,
-  @JsonProperty("alertCapabilities") alertCapabilities: FSAlertCapabilities,
+  @JsonProperty("alertCapabilities") alertCapabilities: Option[FSAlertCapabilities],
   @JsonProperty("appendix") appendix: FSAppendix,
   @JsonProperty("request") request: FSAlertRequest,
   @JsonProperty("error") error: Option[FSError]
@@ -61,10 +61,10 @@ case class FSAlertCapabilities(
 
 @JsonCreator
 case class FSAlertRequest (
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
-  @JsonProperty("codeType") codeType: FSRequested[String],
-  @JsonProperty("nameValues") nameValues: Seq[FSRequested[String]],
-  @JsonProperty("events") events: Seq[FSRequested[String]],
+  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
+  @JsonProperty("codeType") codeType: Option[FSRequested[String]],
+  @JsonProperty("nameValues") nameValues: Option[Seq[FSRequested[String]]],
+  @JsonProperty("events") events: Option[Seq[FSRequested[String]]],
   @JsonProperty("deliverTo") deliverTo: FSRequested[String],
   @JsonProperty("airport") airport: FSRequestedAirport,
   @JsonProperty("url") url: URL,

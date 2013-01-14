@@ -59,6 +59,7 @@ class FSAirportsTest extends FSTest {
       case Right(list) => {
           assertNotNull(list)
           assertTrue(list.length > 0)
+          list.foreach{ exerciseCaseClass(_) }
       }
     }
   }
@@ -70,6 +71,7 @@ class FSAirportsTest extends FSTest {
       case Left(exception) => fail(exception.getMessage())
       case Right(airport) => {
           assertNotNull(airport)
+          exerciseCaseClass(airport)
           assertEquals(code, airport.fs)
       }
     }

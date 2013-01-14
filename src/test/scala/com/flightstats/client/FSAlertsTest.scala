@@ -68,9 +68,8 @@ class FSAlertsTest extends FSTest {
       case Left(exception) => fail(exception.getMessage())
       case Right(request) => {
           assertNotNull(request)
-          assertNotNull(request.rule.name)
-          assertNotNull(request.appendix.airlines)
-          assertNotNull(request.appendix.airports)
+          // rules created with the testRun option do not have an id
+          exerciseCaseClass(request, Map("FSAlertRule" -> Seq("id")))
       }
     }
   }
