@@ -7,6 +7,8 @@ import com.ning.http.client.FluentStringsMap
 import java.io.{File => JFile, PrintWriter => JPrintWriter}
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.DeserializationFeature
+import scala.reflect.runtime.universe._
+import scala.reflect.runtime.{currentMirror => mirror};
 
 
 trait FSTest {
@@ -18,9 +20,7 @@ trait FSTest {
       println(promise) // it's cool to see that we're really async when we test w/creds
   }
 
-  def exerciseCaseClass(foo: Any) {
-    import scala.reflect.runtime.universe._
-    import scala.reflect.runtime.{currentMirror => mirror};
+  def exerciseCaseClass(foo: AnyRef) {
     val im = mirror.reflect(foo)
 
     if(!im.symbol.isCaseClass) return
@@ -29,19 +29,24 @@ trait FSTest {
       case m: MethodSymbol if m.isCaseAccessor => m
     }
 
-    accessors.foreach { a =>
-      val ca = im.reflectMethod(a.asMethod)
-      val r = ca()
+    accessors.foreach( checkNotNull(im, _))
 
-      assertNotNull(im.symbol.name + "." + a.name + " = " + r, r)
 
-      r match {
-        case None => Unit
-        case Some(null) => fail("found Some(null)")
-        case null => fail(im.symbol.name + "." + a.name + " = null")
-        case Some(i) => exerciseCaseClass(i)
-        case x => exerciseCaseClass(x)
-      }
+  }
+
+  def checkNotNull(im: InstanceMirror, m: MethodSymbol) {
+    val ca = im.reflectMethod(m.asMethod)
+    val r = ca()
+
+    assertNotNull(im.symbol.name + "." + m.name + " = " + r, r)
+
+    r match {
+      case None => Unit
+      case Some(null) => fail("found Some(null)")
+      case null => fail(im.symbol.name + "." + m.name + " = null")
+      case Some(i: AnyRef) => exerciseCaseClass(i)
+      case x:AnyRef => exerciseCaseClass(x)
+      case y => fail("expected at least an AnyRef, got: " + y)
     }
   }
 }
