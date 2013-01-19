@@ -126,6 +126,14 @@ object FSTestClients extends FSTest {
         new FSWeather(testAppId, testAppKey) with FSMockClient
     }
 
+  def connections: FSConnections =
+    (appId, appKey) match {
+      case (Some(id), Some(key)) =>
+        new FSConnections(id, key) with FSTestRun
+      case (_, _) =>
+        new FSConnections(testAppId, testAppKey) with FSMockClient
+    }
+
 }
 
 class FSTestClients { }
