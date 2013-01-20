@@ -12,7 +12,7 @@ class FSConnectionsTest extends FSTest {
 
   @Test def directByArrivalAndDate =
     checkConnectionsResponse(connections.directByArrivalAndDate("PDX", date))
-    
+
   @Test def directByDepartureAndDate =
     checkConnectionsResponse(connections.directByDepartureAndDate("JFK", date))
 
@@ -47,6 +47,6 @@ class FSConnectionsTest extends FSTest {
 
   def checkConnections(connections: FSConnectionsResponse) {
     assertNotNull(connections)
-    //exerciseCaseClass(connections)
+    exerciseCaseClass(connections)
   }
 }

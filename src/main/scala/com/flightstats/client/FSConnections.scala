@@ -26,8 +26,6 @@ abstract class FSConnections(protected val appId: String, protected val appKey: 
   // https://api.flightstats.com/flex/connections/rest/v1/json
   protected def api = fsHost / "flex" / "connections" / "rest" / "v1" / "json"
 
-  
-  
   /** Direct scheduled flights by arrival location and date
     *
     * /v1/json/direct/to/{arrivalCode}/arriving/{year}/{month}/{day} GET
@@ -76,7 +74,7 @@ abstract class FSConnections(protected val appId: String, protected val appKey: 
     */
   def betweenLocationsByArrivalDate(departureCode: String, arrivalCode: String, date: DateTime, args: ArgMap = Map.empty) =
     flights(api / "connecting" / "from" / departureCode / "to" / arrivalCode / "arriving" / date)
-  
+
   /** Direct and connecting scheduled flights between two locations by departure date
     *
     * /v1/json/connecting/from/{departureCode}/to/{arrivalCode}/departing/{year}/{month}/{day} GET

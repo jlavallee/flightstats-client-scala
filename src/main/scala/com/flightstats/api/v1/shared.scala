@@ -7,12 +7,14 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 
 @JsonCreator
 case class FSAirline(
-  @JsonProperty("active") active: String, // true
-  @JsonProperty("phoneNumber") phoneNumber: Option[String], // "1-800-433-7300"
+  @JsonProperty("fs") fs: String,  // "AA"
+  @JsonProperty("iata") iata: Option[String], // "AA"
+  @JsonProperty("icao") icao: Option[String], // "AAL"
   @JsonProperty("name") name: String, // "American Airlines"
-  @JsonProperty("icao") icao: String, // "AAL"
-  @JsonProperty("iata") iata: String, // "AA"
-  @JsonProperty("fs") fs: String  // "AA"
+  @JsonProperty("phoneNumber") phoneNumber: Option[String], // "1-800-433-7300"
+  @JsonProperty("active") active: Boolean,
+  @JsonProperty("dateFrom") dateFrom: Option[DateTime],
+  @JsonProperty("dateTo") dateTo: Option[DateTime]
 )
 
 @JsonCreator
@@ -107,15 +109,15 @@ case class FSRequestedDate(
 
 @JsonCreator
 case class FSRequestedAirport(
-  @JsonProperty("requestedCode") requestedCode: String,
-  @JsonProperty("fsCode") fsCode: String,
+  @JsonProperty("requestedCode") requestedCode: Option[String],
+  @JsonProperty("fsCode") fsCode: Option[String],
   @JsonProperty("error") error: Option[FSError]
 )
 
 @JsonCreator
 case class FSRequestedAirline (
-  @JsonProperty("requestedCode") reqeustedCode: String,
-  @JsonProperty("fsCode") fsCode: String,
+  @JsonProperty("requestedCode") reqeustedCode: Option[String],
+  @JsonProperty("fsCode") fsCode: Option[String],
   @JsonProperty("error") error: Option[FSError]
 )
 

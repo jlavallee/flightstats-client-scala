@@ -70,14 +70,14 @@ case class FSFlightId (
 
 @JsonCreator
 case class FSConnectionsRequest (
-  @JsonProperty("airportOrMetro") airportOrMetro: FSRequestedAirportOrMetro,
-  @JsonProperty("date") date: FSRequestedDate,
-  @JsonProperty("carriers") carriers: Seq[FSRequestedAirline],
-  @JsonProperty("codeshareType") codeshareType: FSRequested[String],
-  @JsonProperty("serviceType") serviceType: FSRequested[String],
-  @JsonProperty("flightType") flightType: FSRequested[String],
-  @JsonProperty("codeType") codeType: FSRequested[String],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String]
+  @JsonProperty("airportOrMetro") airportOrMetro: Option[FSRequestedAirportOrMetro],
+  @JsonProperty("date") date: Option[FSRequestedDate],
+  @JsonProperty("carriers") carriers: Option[Seq[FSRequestedAirline]],
+  @JsonProperty("codeshareType") codeshareType: Option[FSRequested[String]],
+  @JsonProperty("serviceType") serviceType: Option[FSRequested[String]],
+  @JsonProperty("flightType") flightType: Option[FSRequested[String]],
+  @JsonProperty("codeType") codeType: Option[FSRequested[String]],
+  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]]
 )
 
 @JsonCreator
