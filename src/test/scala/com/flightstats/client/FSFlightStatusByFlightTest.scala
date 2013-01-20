@@ -12,6 +12,11 @@ class FSFlightStatusByFlightTest extends FSTest {
 
   def statuses = FSTestClients.flightStatusByFlight
 
+  @Test def factory: Unit = FSFlightStatusByFlight("id", "key") match {
+    case o: FSFlightStatusByFlight => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def flightStatus =
     checkFlightStatus(statuses.flightStatus(285645279))
 

@@ -9,6 +9,11 @@ import com.flightstats.api.v1.weather.{FSWeatherMetar, FSWeatherTaf, FSWeatherZo
 class FSWeatherTest extends FSTest {
   val weather = FSTestClients.weather
 
+  @Test def factory: Unit = FSWeather("id", "key") match {
+    case o: FSWeather => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def all =
     checkWeatherResponse(weather.all("PDX"))
 

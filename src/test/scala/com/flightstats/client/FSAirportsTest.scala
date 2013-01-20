@@ -11,6 +11,11 @@ class FSAirportsTest extends FSTest {
 
   val airports = FSTestClients.airports
 
+  @Test def factory: Unit = FSAirports("id", "key") match {
+    case o: FSAirports => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def active =
     checkAirportList(airports.active)
 

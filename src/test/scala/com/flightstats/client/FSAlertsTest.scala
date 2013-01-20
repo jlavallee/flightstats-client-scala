@@ -10,6 +10,11 @@ class FSAlertsTest extends FSTest {
 
   val alerts = FSTestClients.alerts
 
+  @Test def factory: Unit = FSAlerts("id", "key") match {
+    case o: FSAlerts => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def createRuleByArrival =
     checkAlertRequest(
         alerts.createRuleByArrival(

@@ -12,6 +12,11 @@ import com.flightstats.api.v1.flightstatus.FSFlightPosition
 class FSFlightsNearTest extends FSTest {
   def flightsNear = FSTestClients.flightsNear
 
+  @Test def factory: Unit = FSFlightsNear("id", "key") match {
+    case o: FSFlightsNear => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def boundingBox =
     checkFlightsNear(flightsNear.boundingBox(45.0, -125.0, 40.0, -120.0))
 

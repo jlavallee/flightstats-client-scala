@@ -9,6 +9,11 @@ class FSDelayIndexesTest extends FSTest {
 
   val delayIndexes = FSTestClients.delayIndexes
 
+  @Test def factory: Unit = FSDelayIndexes("id", "key") match {
+    case o: FSDelayIndexes => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def byAirport =
     checkAirportDelays(delayIndexes.byAirport("PDX"))
 

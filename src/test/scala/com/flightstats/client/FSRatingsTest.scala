@@ -9,6 +9,11 @@ import com.flightstats.api.v1.ratings.{FSRating, FSRatingsForFlight, FSRatingsFo
 class FSRatingsTest extends FSTest {
   val ratings = FSTestClients.ratings
 
+  @Test def factory: Unit = FSRatings("id", "key") match {
+    case o: FSRatings => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def forFlight =
     checkRatingsResponse(ratings.forFlight("AA", "100"))
 

@@ -10,6 +10,11 @@ class FSConnectionsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-22T00:00:00.000Z")
   val connections = FSTestClients.connections
 
+  @Test def factory: Unit = FSConnections("id", "key") match {
+    case o: FSConnections => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def directByArrivalAndDate =
     checkConnectionsResponse(connections.directByArrivalAndDate("PDX", date))
 
