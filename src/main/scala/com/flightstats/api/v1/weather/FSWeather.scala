@@ -38,8 +38,8 @@ case class FSWeatherZoneForecast (
 @JsonCreator
 case class FSWeatherRequest(
   @JsonProperty("airport") airport: FSRequested[String],
-  @JsonProperty("codeType") codeType: FSRequested[String],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
+  @JsonProperty("codeType") codeType: Option[FSRequested[String]],
+  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
   @JsonProperty("url") url: URL
 )
 

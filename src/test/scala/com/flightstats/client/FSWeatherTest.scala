@@ -37,6 +37,7 @@ class FSWeatherTest extends FSTest {
       }
       case x => fail("Whoops, got unexpected response " + x)
     }
+    exerciseCaseClass(weatherResponse())
   }
 
   def checkMetar(weather: FSMetar) {
