@@ -5,91 +5,82 @@ import org.joda.time.DateTime
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import com.flightstats.api.v1._
 
-@JsonCreator
 case class FSCreateAlert (
-  @JsonProperty("rule") rule: FSAlertRule,
-  @JsonProperty("alertCapabilities") alertCapabilities: Option[FSAlertCapabilities],
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("request") request: FSCreateAlertRequest,
-  @JsonProperty("error") error: Option[FSError]
+  rule: FSAlertRule,
+  alertCapabilities: Option[FSAlertCapabilities],
+  appendix: FSAppendix,
+  request: FSCreateAlertRequest,
+  error: Option[FSError]
 )
 
-@JsonCreator
 case class FSGetAlert (
-  @JsonProperty("rule") rule: FSAlertRule,
-  @JsonProperty("alertCapabilities") alertCapabilities: Option[FSAlertCapabilities],
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("request") request: FSGetAlertRequest,
-  @JsonProperty("error") error: Option[FSError]
+  rule: FSAlertRule,
+  alertCapabilities: Option[FSAlertCapabilities],
+  appendix: FSAppendix,
+  request: FSGetAlertRequest,
+  error: Option[FSError]
 )
 
-@JsonCreator
 case class FSAlertRule (
-  @JsonProperty("id") id: String,
-  @JsonProperty("name") name: String,
-  @JsonProperty("carrierFsCode") carrierFsCode: String,
-  @JsonProperty("flightNumber") flightNumber: String,
-  @JsonProperty("departure") departure: DateTime,
-  @JsonProperty("departureAirport") departureAirport: Option[String],
-  @JsonProperty("departureAirportFsCode") departureAirportFsCode: Option[String],
-  @JsonProperty("arrival") arrival: DateTime,
-  @JsonProperty("arrivalAirport") arrivalAirport: Option[String],
-  @JsonProperty("arrivalAirportFsCode") arrivalAirportFsCode: Option[String],
-  @JsonProperty("nameValues") nameValues: Seq[FSNameValue],
-  @JsonProperty("ruleEvents") ruleEvents: Seq[FSAlertRuleEvent],
-  @JsonProperty("delivery") delivery: FSAlertRuleDelivery
+  id: String,
+  name: String,
+  carrierFsCode: String,
+  flightNumber: String,
+  departure: DateTime,
+  departureAirport: Option[String],
+  departureAirportFsCode: Option[String],
+  arrival: DateTime,
+  arrivalAirport: Option[String],
+  arrivalAirportFsCode: Option[String],
+  nameValues: Seq[FSNameValue],
+  ruleEvents: Seq[FSAlertRuleEvent],
+  delivery: FSAlertRuleDelivery
 )
 
-@JsonCreator
 case class FSNameValue (
-  @JsonProperty("name") name: String,
-  @JsonProperty("value") value: String
+  name: String,
+  value: String
 )
 
-@JsonCreator
 case class FSAlertRuleEvent (
   @JsonProperty("type") eventType : FSAlertRuleEventType
 )
 
-@JsonCreator
 case class FSAlertRuleDelivery(
-  @JsonProperty("destination") destination: URL,
-  @JsonProperty("format") format: String
+  destination: URL,
+  format: String
 )
 
-@JsonCreator
 case class FSAlertCapabilities(
-  @JsonProperty("runwayArrival") runwayArrival: Boolean,
-  @JsonProperty("runwayDeparture") runwayDeparture: Boolean,
-  @JsonProperty("gateArrival") gateArrival: Boolean,
-  @JsonProperty("gateDeparture") gateDeparture: Boolean,
-  @JsonProperty("arrivalGateChange") arrivalGateChange: Boolean,
-  @JsonProperty("departureGateChange") departureGateChange: Boolean,
-  @JsonProperty("baggage") baggage: Boolean
+  runwayArrival: Boolean,
+  runwayDeparture: Boolean,
+  gateArrival: Boolean,
+  gateDeparture: Boolean,
+  arrivalGateChange: Boolean,
+  departureGateChange: Boolean,
+  baggage: Boolean
 )
 
-@JsonCreator
 case class FSCreateAlertRequest (
-  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
-  @JsonProperty("codeType") codeType: Option[FSRequested[String]],
-  @JsonProperty("nameValues") nameValues: Option[Seq[FSRequested[String]]],
-  @JsonProperty("events") events: Option[Seq[FSRequested[String]]],
-  @JsonProperty("deliverTo") deliverTo: FSRequested[String],
-  @JsonProperty("airport") airport: Option[FSRequestedAirport],
-  @JsonProperty("url") url: URL,
-  @JsonProperty("departureAirport") departureAirport: Option[FSRequestedAirport],
-  @JsonProperty("arrivalAirport") arrivalAirport: Option[FSRequestedAirport],
-  @JsonProperty("airlineCode") airlineCode: FSRequestedAirline,
-  @JsonProperty("flightNumber") flightNumber: FSRequested[String],
-  @JsonProperty("date") date: FSRequestedDate,
-  @JsonProperty("name") name: FSRequested[String],
-  @JsonProperty("description") description: FSRequested[String],
-  @JsonProperty("type") `type`: FSRequested[String]
+  extendedOptions: Option[FSRequested[String]],
+  codeType: Option[FSRequested[String]],
+  nameValues: Option[Seq[FSRequested[String]]],
+  events: Option[Seq[FSRequested[String]]],
+  deliverTo: FSRequested[String],
+  airport: Option[FSRequestedAirport],
+  url: URL,
+  departureAirport: Option[FSRequestedAirport],
+  arrivalAirport: Option[FSRequestedAirport],
+  airlineCode: FSRequestedAirline,
+  flightNumber: FSRequested[String],
+  date: FSRequestedDate,
+  name: FSRequested[String],
+  description: FSRequested[String],
+  `type`: FSRequested[String]
 )
 
-@JsonCreator
 case class FSGetAlertRequest (
-  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
-  @JsonProperty("url") url: URL,
-  @JsonProperty("ruleId") ruleId: FSRequested[String]
+  extendedOptions: Option[FSRequested[String]],
+  url: URL,
+  ruleId: FSRequested[String]
 )

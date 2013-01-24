@@ -5,153 +5,137 @@ import java.net.URL
 import com.flightstats.api.v1.{FSAppendix, FSRequested}
 import org.joda.time.DateTime
 
-@JsonCreator
 case class FSWeatherAll (
-  @JsonProperty("request") request: FSWeatherRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("metar") metar: FSMetar,
-  @JsonProperty("taf") taf: FSTaf,
-  @JsonProperty("zoneForecast") zoneForecast: FSZoneForecast
+  request: FSWeatherRequest,
+  appendix: FSAppendix,
+  metar: FSMetar,
+  taf: FSTaf,
+  zoneForecast: FSZoneForecast
 )
 
-@JsonCreator
 case class FSWeatherMetar (
-  @JsonProperty("request") request: FSWeatherRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("metar") metar: FSMetar
+  request: FSWeatherRequest,
+  appendix: FSAppendix,
+  metar: FSMetar
 )
 
-@JsonCreator
 case class FSWeatherTaf (
-  @JsonProperty("request") request: FSWeatherRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("taf") taf: FSTaf
+  request: FSWeatherRequest,
+  appendix: FSAppendix,
+  taf: FSTaf
 )
 
-@JsonCreator
 case class FSWeatherZoneForecast (
-  @JsonProperty("request") request: FSWeatherRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("zoneForecast") zoneForecast: FSZoneForecast
+  request: FSWeatherRequest,
+  appendix: FSAppendix,
+  zoneForecast: FSZoneForecast
 )
 
-@JsonCreator
 case class FSWeatherRequest(
-  @JsonProperty("airport") airport: FSRequested[String],
-  @JsonProperty("codeType") codeType: Option[FSRequested[String]],
-  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]],
-  @JsonProperty("url") url: URL
+  airport: FSRequested[String],
+  codeType: Option[FSRequested[String]],
+  extendedOptions: Option[FSRequested[String]],
+  url: URL
 )
 
-@JsonCreator
 case class FSMetar (
-  @JsonProperty("report") report: String,
-  @JsonProperty("reportTime") reportTime: String,
-  @JsonProperty("reportModifier") reportModifier: Option[String],
-  @JsonProperty("weatherStationIcao") weatherStationIcao: String,
-  @JsonProperty("tags") tags: Seq[FSTag],
-  @JsonProperty("conditions") conditions: FSConditions,
-  @JsonProperty("temperatureCelsius") temperatureCelsius: Option[String],
-  @JsonProperty("dewPointCelsius") dewPointCelsius: Option[String],
-  @JsonProperty("runwayVisualRanges") runwayVisualRanges: Seq[FSRunwayVisualRange],
-  @JsonProperty("obscurations") obscurations: Seq[FSWeatherObscuration],
-  @JsonProperty("noSignificantChange") noSignificantChange: Boolean
+  report: String,
+  reportTime: String,
+  reportModifier: Option[String],
+  weatherStationIcao: String,
+  tags: Seq[FSTag],
+  conditions: FSConditions,
+  temperatureCelsius: Option[String],
+  dewPointCelsius: Option[String],
+  runwayVisualRanges: Seq[FSRunwayVisualRange],
+  obscurations: Seq[FSWeatherObscuration],
+  noSignificantChange: Boolean
 )
 
-@JsonCreator
 case class FSTag (
-  @JsonProperty("key") key: String,
-  @JsonProperty("value") value: String
+  key: String,
+  value: String
 )
 
-@JsonCreator
 case class FSRunwayVisualRange (
-  @JsonProperty("highestVisibility") highestVisibility: Option[Integer],
-  @JsonProperty("lowestVisibility") lowestVisibility: Option[Integer],
-  @JsonProperty("modifier") modifier: Option[String],
-  @JsonProperty("runwayNumber") runwayNumber: Option[String]
+  highestVisibility: Option[Integer],
+  lowestVisibility: Option[Integer],
+  modifier: Option[String],
+  runwayNumber: Option[String]
 )
 
-@JsonCreator
 case class FSWeatherObscuration (
-  @JsonProperty("phenomenon") phenomenon: Option[String],
-  @JsonProperty("coverage") coverage: Option[String],
-  @JsonProperty("height") height: Option[Integer]
+  phenomenon: Option[String],
+  coverage: Option[String],
+  height: Option[Integer]
 )
 
-@JsonCreator
 case class FSConditions (
-  @JsonProperty("wind") wind: FSWind,
-  @JsonProperty("visibility") visibility: FSVisibility,
-  @JsonProperty("weatherConditions") weatherConditions: Seq[FSWeatherCondition],
-  @JsonProperty("skyConditions") skyConditions: Seq[FSSkyCondition],
-  @JsonProperty("pressureInchesHg") pressureInchesHg: Option[String]
+  wind: FSWind,
+  visibility: FSVisibility,
+  weatherConditions: Seq[FSWeatherCondition],
+  skyConditions: Seq[FSSkyCondition],
+  pressureInchesHg: Option[String]
 )
 
-@JsonCreator
 case class FSWeatherCondition (
-  @JsonProperty("phenomenon") phenomenon: Option[String],
-  @JsonProperty("descriptor") descriptor: Option[String],
-  @JsonProperty("intensity") intensity: Option[String]
+  phenomenon: Option[String],
+  descriptor: Option[String],
+  intensity: Option[String]
 )
 
-@JsonCreator
 case class FSWind (
-  @JsonProperty("direction") direction: Option[Integer],
-  @JsonProperty("directionMin") directionMin: Option[Integer],
-  @JsonProperty("directionMax") directionMax: Option[Integer],
-  @JsonProperty("directionIsVariable") directionIsVariable: Option[Boolean],
-  @JsonProperty("speedKnots") speedKnots: Option[String],
-  @JsonProperty("gustSpeedKnots") gustSpeedKnots: Option[String]
+  direction: Option[Integer],
+  directionMin: Option[Integer],
+  directionMax: Option[Integer],
+  directionIsVariable: Option[Boolean],
+  speedKnots: Option[String],
+  gustSpeedKnots: Option[String]
 )
 
-@JsonCreator
 case class FSVisibility (
-  @JsonProperty("miles") miles: Option[String],
-  @JsonProperty("lessThan") lessThan: Option[Boolean],
-  @JsonProperty("cavok") cavok: Option[Boolean]
+  miles: Option[String],
+  lessThan: Option[Boolean],
+  cavok: Option[Boolean]
 )
 
-@JsonCreator
 case class FSSkyCondition (
-  @JsonProperty("coverage") coverage: Option[String],
-  @JsonProperty("base") base: Option[Integer],
-  @JsonProperty("modifier") modifier: Option[String]
+  coverage: Option[String],
+  base: Option[Integer],
+  modifier: Option[String]
 )
 
-@JsonCreator
 case class FSTaf (
-  @JsonProperty("report") report: Option[String],
-  @JsonProperty("reportTime") reportTime: Option[String],
-  @JsonProperty("observationTime") observationTime: Option[String],
-  @JsonProperty("reportType") reportType: Option[String],
-  @JsonProperty("weatherStationIcao") weatherStationIcao: Option[String],
-  @JsonProperty("forecasts") forecasts: Seq[FSWeather]
+  report: Option[String],
+  reportTime: Option[String],
+  observationTime: Option[String],
+  reportType: Option[String],
+  weatherStationIcao: Option[String],
+  forecasts: Seq[FSWeather]
 )
 
 case class FSWeather (
-  @JsonProperty("type") `type`: Option[String],
-  @JsonProperty("start") start: Option[String],
-  @JsonProperty("end") end: Option[String],
-  @JsonProperty("conditions") conditions: FSConditions,
-  @JsonProperty("probability") probability: Option[String]
+  `type`: Option[String],
+  start: Option[String],
+  end: Option[String],
+  conditions: FSConditions,
+  probability: Option[String]
 )
 
-@JsonCreator
 case class FSZoneForecast (
-  @JsonProperty("header") header: Option[String],
-  @JsonProperty("general") general: Option[String],
-  @JsonProperty("zones") zones: Seq[String],
-  @JsonProperty("reportTime") reportTime: Option[DateTime],
-  @JsonProperty("cities") cities: Seq[String],
-  @JsonProperty("zoneNames") zoneNames: Seq[String],
-  @JsonProperty("dayForecasts") dayForecasts: Seq[FSDayForecast]
+  header: Option[String],
+  general: Option[String],
+  zones: Seq[String],
+  reportTime: Option[DateTime],
+  cities: Seq[String],
+  zoneNames: Seq[String],
+  dayForecasts: Seq[FSDayForecast]
 )
 
 case class FSDayForecast (
-  @JsonProperty("day") day: Option[String],
-  @JsonProperty("forecast") forecast: Option[String],
-  @JsonProperty("start") start: Option[String],
-  @JsonProperty("end") end: Option[String],
-  @JsonProperty("tags") tags: Seq[FSTag]
+  day: Option[String],
+  forecast: Option[String],
+  start: Option[String],
+  end: Option[String],
+  tags: Seq[FSTag]
 )

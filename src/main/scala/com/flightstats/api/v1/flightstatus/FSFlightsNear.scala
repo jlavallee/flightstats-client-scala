@@ -6,45 +6,40 @@ import com.flightstats.api.v1.{FSAppendix, FSRequested, FSPosition}
 import org.joda.time.DateTime
 import java.net.URL
 
-@JsonCreator
 case class FSFlightsNearBoundingBox (
-  @JsonProperty("request") request: FSFlightsNearBoundingBoxRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("flightPositions") flightPositions: Seq[FSFlightPosition]
+  request: FSFlightsNearBoundingBoxRequest,
+  appendix: FSAppendix,
+  flightPositions: Seq[FSFlightPosition]
 )
 
-@JsonCreator
 case class FSFlightsNearBoundingBoxRequest (
-  @JsonProperty("topLatitude") topLatitude: FSRequested[BigDecimal],
-  @JsonProperty("leftLongitude") leftLongitude: FSRequested[BigDecimal],
-  @JsonProperty("bottomLatitude") bottomLatitude: FSRequested[BigDecimal],
-  @JsonProperty("rightLongitude") rightLongitude: FSRequested[BigDecimal],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
-  @JsonProperty("url") url: Option[URL]
+  topLatitude: FSRequested[BigDecimal],
+  leftLongitude: FSRequested[BigDecimal],
+  bottomLatitude: FSRequested[BigDecimal],
+  rightLongitude: FSRequested[BigDecimal],
+  extendedOptions: FSRequested[String],
+  url: Option[URL]
 )
 
-@JsonCreator
 case class FSFlightsNearPointAndDistance (
-  @JsonProperty("request") request: FSFlightsNearPointAndDistanceRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("flightPositions") flightPositions: Seq[FSFlightPosition]
+  request: FSFlightsNearPointAndDistanceRequest,
+  appendix: FSAppendix,
+  flightPositions: Seq[FSFlightPosition]
 )
 
-@JsonCreator
 case class FSFlightsNearPointAndDistanceRequest (
-  @JsonProperty("latitude") latitude: FSRequested[BigDecimal],
-  @JsonProperty("longitude") longitude: FSRequested[BigDecimal],
-  @JsonProperty("radiusMiles") radiusMiles: FSRequested[Integer],
-  @JsonProperty("maxFlights") maxFlights: FSRequested[Integer],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
-  @JsonProperty("url") url: Option[URL]
+  latitude: FSRequested[BigDecimal],
+  longitude: FSRequested[BigDecimal],
+  radiusMiles: FSRequested[Integer],
+  maxFlights: FSRequested[Integer],
+  extendedOptions: FSRequested[String],
+  url: Option[URL]
 )
 
-@JsonCreator
 case class FSFlightPosition (
-  @JsonProperty("flightId") flightId: Long,
-  @JsonProperty("callsign") callsign: String,
-  @JsonProperty("heading") heading: BigDecimal,
-  @JsonProperty("source") source: String,
-  @JsonProperty("positions") positions: Seq[FSPosition]
+  flightId: Long,
+  callsign: String,
+  heading: BigDecimal,
+  source: String,
+  positions: Seq[FSPosition]
 )

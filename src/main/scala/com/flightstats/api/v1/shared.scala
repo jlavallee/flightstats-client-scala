@@ -5,26 +5,23 @@ import java.util.UUID
 import java.math.BigDecimal
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 
-@JsonCreator
 case class FSAirline(
-  @JsonProperty("fs") fs: String,  // "AA"
-  @JsonProperty("iata") iata: Option[String], // "AA"
-  @JsonProperty("icao") icao: Option[String], // "AAL"
-  @JsonProperty("name") name: String, // "American Airlines"
-  @JsonProperty("phoneNumber") phoneNumber: Option[String], // "1-800-433-7300"
-  @JsonProperty("active") active: Boolean,
-  @JsonProperty("dateFrom") dateFrom: Option[DateTime],
-  @JsonProperty("dateTo") dateTo: Option[DateTime]
+  fs: String,  // "AA"
+  iata: Option[String], // "AA"
+  icao: Option[String], // "AAL"
+  name: String, // "American Airlines"
+  phoneNumber: Option[String], // "1-800-433-7300"
+  active: Boolean,
+  dateFrom: Option[DateTime],
+  dateTo: Option[DateTime]
 )
 
-@JsonCreator
 case class FSAirportsHolder(
-  @JsonProperty("airports") airports: Seq[FSAirport]
+  airports: Seq[FSAirport]
 )
 
-@JsonCreator
 case class FSAirportHolder(
-  @JsonProperty("airport") airport: FSAirport
+  airport: FSAirport
 )
 
 @JsonCreator
@@ -60,153 +57,137 @@ class FSAirport (  // too many parameters for a case class...
 )
 
 
-@JsonCreator
 case class FSAppendix (
-  @JsonProperty("airports") airports: Option[Seq[FSAirport]],
-  @JsonProperty("airlines") airlines: Option[Seq[FSAirline]],
-  @JsonProperty("equipments") equipment: Option[Seq[FSEquipment]]
+  airports: Option[Seq[FSAirport]],
+  airlines: Option[Seq[FSAirline]],
+  equipment: Option[Seq[FSEquipment]]
 )
 
-@JsonCreator
 case class FSEquipment (
-    @JsonProperty("iata") iata: String,
-    @JsonProperty("name") name: String,
-    @JsonProperty("turboProp") turboProp: Boolean,
-    @JsonProperty("jet") jet: Boolean,
-    @JsonProperty("widebody") widebody: Boolean,
-    @JsonProperty("regional") regional: Boolean
+    iata: String,
+    name: String,
+    turboProp: Boolean,
+    jet: Boolean,
+    widebody: Boolean,
+    regional: Boolean
 )
 
 case class FSDate (
-  @JsonProperty("dateLocal") dateLocal: DateTime,  // should get no timezone!
-  @JsonProperty("dateUtc") dateUtc: DateTime
+  dateLocal: DateTime,  // should get no timezone!
+  dateUtc: DateTime
 )
 
 
-@JsonCreator
 case class FSError(
-  @JsonProperty("httpStatusCode") httpStatusCode: Integer,
-  @JsonProperty("errorCode") errorCode: String, // TODO: make an enum for these
-  @JsonProperty("errorId") errorId: UUID,
-  @JsonProperty("errorMessage") errorMessage: String
+  httpStatusCode: Integer,
+  errorCode: String, // TODO: make an enum for these
+  errorId: UUID,
+  errorMessage: String
 )
 
-@JsonCreator
 case class FSRequested[T] (
-  @JsonProperty("requested") requested: Option[String],
-  @JsonProperty("interpreted") interpreted: Option[T],
-  @JsonProperty("error") error: Option[FSError]
+  requested: Option[String],
+  interpreted: Option[T],
+  error: Option[FSError]
 )
 
-@JsonCreator
 case class FSRequestedDate(
-  @JsonProperty("year") year: String,
-  @JsonProperty("month") month: String,
-  @JsonProperty("day") day: String,
-  @JsonProperty("interpreted") interpreted: String,
-  @JsonProperty("error") error: Option[String]
+  year: String,
+  month: String,
+  day: String,
+  interpreted: String,
+  error: Option[String]
 )
 
-@JsonCreator
 case class FSRequestedAirport(
-  @JsonProperty("requestedCode") requestedCode: Option[String],
-  @JsonProperty("fsCode") fsCode: Option[String],
-  @JsonProperty("error") error: Option[FSError]
+  requestedCode: Option[String],
+  fsCode: Option[String],
+  error: Option[FSError]
 )
 
-@JsonCreator
 case class FSRequestedAirline (
-  @JsonProperty("requestedCode") reqeustedCode: Option[String],
-  @JsonProperty("fsCode") fsCode: Option[String],
-  @JsonProperty("error") error: Option[FSError]
+  requestedCode: Option[String],
+  fsCode: Option[String],
+  error: Option[FSError]
 )
 
 
-@JsonCreator
 case class FSSchedule (
-  @JsonProperty("flightType") flightType: String,
-  @JsonProperty("serviceClasses") serviceClasses: String,
-  @JsonProperty("restrictions") restrictions: String,
-  @JsonProperty("uplines") uplines: Seq[FSUplineFlight],
-  @JsonProperty("downlines") downlines: Seq[FSDownlineFlight]
+  flightType: String,
+  serviceClasses: String,
+  restrictions: String,
+  uplines: Seq[FSUplineFlight],
+  downlines: Seq[FSDownlineFlight]
 )
 
-@JsonCreator
 case class FSUplineFlight (
-  @JsonProperty("departureAirport") departureAirport: FSAirport,
-  @JsonProperty("fsCode") fsCode: String,
-  @JsonProperty("flightId") flightId: Long
+  departureAirport: FSAirport,
+  fsCode: String,
+  flightId: Long
 )
 
-@JsonCreator
 case class FSDownlineFlight (
-  @JsonProperty("arrivalAirport") arrivalAirport: FSAirport,
-  @JsonProperty("fsCode") fsCode: String,
-  @JsonProperty("flightId") flightId: Long
+  arrivalAirport: FSAirport,
+  fsCode: String,
+  flightId: Long
 )
 
-@JsonCreator
 case class FSOperationalTimes (
-  @JsonProperty("publishedDeparture") publishedDeparture: FSDate,
-  @JsonProperty("publishedArrival") publishedArrival: FSDate,
-  @JsonProperty("scheduledGateDeparture") scheduledGateDeparture: FSDate,
-  @JsonProperty("estimatedGateDeparture") estimatedGateDeparture: FSDate,
-  @JsonProperty("actualGateDeparture") actualGateDeparture: FSDate,
-  @JsonProperty("flightPlanPlannedDeparture") flightPlanPlannedDeparture: FSDate,
-  @JsonProperty("estimatedRunwayDeparture") estimatedRunwayDeparture: FSDate,
-  @JsonProperty("actualRunwayDeparture") actualRunwayDeparture: FSDate,
-  @JsonProperty("scheduledGateArrival") scheduledGateArrival: FSDate,
-  @JsonProperty("estimatedGateArrival") estimatedGateArrival: FSDate,
-  @JsonProperty("actualGateArrival") actualGateArrival: FSDate,
-  @JsonProperty("flightPlanPlannedArrival") flightPlanPlannedArrival: FSDate,
-  @JsonProperty("estimatedRunwayArrival") estimatedRunwayArrival: FSDate,
-  @JsonProperty("actualRunwayArrival") actualRunwayArrival: FSDate
+  publishedDeparture: FSDate,
+  publishedArrival: FSDate,
+  scheduledGateDeparture: FSDate,
+  estimatedGateDeparture: FSDate,
+  actualGateDeparture: FSDate,
+  flightPlanPlannedDeparture: FSDate,
+  estimatedRunwayDeparture: FSDate,
+  actualRunwayDeparture: FSDate,
+  scheduledGateArrival: FSDate,
+  estimatedGateArrival: FSDate,
+  actualGateArrival: FSDate,
+  flightPlanPlannedArrival: FSDate,
+  estimatedRunwayArrival: FSDate,
+  actualRunwayArrival: FSDate
 )
 
-@JsonCreator
 case class FSCodeShare (
-  @JsonProperty("carrier") carrier: Option[FSAirport],
-  @JsonProperty("fsCode") fsCode: String,
-  @JsonProperty("flightNumber") flightNumber: String,
-  @JsonProperty("relationship") relationship: String
+  carrier: Option[FSAirport],
+  fsCode: String,
+  flightNumber: String,
+  relationship: String
 )
 
-@JsonCreator
 case class FSFlightDuration (
-  @JsonProperty("scheduledBlockMinutes") scheduledBlockMinutes: Integer,
-  @JsonProperty("blockMinutes") blockMinutes: Integer,
-  @JsonProperty("scheduledAirMinutes") scheduledAirMinutes: Integer,
-  @JsonProperty("airMinutes") airMinutes: Integer,
-  @JsonProperty("scheduledTaxiOutMinutes") scheduledTaxiOutMinutes: Integer,
-  @JsonProperty("taxiOutMinutes") taxiOutMinutes: Integer,
-  @JsonProperty("scheduledTaxiInMinutes") scheduledTaxiInMinutes: Integer,
-  @JsonProperty("taxiInMinutes") taxiInMinutes: Integer
+  scheduledBlockMinutes: Integer,
+  blockMinutes: Integer,
+  scheduledAirMinutes: Integer,
+  airMinutes: Integer,
+  scheduledTaxiOutMinutes: Integer,
+  taxiOutMinutes: Integer,
+  scheduledTaxiInMinutes: Integer,
+  taxiInMinutes: Integer
 )
 
-@JsonCreator
 case class FSFlightEquipment (
-  @JsonProperty("scheduledEquipment") scheduledEquipment: FSEquipment,
-  @JsonProperty("scheduledEquipmentIataCode") scheduledEquipmentIataCode: String,
-  @JsonProperty("actualEquipment") actualEquipment: FSEquipment,
-  @JsonProperty("actualEquipmentIataCode") actualEquipmentIataCode: String,
-  @JsonProperty("tailNumber") tailNumber: String
+  scheduledEquipment: FSEquipment,
+  scheduledEquipmentIataCode: String,
+  actualEquipment: FSEquipment,
+  actualEquipmentIataCode: String,
+  tailNumber: String
 )
 
-@JsonCreator
 case class FSAirportResources (
-  @JsonProperty("departureTerminal") departureTerminal: String,
-  @JsonProperty("departureGate") departureGate: String,
-  @JsonProperty("arrivalTerminal") arrivalTerminal: String,
-  @JsonProperty("arrivalGate") arrivalGate: String,
-  @JsonProperty("baggage") baggage: String
+  departureTerminal: String,
+  departureGate: String,
+  arrivalTerminal: String,
+  arrivalGate: String,
+  baggage: String
 )
 
-@JsonCreator
 case class FSPosition (
-  @JsonProperty("lon") lon: BigDecimal,
-  @JsonProperty("lat") lat: BigDecimal,
-  @JsonProperty("speedMph") speedMph: Option[Integer],
-  @JsonProperty("altitudeFt") altitudeFt: Option[Integer],
-  @JsonProperty("source") source: Option[String],
-  @JsonProperty("date") date: DateTime
+  lon: BigDecimal,
+  lat: BigDecimal,
+  speedMph: Option[Integer],
+  altitudeFt: Option[Integer],
+  source: Option[String],
+  date: DateTime
 )

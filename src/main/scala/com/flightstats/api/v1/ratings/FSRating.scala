@@ -4,37 +4,33 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import java.net.URL
 import com.flightstats.api.v1.{FSAppendix, FSRequested, FSAirport, FSRequestedAirline}
 
-@JsonCreator
 case class FSRatingsForRoute (
-  @JsonProperty("request") request: FSRatingsForRouteRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("ratings") ratings: Seq[FSRating]
+  request: FSRatingsForRouteRequest,
+  appendix: FSAppendix,
+  ratings: Seq[FSRating]
 )
 
-@JsonCreator
 case class FSRatingsForRouteRequest (
-  @JsonProperty("departureAirport") departureAirport: FSRequested[String],
-  @JsonProperty("arrivalAirport") arrivalAirport: FSRequested[String],
-  @JsonProperty("codeType") codeType: FSRequested[String],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
-  @JsonProperty("url") url: URL
+  departureAirport: FSRequested[String],
+  arrivalAirport: FSRequested[String],
+  codeType: FSRequested[String],
+  extendedOptions: FSRequested[String],
+  url: URL
 )
 
-@JsonCreator
 case class FSRatingsForFlight (
-  @JsonProperty("request") request: FSRatingsForFlightRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("ratings") ratings: Seq[FSRating]
+  request: FSRatingsForFlightRequest,
+  appendix: FSAppendix,
+  ratings: Seq[FSRating]
 )
 
-@JsonCreator
 case class FSRatingsForFlightRequest (
-  @JsonProperty("airlineCode") airlineCode: FSRequestedAirline,
-  @JsonProperty("flightNumber") flightNumber: FSRequested[String],
-  @JsonProperty("departureAirport") departureAirport: FSRequested[String],
-  @JsonProperty("codeType") codeType: FSRequested[String],
-  @JsonProperty("extendedOptions") extendedOptions: FSRequested[String],
-  @JsonProperty("url") url: URL
+  airlineCode: FSRequestedAirline,
+  flightNumber: FSRequested[String],
+  departureAirport: FSRequested[String],
+  codeType: FSRequested[String],
+  extendedOptions: FSRequested[String],
+  url: URL
 )
 
 @JsonCreator

@@ -4,32 +4,30 @@ import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import com.flightstats.api.v1.{FSAppendix, FSRequested, FSRequestedAirport, FSRequestedAirline, FSRequestedDate, FSAirport, FSAirline, FSEquipment}
 import com.flightstats.api.v1.ratings.FSRating
 
-@JsonCreator
 case class FSConnectionsResponse (
-  @JsonProperty("request") request: FSConnectionsRequest,
-  @JsonProperty("appendix") appendix: FSAppendix,
-  @JsonProperty("flights") flights: Seq[FSFlight]
+  request: FSConnectionsRequest,
+  appendix: FSAppendix,
+  flights: Seq[FSFlight]
 )
 
-@JsonCreator
 case class FSFlight (
-  @JsonProperty("departureAirport") departureAirport: Option[FSAirport],
-  @JsonProperty("departureAirportFsCode") departureAirportFsCode: Option[String],
-  @JsonProperty("arrivalAirport") arrivalAirport: Option[FSAirport],
-  @JsonProperty("arrivalAirportFsCode") arrivalAirportFsCode: Option[String],
-  @JsonProperty("departureDateFrom") departureDateFrom: String,
-  @JsonProperty("departureDateTo") departureDateTo: String,
-  @JsonProperty("departureDaysOfWeek") departureDaysOfWeek: Seq[Integer],
-  @JsonProperty("arrivalDateAdjustment") arrivalDateAdjustment: Integer,
-  @JsonProperty("departureTime") departureTime: String,
-  @JsonProperty("arrivalTime") arrivalTime: String,
-  @JsonProperty("distanceMiles") distanceMiles: Integer,
-  @JsonProperty("flightDurationMinutes") flightDurationMinutes: Integer,
-  @JsonProperty("layoverDurationMinutes") layoverDurationMinutes: Integer,
-  @JsonProperty("flightType") flightType: String, // TODO: create FSFlightType
-  @JsonProperty("serviceType") serviceType: String, // TODO: create FSServiceType
-  @JsonProperty("online") online: Boolean,
-  @JsonProperty("flightLegs") flightLegs: Seq[FSFlightLeg]
+  departureAirport: Option[FSAirport],
+  departureAirportFsCode: Option[String],
+  arrivalAirport: Option[FSAirport],
+  arrivalAirportFsCode: Option[String],
+  departureDateFrom: String,
+  departureDateTo: String,
+  departureDaysOfWeek: Seq[Integer],
+  arrivalDateAdjustment: Integer,
+  departureTime: String,
+  arrivalTime: String,
+  distanceMiles: Integer,
+  flightDurationMinutes: Integer,
+  layoverDurationMinutes: Integer,
+  flightType: String, // TODO: create FSFlightType
+  serviceType: String, // TODO: create FSServiceType
+  online: Boolean,
+  flightLegs: Seq[FSFlightLeg]
 )
 
 @JsonCreator
@@ -61,27 +59,24 @@ class FSFlightLeg (
   @JsonProperty("ratings") val ratings: Seq[FSRating]
 )
 
-@JsonCreator
 case class FSFlightId (
-  @JsonProperty("carrier") carrier: Option[FSAirline],
-  @JsonProperty("carrierFsCode") carrierFsCode: Option[String],
-  @JsonProperty("flightNumber") flightNumber: Option[String]
+  carrier: Option[FSAirline],
+  carrierFsCode: Option[String],
+  flightNumber: Option[String]
 )
 
-@JsonCreator
 case class FSConnectionsRequest (
-  @JsonProperty("airportOrMetro") airportOrMetro: Option[FSRequestedAirportOrMetro],
-  @JsonProperty("date") date: Option[FSRequestedDate],
-  @JsonProperty("carriers") carriers: Option[Seq[FSRequestedAirline]],
-  @JsonProperty("codeshareType") codeshareType: Option[FSRequested[String]],
-  @JsonProperty("serviceType") serviceType: Option[FSRequested[String]],
-  @JsonProperty("flightType") flightType: Option[FSRequested[String]],
-  @JsonProperty("codeType") codeType: Option[FSRequested[String]],
-  @JsonProperty("extendedOptions") extendedOptions: Option[FSRequested[String]]
+  airportOrMetro: Option[FSRequestedAirportOrMetro],
+  date: Option[FSRequestedDate],
+  carriers: Option[Seq[FSRequestedAirline]],
+  codeshareType: Option[FSRequested[String]],
+  serviceType: Option[FSRequested[String]],
+  flightType: Option[FSRequested[String]],
+  codeType: Option[FSRequested[String]],
+  extendedOptions: Option[FSRequested[String]]
 )
 
-@JsonCreator
 case class FSRequestedAirportOrMetro (
-  @JsonProperty("airport") airport: FSRequestedAirport,
-  @JsonProperty("metro") metro: FSRequested[String]
+  airport: FSRequestedAirport,
+  metro: FSRequested[String]
 )
