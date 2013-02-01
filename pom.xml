@@ -6,6 +6,13 @@
   <name>${project.artifactId}</name>
   <description>A scala client for FlightStats API</description>
   <inceptionYear>2013</inceptionYear>
+  <url>https://github.com/jlavallee/flightstats-client-scala</url>
+  <scm>
+    <connection>scm:git:ssh://git@github.com:jlavallee/flightstats-client-scala.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:jlavallee/flightstats-client-scala.git</developerConnection>
+    <url>https://github.com/jlavallee/flightstats-client-scala</url>
+    <tag>HEAD</tag>
+  </scm>
   <licenses>
     <license>
       <name>the Apache License, ASL Version 2.0</name>
@@ -13,6 +20,13 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <developers>
+    <developer>
+      <id>jeff@zeroclue.com</id>
+      <name>Jeff Lavallee</name>
+      <email>jeff@zeroclue.com</email>
+    </developer>
+  </developers>
 
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
@@ -162,6 +176,20 @@
             </plugin>
           </reportPlugins>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
