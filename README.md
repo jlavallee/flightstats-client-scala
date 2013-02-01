@@ -1,5 +1,19 @@
 # flightstats-client-scala - a scala client for [FlightStats][1]
 
+This is a client for [FlightStats] flex APIs.
+
+
+`flightstats-client-scala` makes use of [Dispatch][2] and [Jackson][3]
+to provide a dead-simple asynchronous client for [FlightStats][1] API.
+
+See the excellent [Dispatch docs][4] for a primer on working with the
+`Promises` returned by API methods.
+
+Each API is suppororted by a client class which provides methods for each
+available endpoint.  All communication is done using JSONN.  Response
+objects are modeled by case classes, except where the number of fields
+surpases the case class limit.
+
 ## Example usage:
 
 ```scala
@@ -22,13 +36,6 @@ val delayIndex:Promise[FSDelayIndexResponse] =
 ```
 
 
-## Under the hood
-
-`flightstats-client-scala` makes use of [Dispatch][2] and [Jackson][3]
-to provide a dead-simple asynchronous client for [FlightStats][1] API.
-
-See the excellent [Dispatch docs][4] for a primer on working with the
-`Promises` returned by API methods.
 
 [1]: https://developer.flightstats.com/api-docs/
 [2]: https://github.com/dispatch/reboot
