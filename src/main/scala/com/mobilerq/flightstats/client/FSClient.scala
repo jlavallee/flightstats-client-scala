@@ -25,11 +25,8 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
     for ( a <- getWithCreds(addParams(url)) ) yield mapFromJson(t, a)
 
   protected def addParams(url: RequestBuilder): RequestBuilder = {
-    // TODO: add mechanism for users to add more extendedOptions
     url.addQueryParameter("extendedOptions", "useHttpErrors")
-
     credentials.foreach {case (name, value) => url.addHeader(name, value)}
-
     url
   }
 
