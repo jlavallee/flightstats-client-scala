@@ -12,8 +12,8 @@ class FSFlightStatusByRouteTest extends FSTest {
 
   def statuses = FSTestClients.flightStatusByRoute
 
-  @Test def factory: Unit = FSFlightStatusByFlight("id", "key") match {
-    case o: FSFlightStatusByFlight => Unit // what we expect
+  @Test def factory: Unit = FSFlightStatusByRoute("id", "key") match {
+    case o: FSFlightStatusByRoute => Unit // what we expect
     case x => fail("didn't get what we expected: " + x)
   }
 
