@@ -24,7 +24,8 @@ public class FSJavaExampleTest {
 
     @Test
     public void usingApply(){
-        Promise<FSAirport> promise = airports.byCode("PDX");
+        Promise<FSAirport> promise = airports.byCode("PDX",
+                scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
         // this call blocks
         FSAirport airport = promise.apply();
@@ -34,7 +35,8 @@ public class FSJavaExampleTest {
 
     @Test
     public void onComplete(){
-        Promise<FSAirport> promise = airports.byCode("PDX");
+        Promise<FSAirport> promise = airports.byCode("PDX",
+                scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
         promise.onComplete(
             new AbstractFunction1<Either<Throwable, FSAirport>, FSAirport>(){
@@ -54,7 +56,8 @@ public class FSJavaExampleTest {
      */
     @Test
     public void onSuccess(){
-        Promise<FSAirport> promise = airports.byCode("PDX");
+        Promise<FSAirport> promise = airports.byCode("PDX",
+                scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
         promise.onSuccess(
             new AbstractPartialFunction<FSAirport, FSAirport>(){
@@ -74,7 +77,9 @@ public class FSJavaExampleTest {
      */
     @Test
     public void onFailure(){
-        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("blarg!").either();
+        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("blarg!",
+                scala.collection.immutable.Map$.MODULE$.<String, String>empty())
+                .either();
 
         promise.onFailure(
             new AbstractPartialFunction<Throwable, FSAirport>(){

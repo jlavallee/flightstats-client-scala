@@ -17,13 +17,13 @@ class FSAirportsTest extends FSTest {
   }
 
   @Test def active =
-    checkAirportList(airports.active)
+    checkAirportList(airports.active())
 
   @Test def activeOnDate =
     checkAirportList(airports.activeOnDate(date))
 
   @Test def all =
-    checkAirportList(airports.all)
+    checkAirportList(airports.all())
 
   @Test def byCode =
     checkAirport(airports.byCode("PDX"), "PDX")
