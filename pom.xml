@@ -125,6 +125,7 @@
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
         <configuration>
+          <recompileMode>incremental</recompileMode>
           <args>
             <arg>-unchecked</arg>
             <arg>-deprecation</arg>
