@@ -1,5 +1,6 @@
 package com.mobilerq.flightstats
 
+import scala.language.implicitConversions
 import com.ning.http.client.RequestBuilder
 
 /**
