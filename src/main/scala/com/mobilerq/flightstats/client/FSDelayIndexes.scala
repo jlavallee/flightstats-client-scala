@@ -10,6 +10,7 @@ object FSDelayIndexes {
     new FSDelayIndexes(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Delay Index API
   *
   * Use companion object to obtain an instance:

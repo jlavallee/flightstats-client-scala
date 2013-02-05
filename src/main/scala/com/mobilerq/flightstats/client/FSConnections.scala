@@ -12,6 +12,7 @@ object FSConnections {
     new FSConnections(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Schedules / Connections API
   *
   * Use companion object to obtain an instance:

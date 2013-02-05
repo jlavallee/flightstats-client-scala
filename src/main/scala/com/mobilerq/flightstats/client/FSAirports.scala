@@ -12,6 +12,7 @@ object FSAirports {
     new FSAirports(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Airports API
   *
   * Use companion object to obtain an instance:

@@ -13,6 +13,7 @@ object FSFlightsNear {
     new FSFlightsNear(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Flights Near (Flight Positions) API
   *
   * Use companion object to obtain an instance:

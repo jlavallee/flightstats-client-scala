@@ -12,6 +12,7 @@ object FSFlightStatusByAirport {
     new FSFlightStatusByAirport(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Flight Status & Track by Airport API
   *
   * Use companion object to obtain an instance:

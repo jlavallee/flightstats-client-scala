@@ -12,6 +12,7 @@ object FSRatings {
     new FSRatings(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Ratings API
   *
   * Use companion object to obtain an instance:

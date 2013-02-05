@@ -12,6 +12,7 @@ object FSWeather {
     new FSWeather(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Weather API
   *
   * Use companion object to obtain an instance:

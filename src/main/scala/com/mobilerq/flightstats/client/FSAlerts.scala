@@ -11,6 +11,7 @@ object FSAlerts {
     new FSAlerts(appId, appKey) with FSClientReboot
   }
 }
+
 /** A client for FlightStats Alerts API
   *
   * Use companion object to obtain an instance:
@@ -78,5 +79,4 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
 
   private def get(url: RequestBuilder) =
     for ( r <- getAndDeserialize(classOf[FSGetAlert], url) ) yield r
-
 }
