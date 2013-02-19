@@ -8,7 +8,9 @@ import java.io.{File => JFile, PrintWriter => JPrintWriter}
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.DeserializationFeature
 import scala.reflect.runtime.universe._
-import scala.reflect.runtime.{currentMirror => mirror};
+import scala.reflect.runtime.{currentMirror => mirror}
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.datatype.joda.JodaModule
 
 
 trait FSTest {
@@ -30,8 +32,6 @@ trait FSTest {
     }
 
     accessors.foreach( checkNotNull(im, _))
-
-
   }
 
   def checkNotNull(im: InstanceMirror, m: MethodSymbol) {
@@ -185,9 +185,11 @@ trait StrictJacksonMapper extends FSClient {
 }
 
 private object StrictJacksonMapper {
-  def mapper = {
-    val m = JacksonMapper.mapper
-    m.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-    m
+  val mapper = newMapper
+  def newMapper = {
+    val m = new ObjectMapper()
+    m.registerModule(DefaultScalaModule)
+    m.registerModule(new JodaModule)
+    m.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true)
   }
 }

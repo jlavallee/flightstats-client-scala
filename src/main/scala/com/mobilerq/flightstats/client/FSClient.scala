@@ -54,11 +54,11 @@ trait JacksonMapper extends FSClient {
 }
 
 private object JacksonMapper {
-  def mapper = {
+  val mapper = newMapper
+  def newMapper = {
     val m = new ObjectMapper()
     m.registerModule(DefaultScalaModule)
-    m.registerModule(new JodaModule())
-    m.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    m
+    m.registerModule(new JodaModule)
+    m.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
   }
 }
