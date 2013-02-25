@@ -54,7 +54,7 @@ No method on any response object should ever return `null` - if one does, please
 
 The tests run against static JSON test files captured from [FlightStats][1] API.  You can run the tests against [FlightStats][1] live API by supplying your credentials as properties:
 
-```sh
+```
 mvn -Dflightstats.appId=<my appId> -Dflightstats.appKey=<my appKey> test
 ```
 
