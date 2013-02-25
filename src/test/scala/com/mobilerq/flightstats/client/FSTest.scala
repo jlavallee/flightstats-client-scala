@@ -14,8 +14,8 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 
 
 trait FSTest {
-  val appId = sys.props.get("flightstats.appid")
-  val appKey = sys.props.get("flightstats.appkey")
+  val appId = sys.props.get("flightstats.appId")
+  val appKey = sys.props.get("flightstats.appKey")
 
   def debug(promise: Promise[Either[Throwable, AnyRef]]) {
     if(appId.isDefined && appKey.isDefined)
