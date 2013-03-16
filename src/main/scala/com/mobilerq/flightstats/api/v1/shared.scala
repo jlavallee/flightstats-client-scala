@@ -4,6 +4,7 @@ import org.joda.time.DateTime
 import java.util.UUID
 import java.math.BigDecimal
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
+import scala.collection.immutable.Map
 
 case class FSAirline(
   fs: String,  // "AA"
@@ -62,6 +63,23 @@ case class FSAppendix (
   airlines: Option[Seq[FSAirline]],
   equipment: Option[Seq[FSEquipment]]
 )
+
+class RichAppendix(appendix: FSAppendix) {
+
+  def airportsMap = airports
+  def airlinesMap = airlines
+
+  private val airports : Map[String, FSAirport] = appendix.airports match {
+    case None => Map.empty
+    case Some(airports) => Map(airports map { a => a.fs -> a }: _*)
+  }
+
+  private val airlines : Map[String, FSAirline] = appendix.airlines match {
+    case None => Map.empty
+    case Some(airlines) => Map(airlines map { a => a.fs -> a }: _*)
+  }
+
+}
 
 case class FSEquipment (
     iata: String,
