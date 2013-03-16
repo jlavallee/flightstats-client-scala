@@ -51,6 +51,12 @@ class RichFlightStatusResponse(response: FSFlightStatusResponse)
   override val flightStatus = new RichFlightStatus(response.flightStatus, response.appendix)
 }
 
+class RichFlightStatusesResponse(response: FSFlightStatusesResponse)
+  extends FSFlightStatusesResponse(response.request, response.appendix, response.flightStatuses) {
+
+  override val flightStatuses = response.flightStatuses map { new RichFlightStatus(_, response.appendix) }
+}
+
 class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
   extends FSFlightStatus(  // gosh this is nasty, is there a better way?
       status.flightId, status.carrierFsCode, status.flightNumber,

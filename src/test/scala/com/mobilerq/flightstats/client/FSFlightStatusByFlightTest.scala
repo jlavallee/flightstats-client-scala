@@ -7,8 +7,6 @@ import com.mobilerq.flightstats.api.v1.flightstatus._
 import com.mobilerq.flightstats.client.FSTestUtil._
 import org.joda.time.DateTime
 
-import com.mobilerq.flightstats.api.v1._
-
 class FSFlightStatusByFlightTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-14T21:12:23.048-08:00")
 
@@ -30,6 +28,15 @@ class FSFlightStatusByFlightTest extends FSTest {
 
   @Test def flightStatusDepartingOnDate =
     checkFlightStatuses(statuses.flightStatusDepartingOnDate("AA","100", date))
+
+  @Test def flightStatusDepartingOnDateRich {
+    val response: Promise[RichFlightStatusesResponse] = statuses.flightStatusDepartingOnDate("AA","100", date)
+    
+    checkFlightStatuses(response)
+    for(status <- response().flightStatuses){
+      assertEquals(Some("AA"), status.carrier flatMap { _.iata })
+    }
+  }
 
   @Test def flightStatusArrivingOnDate =
     checkFlightStatuses(statuses.flightStatusArrivingOnDate("AA","100", date))

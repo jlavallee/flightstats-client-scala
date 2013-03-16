@@ -3,7 +3,7 @@ package com.mobilerq.flightstats.client
 import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
-import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
+import com.mobilerq.flightstats.api.v1.flightstatus._
 import com.mobilerq.flightstats.client.FSTestUtil._
 import org.joda.time.DateTime
 
@@ -19,6 +19,11 @@ class FSFlightStatusByAirportTest extends FSTest {
 
   @Test def departureStatus =
     checkFlightStatuses(statuses.departureStatus("PDX", date))
+    
+  @Test def departureStatusRich {
+    val response: Promise[RichFlightStatusesResponse] = statuses.departureStatus("PDX", date)
+    response().flightStatuses.foreach({ s => assertEquals(Some("PDX"), s.departureAirport flatMap { _.iata }) })
+  }
 
   @Test def arrivalStatus =
     checkFlightStatuses(statuses.arrivalStatus("PDX", date))
