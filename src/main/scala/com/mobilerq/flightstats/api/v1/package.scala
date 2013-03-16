@@ -9,19 +9,12 @@ package object v1 {
   implicit def enrichAppendix(appendix: FSAppendix) =
     new RichAppendix(appendix)
 
-/*
-  // unused
-  implicit def enrichFlightStatusResponse(response: FSFlightStatusResponse) =
-    new RichFlightStatusResponse(response)
-
-  // doesn't work (needs appendix)
-  implicit def enrichFlightStatus(status: FSFlightStatus) =
-    new RichFlightStatus(status)
-*/
-  
   implicit def enrichFlightStatusResponsePromise(promise: Promise[FSFlightStatusResponse]) =
     for(r <- promise) yield { new RichFlightStatusResponse(r) }
 
   implicit def enrichFlightStatusesResponsePromise(promise: Promise[FSFlightStatusesResponse]) =
     for(r <- promise) yield { new RichFlightStatusesResponse(r) }
+
+  implicit def enrichFlightTrackResponsePromise(promise: Promise[FSFlightTrackResponse]) =
+    for(r <- promise) yield { new RichFlightTrackResponse(r) }
 }

@@ -17,7 +17,10 @@ class FSFlightStatusByFlightTest extends FSTest {
     case x => fail("didn't get what we expected: " + x)
   }
 
-  @Test def flightStatus {
+  @Test def flightStatus =
+    checkFlightStatus(statuses.flightStatus(285645279))
+
+  @Test def flightStatusRich {
     val response: Promise[RichFlightStatusResponse] = statuses.flightStatus(285645279)
     checkFlightStatus(response)
     val flightStatus = response().flightStatus
@@ -31,11 +34,11 @@ class FSFlightStatusByFlightTest extends FSTest {
 
   @Test def flightStatusDepartingOnDateRich {
     val response: Promise[RichFlightStatusesResponse] = statuses.flightStatusDepartingOnDate("AA","100", date)
-    
+
     checkFlightStatuses(response)
-    for(status <- response().flightStatuses){
-      assertEquals(Some("AA"), status.carrier flatMap { _.iata })
-    }
+    response().flightStatuses.foreach({ s =>
+      assertEquals(Some("AA"), s.carrier flatMap { _.iata })
+    })
   }
 
   @Test def flightStatusArrivingOnDate =
@@ -44,6 +47,15 @@ class FSFlightStatusByFlightTest extends FSTest {
 
   @Test def flightTrack =
     checkFlightTrack(statuses.flightTrack(285645279))
+
+  @Test def flightTrackRich = {
+    val response: Promise[RichFlightTrackResponse] = statuses.flightTrack(285645279)
+    checkFlightTrack(response)
+    val flightTrack = response().flightTrack
+    assertEquals(Some("AA"), flightTrack.carrier flatMap { _.iata })
+    assertEquals(Some("LHR"), flightTrack.arrivalAirport flatMap { _.iata })
+    assertEquals(Some("JFK"), flightTrack.departureAirport flatMap { _.iata })
+  }
 
   @Test def flightTracksDepartingOnDate =
     checkFlightTracks(statuses.flightTracksDepartingOnDate("AA", "100", date))

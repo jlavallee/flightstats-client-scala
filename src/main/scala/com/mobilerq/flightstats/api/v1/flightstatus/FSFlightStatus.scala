@@ -64,24 +64,4 @@ class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
       status.departureDate, status.arrivalDate, status.status,
       status.schedule, status.operationalTimes, status.codeshares,
       status.flightDurations, status.airportResources, status.flightEquipment)
-  with FlightStatusAppendixHelper {
-  override val carrierFsCode = status.carrierFsCode
-  override val arrivalAirportFsCode = status.arrivalAirportFsCode
-  override val departureAirportFsCode = status.departureAirportFsCode
-}
-
-trait FlightStatusAppendixHelper {
-  def appendix: FSAppendix
-  def carrierFsCode: String
-  def arrivalAirportFsCode: String
-  def departureAirportFsCode: String
-
-  def carrier: Option[FSAirline] =
-    appendix.airlinesMap.get(carrierFsCode)
-
-  def arrivalAirport: Option[FSAirport] =
-    appendix.airportsMap.get(arrivalAirportFsCode)
-
-  def departureAirport: Option[FSAirport] =
-    appendix.airportsMap.get(departureAirportFsCode)
-}
+  with FlightAppendixHelper

@@ -19,7 +19,7 @@ class FSFlightStatusByAirportTest extends FSTest {
 
   @Test def departureStatus =
     checkFlightStatuses(statuses.departureStatus("PDX", date))
-    
+
   @Test def departureStatusRich {
     val response: Promise[RichFlightStatusesResponse] = statuses.departureStatus("PDX", date)
     response().flightStatuses.foreach({ s => assertEquals(Some("PDX"), s.departureAirport flatMap { _.iata }) })
