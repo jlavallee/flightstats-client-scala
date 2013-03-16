@@ -60,6 +60,15 @@ class FSFlightStatusByFlightTest extends FSTest {
   @Test def flightTracksDepartingOnDate =
     checkFlightTracks(statuses.flightTracksDepartingOnDate("AA", "100", date))
 
+  @Test def flightTracksDepartingOnDateRich {
+    val response: Promise[RichFlightTracksResponse] = statuses.flightTracksDepartingOnDate("AA", "100", date)
+
+    checkFlightTracks(response)
+    response().flightTracks.foreach({ t =>
+      assertEquals(Some("AA"), t.carrier flatMap {_.iata })
+    })
+  }
+
   @Test def flightTracksArrivingOnDate =
     checkFlightTracks(statuses.flightTracksArrivingOnDate("AA", "100", date))
 }

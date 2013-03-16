@@ -17,4 +17,7 @@ package object v1 {
 
   implicit def enrichFlightTrackResponsePromise(promise: Promise[FSFlightTrackResponse]) =
     for(r <- promise) yield { new RichFlightTrackResponse(r) }
+
+  implicit def enrichFlightTracksResponsePromise(promise: Promise[FSFlightTracksResponse]) =
+    for(r <- promise) yield { new RichFlightTracksResponse(r) }
 }

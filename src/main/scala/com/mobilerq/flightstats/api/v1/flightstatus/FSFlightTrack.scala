@@ -52,6 +52,11 @@ class RichFlightTrackResponse(response: FSFlightTrackResponse)
   override val flightTrack = new RichFlightTrack(response.flightTrack, response.appendix)
 }
 
+class RichFlightTracksResponse(response: FSFlightTracksResponse)
+  extends FSFlightTracksResponse(response.request, response.appendix, response.flightTracks) {
+  override val flightTracks = response.flightTracks map { new RichFlightTrack(_, response.appendix) }
+}
+
 class RichFlightTrack(flightTrack: FSFlightTrack, val appendix: FSAppendix)
   extends FSFlightTrack(flightTrack.flightId, flightTrack.carrierFsCode,
       flightTrack.flightNumber, flightTrack.departureAirportFsCode,
