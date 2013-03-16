@@ -48,25 +48,34 @@ case class FSFlightStatus (
 class RichFlightStatusResponse(response: FSFlightStatusResponse)
   extends FSFlightStatusResponse(response.request, response.appendix, response.flightStatus) {
 
-  
-  implicit val impAppendix: FSAppendix = response.appendix
-  override val flightStatus = new RichFlightStatus(response.flightStatus)
+  override val flightStatus = new RichFlightStatus(response.flightStatus, response.appendix)
 }
 
-class RichFlightStatus(status: FSFlightStatus)(implicit appendix: FSAppendix)
+class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
   extends FSFlightStatus(  // gosh this is nasty, is there a better way?
       status.flightId, status.carrierFsCode, status.flightNumber,
       status.departureAirportFsCode, status.arrivalAirportFsCode,
       status.departureDate, status.arrivalDate, status.status,
       status.schedule, status.operationalTimes, status.codeshares,
-      status.flightDurations, status.airportResources, status.flightEquipment) {
-  def carrierIataCode: Option[String] =
-    appendix.airlinesMap.get(status.carrierFsCode) flatMap { _.iata }
+      status.flightDurations, status.airportResources, status.flightEquipment)
+  with FlightStatusAppendixHelper {
+  override val carrierFsCode = status.carrierFsCode
+  override val arrivalAirportFsCode = status.arrivalAirportFsCode
+  override val departureAirportFsCode = status.departureAirportFsCode
+}
 
-  def arrivalAirportIataCode: Option[String] =
-    appendix.airportsMap.get(status.arrivalAirportFsCode) flatMap { _.iata }
+trait FlightStatusAppendixHelper {
+  def appendix: FSAppendix
+  def carrierFsCode: String
+  def arrivalAirportFsCode: String
+  def departureAirportFsCode: String
 
-  def departureAirportIataCode: Option[String] =
-    appendix.airportsMap.get(status.departureAirportFsCode) flatMap { _.iata }
+  def carrier: Option[FSAirline] =
+    appendix.airlinesMap.get(carrierFsCode)
 
+  def arrivalAirport: Option[FSAirport] =
+    appendix.airportsMap.get(arrivalAirportFsCode)
+
+  def departureAirport: Option[FSAirport] =
+    appendix.airportsMap.get(departureAirportFsCode)
 }

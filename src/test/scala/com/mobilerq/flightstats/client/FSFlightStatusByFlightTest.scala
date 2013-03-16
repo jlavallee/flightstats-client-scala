@@ -23,9 +23,9 @@ class FSFlightStatusByFlightTest extends FSTest {
     val response: Promise[RichFlightStatusResponse] = statuses.flightStatus(285645279)
     checkFlightStatus(response)
     val flightStatus = response().flightStatus
-    assertEquals(Some("AA"), flightStatus.carrierIataCode)
-    assertEquals(Some("LHR"), flightStatus.arrivalAirportIataCode)
-    assertEquals(Some("JFK"), flightStatus.departureAirportIataCode)
+    assertEquals(Some("AA"), flightStatus.carrier flatMap { _.iata })
+    assertEquals(Some("LHR"), flightStatus.arrivalAirport flatMap { _.iata })
+    assertEquals(Some("JFK"), flightStatus.departureAirport flatMap { _.iata })
   }
 
   @Test def flightStatusDepartingOnDate =
