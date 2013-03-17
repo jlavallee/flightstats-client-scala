@@ -36,7 +36,7 @@ case class FSFlightStatus (
   status: String,
   schedule: FSSchedule,
   operationalTimes: FSOperationalTimes,
-  codeshares: Seq[FSCodeShare],
+  codeshares: Seq[FSCodeshare],
   flightDurations: FSFlightDuration,
   airportResources: FSAirportResources,
   flightEquipment: FSFlightEquipment

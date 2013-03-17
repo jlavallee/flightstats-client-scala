@@ -149,11 +149,11 @@ case class FSOperationalTimes (
   actualRunwayArrival: FSDate
 )
 
-case class FSCodeShare (
-  carrier: Option[FSAirport],
-  fsCode: String,
-  flightNumber: String,
-  relationship: String
+case class FSCodeshare (
+  carrier: Option[FSAirline],
+  fsCode: Option[String],
+  flightNumber: Option[String],
+  relationship: Option[String]
 )
 
 case class FSFlightDuration (
