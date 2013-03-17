@@ -16,12 +16,12 @@ case class FSFlightStatusesResponse (
 )
 
 case class FSFlightStatusRequest (
-  airline: FSRequestedAirline,
-  flight: FSRequested[String],
-  date: FSRequestedDate,
-  utc: FSRequested[String],
-  airport: FSRequestedAirport,
-  codeType: FSRequested[String],
+  airline: Option[FSRequestedAirline],
+  flight: Option[FSRequested[String]],
+  date: Option[FSRequestedDate],
+  utc: Option[FSRequested[String]],
+  airport: Option[FSRequestedAirport],
+  codeType: Option[FSRequested[String]],
   extendedOptions: FSRequested[String]
 )
 
@@ -36,7 +36,7 @@ case class FSFlightStatus (
   status: String,
   schedule: FSSchedule,
   operationalTimes: FSOperationalTimes,
-  codeshares: Seq[FSCodeshare],
+  codeshares: Option[Seq[FSCodeshare]],
   flightDurations: FSFlightDuration,
   airportResources: FSAirportResources,
   flightEquipment: FSFlightEquipment

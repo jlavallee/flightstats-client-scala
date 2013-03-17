@@ -19,9 +19,9 @@ case class FSFlightTracksResponse (
 case class FSFlightTrackRequest (
   // WSDL specifies all of these as optional...
   flightId: FSRequested[Long],
-  date: FSRequestedDate,
-  hourOfDay: FSRequested[Integer],
-  numHours: FSRequested[Integer],
+  date: Option[FSRequestedDate],
+  hourOfDay: Option[FSRequested[Integer]],
+  numHours: Option[FSRequested[Integer]],
   includeFlightPlan: FSRequested[Boolean],
   maxPositions: FSRequested[Integer],
   maxPositionAgeMinutes: FSRequested[Integer],
@@ -39,7 +39,7 @@ case class FSFlightTrack (
   equipment: String,
   bearing: BigDecimal,
   positions: Seq[FSPosition],
-  waypoints: Seq[FSWaypoint]
+  waypoints: Option[Seq[FSWaypoint]]
 )
 
 case class FSWaypoint (

@@ -113,40 +113,40 @@ case class FSRequestedAirline (
 
 
 case class FSSchedule (
-  flightType: String,
-  serviceClasses: String,
-  restrictions: String,
-  uplines: Seq[FSUplineFlight],
-  downlines: Seq[FSDownlineFlight]
+  flightType: Option[String],
+  serviceClasses: Option[String],
+  restrictions: Option[String],
+  uplines: Option[Seq[FSUplineFlight]],
+  downlines: Option[Seq[FSDownlineFlight]]
 )
 
 case class FSUplineFlight (
-  departureAirport: FSAirport,
+  departureAirport: Option[FSAirport],
   fsCode: String,
   flightId: Long
 )
 
 case class FSDownlineFlight (
-  arrivalAirport: FSAirport,
+  arrivalAirport: Option[FSAirport],
   fsCode: String,
   flightId: Long
 )
 
 case class FSOperationalTimes (
-  publishedDeparture: FSDate,
-  publishedArrival: FSDate,
-  scheduledGateDeparture: FSDate,
-  estimatedGateDeparture: FSDate,
-  actualGateDeparture: FSDate,
-  flightPlanPlannedDeparture: FSDate,
-  estimatedRunwayDeparture: FSDate,
-  actualRunwayDeparture: FSDate,
-  scheduledGateArrival: FSDate,
-  estimatedGateArrival: FSDate,
-  actualGateArrival: FSDate,
-  flightPlanPlannedArrival: FSDate,
-  estimatedRunwayArrival: FSDate,
-  actualRunwayArrival: FSDate
+  publishedDeparture: Option[FSDate],
+  publishedArrival: Option[FSDate],
+  scheduledGateDeparture: Option[FSDate],
+  estimatedGateDeparture: Option[FSDate],
+  actualGateDeparture: Option[FSDate],
+  flightPlanPlannedDeparture: Option[FSDate],
+  estimatedRunwayDeparture: Option[FSDate],
+  actualRunwayDeparture: Option[FSDate],
+  scheduledGateArrival: Option[FSDate],
+  estimatedGateArrival: Option[FSDate],
+  actualGateArrival: Option[FSDate],
+  flightPlanPlannedArrival: Option[FSDate],
+  estimatedRunwayArrival: Option[FSDate],
+  actualRunwayArrival: Option[FSDate]
 )
 
 case class FSCodeshare (
@@ -157,30 +157,28 @@ case class FSCodeshare (
 )
 
 case class FSFlightDuration (
-  scheduledBlockMinutes: Integer,
-  blockMinutes: Integer,
-  scheduledAirMinutes: Integer,
-  airMinutes: Integer,
-  scheduledTaxiOutMinutes: Integer,
-  taxiOutMinutes: Integer,
-  scheduledTaxiInMinutes: Integer,
-  taxiInMinutes: Integer
+  scheduledBlockMinutes: Option[Integer],
+  blockMinutes: Option[Integer],
+  scheduledAirMinutes: Option[Integer],
+  airMinutes: Option[Integer],
+  scheduledTaxiOutMinutes: Option[Integer],
+  taxiOutMinutes: Option[Integer],
+  scheduledTaxiInMinutes: Option[Integer],
+  taxiInMinutes: Option[Integer]
 )
 
 case class FSFlightEquipment (
-  scheduledEquipment: FSEquipment,
-  scheduledEquipmentIataCode: String,
-  actualEquipment: FSEquipment,
-  actualEquipmentIataCode: String,
-  tailNumber: String
+  scheduledEquipmentIataCode: Option[String],
+  actualEquipmentIataCode: Option[String],
+  tailNumber: Option[String]
 )
 
 case class FSAirportResources (
-  departureTerminal: String,
-  departureGate: String,
-  arrivalTerminal: String,
-  arrivalGate: String,
-  baggage: String
+  departureTerminal: Option[String],
+  departureGate: Option[String],
+  arrivalTerminal: Option[String],
+  arrivalGate: Option[String],
+  baggage: Option[String]
 )
 
 case class FSPosition (

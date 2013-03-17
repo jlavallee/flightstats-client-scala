@@ -11,8 +11,9 @@ object FSTestUtil extends FSTest {
     status() match {
       case Left(exception) => fail(exception.getMessage())
       case Right(status) => {
-          assertNotNull(status)
-          assertNotNull(status.flightStatus)
+        exerciseCaseClass(status)
+        assertNotNull(status)
+        assertNotNull(status.flightStatus)
       }
     }
   }
@@ -23,7 +24,8 @@ object FSTestUtil extends FSTest {
     statuses() match {
       case Left(exception) => fail(exception.getMessage())
       case Right(statuses) => {
-          assertTrue(statuses.flightStatuses.length > 0)
+        statuses.flightStatuses.foreach(exerciseCaseClass(_))
+        assertTrue(statuses.flightStatuses.length > 0)
       }
     }
   }
@@ -34,8 +36,9 @@ object FSTestUtil extends FSTest {
     track() match {
       case Left(exception) => fail(exception.getMessage())
       case Right(track) => {
-          assertNotNull(track)
-          assertNotNull(track.flightTrack)
+        exerciseCaseClass(track)
+        assertNotNull(track)
+        assertNotNull(track.flightTrack)
       }
     }
   }
@@ -46,7 +49,8 @@ object FSTestUtil extends FSTest {
     tracks() match {
       case Left(exception) => fail(exception.getMessage())
       case Right(tracks) => {
-          assertTrue(tracks.flightTracks.length > 0)
+        tracks.flightTracks.foreach(exerciseCaseClass(_))
+        assertTrue(tracks.flightTracks.length > 0)
       }
     }
   }
