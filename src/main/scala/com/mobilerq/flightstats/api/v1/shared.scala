@@ -174,7 +174,8 @@ case class FSOperationalTimes (
 )
 
 case class FSCodeshare (
-  carrier: Option[FSAirline],
+  //carrier: Option[FSAirline],  // flight stats doesn't send this,
+    // it needs to be picked out of the appendix.  see RichCodeshare
   fsCode: Option[String],
   flightNumber: Option[String],
   relationship: Option[String]

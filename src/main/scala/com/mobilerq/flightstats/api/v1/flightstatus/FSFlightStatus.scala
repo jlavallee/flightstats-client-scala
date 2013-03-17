@@ -61,4 +61,14 @@ class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
       status.departureDate, status.arrivalDate, status.status,
       status.schedule, status.operationalTimes, status.codeshares,
       status.flightDurations, status.airportResources, status.flightEquipment)
-  with FlightAppendixHelper
+  with FlightAppendixHelper {
+  override val codeshares = status.codeshares map { _ map { new RichCodeshare(_, appendix)} }
+}
+
+class RichCodeshare(cs: FSCodeshare, val appendix: FSAppendix)
+  extends FSCodeshare(cs.fsCode, cs.flightNumber, cs.relationship) {
+  def carrier: Option[FSAirline] = fsCode match {
+    case None => None
+    case Some(fsCode) => appendix.airlinesMap.get(fsCode)
+  }
+}
