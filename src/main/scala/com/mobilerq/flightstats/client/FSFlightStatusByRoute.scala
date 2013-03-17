@@ -4,7 +4,7 @@ import dispatch._
 import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.client._
-import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
+import com.mobilerq.flightstats.api.v1.flightstatus._
 
 /** Factory for [[com.mobilerq.flightstats.client.FSFlightStatusByRoute]] instances. */
 object FSFlightStatusByRoute {
@@ -23,7 +23,8 @@ object FSFlightStatusByRoute {
   *
   * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/route">FlightStats Flight Status by Route API Documentation</a>
   */
-abstract class FSFlightStatusByRoute(protected val appId: String, protected val appKey: String) extends FSClientBase {
+abstract class FSFlightStatusByRoute(protected val appId: String, protected val appKey: String)
+  extends FSClientBase with FSFlightStatusHelpers {
   // https://api.flightstats.com/flex/flightstatus/rest/v2/json
   protected def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"
 
@@ -40,9 +41,4 @@ abstract class FSFlightStatusByRoute(protected val appId: String, protected val 
     */
   def arrivalDate(departureAirportCode: String, arrivalAirportCode: String, date: DateTime, args: ArgMap = Map.empty) =
     statuses( api / "route" / "status" / departureAirportCode / arrivalAirportCode / "arr" / date <<? args )
-
-
-  private def statuses(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightStatusesResponse], url)
-
 }

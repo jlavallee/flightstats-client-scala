@@ -25,9 +25,6 @@ case class FSFlightStatusRequest (
   extendedOptions: FSRequested[String]
 )
 
-object FSFlightStatus {
-  def apply(status: FSFlightStatus) = status
-}
 case class FSFlightStatus (
   flightId: Long,
   carrierFsCode: String,

@@ -21,7 +21,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightStatus(statuses.flightStatus(285645279))
 
   @Test def flightStatusRich {
-    val response: Promise[RichFlightStatusResponse] = statuses.flightStatus(285645279)
+    val response = statuses.flightStatus(285645279)
     checkFlightStatus(response)
     val flightStatus = response().flightStatus
     assertEquals(Some("AA"), flightStatus.carrier flatMap { _.iata })
@@ -33,7 +33,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightStatuses(statuses.flightStatusDepartingOnDate("AA","100", date))
 
   @Test def flightStatusDepartingOnDateRich {
-    val response: Promise[RichFlightStatusesResponse] = statuses.flightStatusDepartingOnDate("AA","100", date)
+    val response = statuses.flightStatusDepartingOnDate("AA","100", date)
 
     checkFlightStatuses(response)
     response().flightStatuses.foreach({ s =>
@@ -49,7 +49,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightTrack(statuses.flightTrack(285645279))
 
   @Test def flightTrackRich = {
-    val response: Promise[RichFlightTrackResponse] = statuses.flightTrack(285645279)
+    val response = statuses.flightTrack(285645279)
     checkFlightTrack(response)
     val flightTrack = response().flightTrack
     assertEquals(Some("AA"), flightTrack.carrier flatMap { _.iata })
@@ -61,7 +61,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightTracks(statuses.flightTracksDepartingOnDate("AA", "100", date))
 
   @Test def flightTracksDepartingOnDateRich {
-    val response: Promise[RichFlightTracksResponse] = statuses.flightTracksDepartingOnDate("AA", "100", date)
+    val response = statuses.flightTracksDepartingOnDate("AA", "100", date)
 
     checkFlightTracks(response)
     response().flightTracks.foreach({ t =>

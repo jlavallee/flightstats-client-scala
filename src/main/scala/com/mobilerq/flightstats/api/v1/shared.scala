@@ -87,30 +87,6 @@ class RichAppendix(appendix: FSAppendix) {
 
 }
 
-trait FlightAppendixHelper {
-  def appendix: FSAppendix
-  def carrierFsCode: String
-  def arrivalAirportFsCode: String
-  def departureAirportFsCode: String
-
-  def carrier: Option[FSAirline] =
-    appendix.airlinesMap.get(carrierFsCode)
-
-  def arrivalAirport: Option[FSAirport] =
-    appendix.airportsMap.get(arrivalAirportFsCode)
-
-  def departureAirport: Option[FSAirport] =
-    appendix.airportsMap.get(departureAirportFsCode)
-}
-
-trait EquipmentAppendixHelper {
-  def appendix: FSAppendix
-  def equipmentCodes: Seq[String]
-
-  def equipments: Map[String, FSEquipment] =
-    appendix.equipmentMap
-}
-
 case class FSEquipment (
     iata: String,
     name: String,
@@ -237,3 +213,27 @@ case class FSPosition (
   source: Option[String],
   date: DateTime
 )
+
+trait FlightAppendixHelper {
+  def appendix: FSAppendix
+  def carrierFsCode: String
+  def arrivalAirportFsCode: String
+  def departureAirportFsCode: String
+
+  def carrier: Option[FSAirline] =
+    appendix.airlinesMap.get(carrierFsCode)
+
+  def arrivalAirport: Option[FSAirport] =
+    appendix.airportsMap.get(arrivalAirportFsCode)
+
+  def departureAirport: Option[FSAirport] =
+    appendix.airportsMap.get(departureAirportFsCode)
+}
+
+trait EquipmentAppendixHelper {
+  def appendix: FSAppendix
+  def equipmentCodes: Seq[String]
+
+  def equipments: Map[String, FSEquipment] =
+    appendix.equipmentMap
+}

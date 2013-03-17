@@ -23,7 +23,8 @@ object FSFlightStatusByAirport {
   *
   * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/airport">FlightStats Flight Status & Track by Airport API Documentation</a>
   */
-abstract class FSFlightStatusByAirport(protected val appId: String, protected val appKey: String) extends FSClientBase {
+abstract class FSFlightStatusByAirport(protected val appId: String, protected val appKey: String)
+  extends FSClientBase with FSFlightStatusHelpers with FSFlightTrackHelpers {
   // https://api.flightstats.com/flex/flightstatus/rest/v2/json
   protected def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"
 
@@ -54,11 +55,4 @@ abstract class FSFlightStatusByAirport(protected val appId: String, protected va
     */
   def departureTracks(airportCode: String, args: ArgMap = Map.empty) =
     tracks( api / "airport" / "tracks" / airportCode / "dep" <<? args )
-
-
-  private def statuses(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightStatusesResponse], url)
-
-  private def tracks(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightTracksResponse], url)
 }
