@@ -3,9 +3,10 @@ package com.mobilerq.flightstats.client
 import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
-import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
-import com.mobilerq.flightstats.client.FSTestUtil._
 import org.joda.time.DateTime
+import com.mobilerq.flightstats.api.v1._
+import com.mobilerq.flightstats.api.v1.flightstatus._
+import com.mobilerq.flightstats.client.FSTestUtil._
 
 class FSFlightStatusByFlightTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-14T21:12:23.048-08:00")
@@ -19,6 +20,15 @@ class FSFlightStatusByFlightTest extends FSTest {
 
   @Test def flightStatus =
     checkFlightStatus(statuses.flightStatus(285645279))
+
+  @Test def flightStatusRichAppendix {
+    val response = statuses.flightStatus(285645279)
+    val status = response().flightStatus
+    val appendix = response().appendix
+    assertEquals(Some("AA"), appendix.airlinesMap.get(status.carrierFsCode) flatMap {_.iata})
+    assertEquals(Some("LHR"), appendix.airportsMap.get(status.arrivalAirportFsCode) flatMap {_.iata})
+    assertEquals(Some("JFK"), appendix.airportsMap.get(status.departureAirportFsCode) flatMap {_.iata})
+  }
 
   @Test def flightStatusDepartingOnDate =
     checkFlightStatuses(statuses.flightStatusDepartingOnDate("AA","100", date))
