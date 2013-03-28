@@ -1,5 +1,6 @@
 package com.mobilerq.flightstats.client
 
+import scala.concurrent.Future
 import dispatch._
 import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
@@ -30,7 +31,7 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
     *
     * /v1/json/create/{carrier}/{flightNumber}/to/{arrivalAirport}/arriving/{year}/{month}/{day} GET
     */
-  def createRuleByArrival(deliverTo: String, carrier: String, flightNumber: String, arrivalAirport: String, date: DateTime, args: ArgMap = Map.empty): Promise[FSCreateAlert] =
+  def createRuleByArrival(deliverTo: String, carrier: String, flightNumber: String, arrivalAirport: String, date: DateTime, args: ArgMap = Map.empty): Future[FSCreateAlert] =
     // TODO: allow type to be configurable
     create( api / "create" / carrier / flightNumber / "to" / arrivalAirport / "arriving" / date
         <<? Map("deliverTo" -> deliverTo, "type" -> "JSON") ++ args)
@@ -39,7 +40,7 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
     *
     * /v1/json/create/{carrier}/{flightNumber}/from/{departureAirport}/departing/{year}/{month}/{day} GET
     */
-  def createRuleByDeparture(deliverTo: String, carrier: String, flightNumber: String, departureAirport: String, date: DateTime, args: ArgMap = Map.empty): Promise[FSCreateAlert] =
+  def createRuleByDeparture(deliverTo: String, carrier: String, flightNumber: String, departureAirport: String, date: DateTime, args: ArgMap = Map.empty): Future[FSCreateAlert] =
     create( api / "create" / carrier / flightNumber / "from" / departureAirport / "departing" / date
         <<? Map("deliverTo" -> deliverTo, "type" -> "JSON") ++ args)
 
@@ -47,7 +48,7 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
     *
     * /v1/json/create/{carrier}/{flightNumber}/from/{departureAirport}/to/{arrivalAirport}/arriving/{year}/{month}/{day} GET
     */
-  def createRuleForRouteByArrivalDate(deliverTo: String, carrier: String, flightNumber: String, departureAirport: String, arrivalAirport: String, date: DateTime, args: ArgMap = Map.empty): Promise[FSCreateAlert] =
+  def createRuleForRouteByArrivalDate(deliverTo: String, carrier: String, flightNumber: String, departureAirport: String, arrivalAirport: String, date: DateTime, args: ArgMap = Map.empty): Future[FSCreateAlert] =
     create( api / "create" / carrier / flightNumber / "from" / departureAirport / "to" / arrivalAirport / "arriving" / date
         <<? Map("deliverTo" -> deliverTo, "type" -> "JSON") ++ args)
 
@@ -55,7 +56,7 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
     *
     * /v1/json/create/{carrier}/{flightNumber}/from/{departureAirport}/to/{arrivalAirport}/departing/{year}/{month}/{day} GET
     */
-  def createRuleForRouteByDepartureDate(deliverTo: String, carrier: String, flightNumber: String, departureAirport: String, arrivalAirport: String, date: DateTime, args: ArgMap = Map.empty): Promise[FSCreateAlert] =
+  def createRuleForRouteByDepartureDate(deliverTo: String, carrier: String, flightNumber: String, departureAirport: String, arrivalAirport: String, date: DateTime, args: ArgMap = Map.empty): Future[FSCreateAlert] =
     create( api / "create" / carrier / flightNumber / "from" / departureAirport / "to" / arrivalAirport / "departing" / date
         <<? Map("deliverTo" -> deliverTo, "type" -> "JSON") ++ args)
 
@@ -63,14 +64,14 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
     *
     * /v1/json/delete/{ruleId} GET
     */
-  def delete(ruleId: Integer): Promise[FSGetAlert] =
+  def delete(ruleId: Integer): Future[FSGetAlert] =
     get(api / "delete" / ruleId.toString())
 
   /** Retrieve a previously registered rule by ID
     *
     * /v1/json/get/{ruleId} GET
     */
-  def get(ruleId: Integer): Promise[FSGetAlert] =
+  def get(ruleId: Integer): Future[FSGetAlert] =
     get(api / "get" / ruleId.toString())
 
 

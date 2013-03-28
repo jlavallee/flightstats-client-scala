@@ -17,17 +17,17 @@ import com.ning.http.client.RequestBuilder
   * val airports = FSAirports(appId, appKey)
   *
   * // fetch active airports
-  * val activeAirports:Promise[Seq[FSAirport]] = airports.active
+  * val activeAirports:Future[Seq[FSAirport]] = airports.active
   *
   * // to handle errors gracefully, use .either (see Dispatch docs)
-  * val activeAirportsEither:Promise[Either[Throwable, Seq[FSAirport]]] = airports.active.either
+  * val activeAirportsEither:Future[Either[Throwable, Seq[FSAirport]]] = airports.active.either
   *
   *
   * // create an instance of a client for the Delay Indexes API
   * val delayIndexes = FSDelayIndexes(appId, appKey)
   *
   * // optional arguments passed as a map
-  * val delayIndex:Promise[FSDelayIndexResponse] =
+  * val delayIndex:Future[FSDelayIndexResponse] =
   *   delayIndexes.byRegion("Caribbean", Map("classification" -> "3", "score" -> "3"))
   * }}}
   *

@@ -1,5 +1,6 @@
 package com.mobilerq.flightstats.client
 
+import scala.concurrent.Future
 import dispatch._
 import com.ning.http.client.RequestBuilder
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
@@ -12,8 +13,8 @@ protected trait FSClient {
   protected def api: RequestBuilder  // base URL for API
   protected def appId: String
   protected def appKey: String
-  protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T]
-  protected def getWithCreds(url: RequestBuilder): Promise[String]
+  protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Future[T]
+  protected def getWithCreds(url: RequestBuilder): Future[String]
   protected def mapFromJson[T](t: Class[T], json: String): T
 }
 
@@ -21,7 +22,7 @@ protected trait FSClientBase extends FSClient with JacksonMapper {
   private val HOST = "api.flightstats.com"
   protected def fsHost = host(HOST).secure
 
-  override protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Promise[T] =
+  override protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Future[T] =
     for ( a <- getWithCreds(addParams(url)) ) yield mapFromJson(t, a)
 
   protected def addParams(url: RequestBuilder): RequestBuilder = {
@@ -43,7 +44,7 @@ protected class EnhancedRequestVerbs(override val subject: RequestBuilder) exten
 
 /** implements HTTP support using Dispatch Reboot */
 trait FSClientReboot extends FSClient {
-  override protected def getWithCreds(url: RequestBuilder): Promise[String] =
+  override protected def getWithCreds(url: RequestBuilder): Future[String] =
       Http( url OK as.String)
 }
 
