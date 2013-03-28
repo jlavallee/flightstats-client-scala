@@ -1,23 +1,25 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Future, ExecutionContext}
 import org.junit.Assert._
-import com.ning.http.client.RequestBuilder
-import com.ning.http.client.FluentStringsMap
+import com.ning.http.client.{FluentStringsMap, RequestBuilder}
 import java.io.{File => JFile, PrintWriter => JPrintWriter}
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{currentMirror => mirror}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.datatype.joda.JodaModule
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Future, ExecutionContext}
 
 
 trait FSTest {
   val appId = sys.props.get("flightstats.appId")
   val appKey = sys.props.get("flightstats.appKey")
+  val duration = Duration("10 seconds")
 
-  def debug(promise: Promise[Either[Throwable, AnyRef]]) {
+  def debug(promise: Future[AnyRef]) {
     if(appId.isDefined && appKey.isDefined)
       println(promise) // it's cool to see that we're really async when we test w/creds
   }
@@ -143,7 +145,8 @@ trait FSTestRun extends FSClientBase
     with FSClientReboot {
   val capture = sys.props.get("test.capture")
 
-  override protected def getWithCreds(url: RequestBuilder) : Promise[String] = {
+  override protected def getWithCreds(url: RequestBuilder) : Future[String] = {
+    import ExecutionContext.Implicits.global
     println("URL: " + url.build().getRawUrl())
     for (x <- super.getWithCreds(url)) yield {
       capture match {

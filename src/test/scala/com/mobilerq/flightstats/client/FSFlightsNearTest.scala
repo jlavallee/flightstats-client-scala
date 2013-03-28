@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
@@ -23,14 +24,14 @@ class FSFlightsNearTest extends FSTest {
   @Test def pointAndDistance =
     checkFlightsNear(flightsNear.pointAndDistance(45.000, -122.00, 25))
 
-  def checkFlightsNear(promise: Promise[AnyRef]) {
-    val either = promise.either
+  def checkFlightsNear(flightsNear: Future[AnyRef]) {
+    import ExecutionContext.Implicits.global
 
-    debug(either)
+    debug(flightsNear)
 
-    either() match {
-      case Left(exception) => fail(exception.getMessage)
-      case Right(x) => {
+    flightsNear onComplete {
+      case Failure(exception) => fail(exception.getMessage)
+      case Success(x) => {
         exerciseCaseClass(x)
         x match {
           case FSFlightsNearBoundingBox(req, appendix, flightPositions) => checkFlightPositions(flightPositions)

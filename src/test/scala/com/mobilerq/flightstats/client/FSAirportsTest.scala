@@ -1,10 +1,11 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
 import com.mobilerq.flightstats.api.v1.FSAirport
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 
 class FSAirportsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
@@ -56,29 +57,31 @@ class FSAirportsTest extends FSTest {
     checkAirportList(airports.withinRadius(-122, 45, 50))
 
 
-  def checkAirportList(airportListPromise: Promise[Seq[FSAirport]]) {
-    val airportList = airportListPromise.either
+  def checkAirportList(airportList: Future[Seq[FSAirport]]) {
+    import ExecutionContext.Implicits.global
     debug(airportList)
-    airportList() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(list) => {
+    airportList onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(list) => {
           assertNotNull(list)
           assertTrue(list.length > 0)
           list.foreach{ exerciseCaseClass(_) }
       }
     }
+    Await.result(airportList, duration)
   }
 
-  def checkAirport(airportPromise: Promise[FSAirport], code: String) {
-    val airport = airportPromise.either
+  def checkAirport(airport: Future[FSAirport], code: String) {
+    import ExecutionContext.Implicits.global
     debug(airport)
-    airport() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(airport) => {
+    airport onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(airport) => {
           assertNotNull(airport)
           exerciseCaseClass(airport)
           assertEquals(code, airport.fs)
       }
     }
+    Await.result(airport, duration)
   }
 }

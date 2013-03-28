@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
@@ -65,15 +66,18 @@ class FSAlertsTest extends FSTest {
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )
 
-  def checkAlertRequest(alertPromise: Promise[AnyRef]) {
-    val alert = alertPromise.either
+  def checkAlertRequest(alertPromise: Future[AnyRef]) {
+    import ExecutionContext.Implicits.global
+    val alert = alertPromise
     debug(alert)
-    alert() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(request) => {
-          assertNotNull(request)
-          exerciseCaseClass(request)
+    
+    alert onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(result) => {
+          assertNotNull(result)
+          exerciseCaseClass(result)
       }
     }
+    Await.result(alert, duration)
   }
 }

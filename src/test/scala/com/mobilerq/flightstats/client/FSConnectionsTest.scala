@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
@@ -40,14 +41,16 @@ class FSConnectionsTest extends FSTest {
     checkConnectionsResponse(connections.betweenLocationsByDepartureDate("PDX", "JFK", date))
 
 
-  def checkConnectionsResponse(connectionsPromise: Promise[FSConnectionsResponse]) {
-    val connectionsResponse = connectionsPromise.either
+  def checkConnectionsResponse(connectionsResponse: Future[FSConnectionsResponse]) {
+    import ExecutionContext.Implicits.global
+
     debug(connectionsResponse)
-    connectionsResponse() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(connections) => checkConnections(connections)
+    connectionsResponse onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(connections) => checkConnections(connections)
       case x => fail("Whoops, got unexpected response " + x)
     }
+    Await.result(connectionsResponse, duration)
   }
 
   def checkConnections(connections: FSConnectionsResponse) {

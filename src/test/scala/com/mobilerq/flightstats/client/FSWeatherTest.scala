@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
@@ -27,22 +28,27 @@ class FSWeatherTest extends FSTest {
     checkWeatherResponse(weather.zoneForecast("PDX"))
 
 
-  def checkWeatherResponse(weatherPromise: Promise[AnyRef]) {
-    val weatherResponse = weatherPromise.either
+  def checkWeatherResponse(weatherResponse: Future[AnyRef]) {
+    import ExecutionContext.Implicits.global
+    
     debug(weatherResponse)
-    weatherResponse() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(FSWeatherMetar(req, appendix, metar)) => checkMetar(metar)
-      case Right(FSWeatherTaf(req, appendix, taf)) => checkTaf(taf)
-      case Right(FSWeatherZoneForecast(req, appendix, weather)) => checkZoneForecast(weather)
-      case Right(FSWeatherAll(req, appendix, metar, taf, zoneForcast)) => {
-        checkMetar(metar)
-        checkTaf(taf)
-        checkZoneForecast(zoneForcast)
+    weatherResponse onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(response) => {
+        exerciseCaseClass(response)
+        response match {
+          case FSWeatherMetar(req, appendix, metar) => checkMetar(metar)
+          case FSWeatherTaf(req, appendix, taf) => checkTaf(taf)
+          case FSWeatherZoneForecast(req, appendix, weather) => checkZoneForecast(weather)
+          case FSWeatherAll(req, appendix, metar, taf, zoneForcast) => {
+            checkMetar(metar)
+            checkTaf(taf)
+            checkZoneForecast(zoneForcast)
+            }
+        }
       }
       case x => fail("Whoops, got unexpected response " + x)
     }
-    exerciseCaseClass(weatherResponse())
   }
 
   def checkMetar(weather: FSMetar) {

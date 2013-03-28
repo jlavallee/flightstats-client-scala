@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
@@ -21,15 +22,16 @@ class FSRatingsTest extends FSTest {
     checkRatingsResponse(ratings.forRoute("PDX", "JFK"))
 
 
-  def checkRatingsResponse(ratingsPromise: Promise[AnyRef]) {
-    val ratingsResponse = ratingsPromise.either
+  def checkRatingsResponse(ratingsResponse: Future[AnyRef]) {
+    import ExecutionContext.Implicits.global
     debug(ratingsResponse)
-    ratingsResponse() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(FSRatingsForRoute(req, appendix, ratings)) => checkRatings(ratings)
-      case Right(FSRatingsForFlight(req, appendix, ratings)) => checkRatings(ratings)
+    ratingsResponse onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(FSRatingsForRoute(req, appendix, ratings)) => checkRatings(ratings)
+      case Success(FSRatingsForFlight(req, appendix, ratings)) => checkRatings(ratings)
       case x => fail("Whoops, got unexpected response " + x)
     }
+    Await.result(ratingsResponse, duration)
   }
 
   def checkRatings(ratings: Seq[FSRating]) {

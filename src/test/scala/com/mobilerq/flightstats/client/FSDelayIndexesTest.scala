@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import com.mobilerq.flightstats.api.v1.delayindex.FSDelayIndexResponse
@@ -35,17 +36,18 @@ class FSDelayIndexesTest extends FSTest {
   @Test def byState =
     checkAirportDelays(delayIndexes.byState("OR"))
 
-  def checkAirportDelays(delayIndexPromise: Promise[FSDelayIndexResponse]) {
-    val delayIndex = delayIndexPromise.either
+  def checkAirportDelays(delayIndex: Future[FSDelayIndexResponse]) {
+    import ExecutionContext.Implicits.global
 
     debug(delayIndex)
 
-    delayIndex() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(delayIndex) => {
+    delayIndex onComplete {
+      case Failure(exception) => fail(exception.getMessage())
+      case Success(delayIndex) => {
           assertNotNull(delayIndex)
       }
     }
+    Await.result(delayIndex, duration)
   }
 
 }
