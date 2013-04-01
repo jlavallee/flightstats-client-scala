@@ -21,7 +21,7 @@ import com.mobilerq.flightstats.client.FSTestClients;
  *
  */
 public class FSJavaExampleTest {
-    ExecutionContext executionContext;
+    ExecutionContext executionContext = scala.concurrent.ExecutionContext$.MODULE$.global();
     FSAirports airports = FSTestClients.airports();
 
     @Test
