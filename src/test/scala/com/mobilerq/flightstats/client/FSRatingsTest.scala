@@ -23,7 +23,6 @@ class FSRatingsTest extends FSTest {
 
 
   def checkRatingsResponse(ratingsResponse: Future[AnyRef]) {
-    import ExecutionContext.Implicits.global
     debug(ratingsResponse)
     ratingsResponse onComplete {
       case Failure(exception) => fail(exception.getMessage())

@@ -6,7 +6,6 @@ import org.junit.Assert._
 import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
 
 object FSTestUtil extends FSTest {
-  import ExecutionContext.Implicits.global
 
   def checkFlightStatus(status: Future[FSFlightStatusResponse]) {
     debug(status)

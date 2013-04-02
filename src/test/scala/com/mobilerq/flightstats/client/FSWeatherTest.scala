@@ -29,8 +29,6 @@ class FSWeatherTest extends FSTest {
 
 
   def checkWeatherResponse(weatherResponse: Future[AnyRef]) {
-    import ExecutionContext.Implicits.global
-    
     debug(weatherResponse)
     weatherResponse onComplete {
       case Failure(exception) => fail(exception.getMessage())

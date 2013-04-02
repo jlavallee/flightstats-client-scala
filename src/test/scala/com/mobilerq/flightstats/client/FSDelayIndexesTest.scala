@@ -37,8 +37,6 @@ class FSDelayIndexesTest extends FSTest {
     checkAirportDelays(delayIndexes.byState("OR"))
 
   def checkAirportDelays(delayIndex: Future[FSDelayIndexResponse]) {
-    import ExecutionContext.Implicits.global
-
     debug(delayIndex)
 
     delayIndex onComplete {

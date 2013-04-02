@@ -5,6 +5,7 @@ import scala.concurrent.{Future, ExecutionContext}
 import org.junit.Assert._
 import com.ning.http.client.{FluentStringsMap, RequestBuilder}
 import java.io.{File => JFile, PrintWriter => JPrintWriter}
+import java.util.concurrent.{Executors => JExecutors}
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
 import scala.reflect.runtime.universe._
 import scala.reflect.runtime.{currentMirror => mirror}
@@ -14,10 +15,16 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Future, ExecutionContext}
 
 
+object FSTest {
+  val executor = ExecutionContext.fromExecutor(JExecutors.newSingleThreadExecutor())
+}
 trait FSTest {
   val appId = sys.props.get("flightstats.appId")
   val appKey = sys.props.get("flightstats.appKey")
   val duration = Duration("10 seconds")
+
+  // need to execute exerciseCaseClass in a single thread, reflection isn't threadsafe
+  implicit val executor = FSTest.executor
 
   def debug(promise: Future[AnyRef]) {
     if(appId.isDefined && appKey.isDefined)

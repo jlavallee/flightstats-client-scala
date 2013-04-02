@@ -42,8 +42,6 @@ class FSConnectionsTest extends FSTest {
 
 
   def checkConnectionsResponse(connectionsResponse: Future[FSConnectionsResponse]) {
-    import ExecutionContext.Implicits.global
-
     debug(connectionsResponse)
     connectionsResponse onComplete {
       case Failure(exception) => fail(exception.getMessage())

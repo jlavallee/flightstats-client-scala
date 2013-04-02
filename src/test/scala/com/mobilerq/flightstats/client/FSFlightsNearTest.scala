@@ -25,8 +25,6 @@ class FSFlightsNearTest extends FSTest {
     checkFlightsNear(flightsNear.pointAndDistance(45.000, -122.00, 25))
 
   def checkFlightsNear(flightsNear: Future[AnyRef]) {
-    import ExecutionContext.Implicits.global
-
     debug(flightsNear)
 
     flightsNear onComplete {

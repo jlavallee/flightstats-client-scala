@@ -66,11 +66,9 @@ class FSAlertsTest extends FSTest {
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )
 
-  def checkAlertRequest(alertPromise: Future[AnyRef]) {
-    import ExecutionContext.Implicits.global
-    val alert = alertPromise
+  def checkAlertRequest(alert: Future[AnyRef]) {
     debug(alert)
-    
+
     alert onComplete {
       case Failure(exception) => fail(exception.getMessage())
       case Success(result) => {

@@ -58,7 +58,6 @@ class FSAirportsTest extends FSTest {
 
 
   def checkAirportList(airportList: Future[Seq[FSAirport]]) {
-    import ExecutionContext.Implicits.global
     debug(airportList)
     airportList onComplete {
       case Failure(exception) => fail(exception.getMessage())
@@ -72,7 +71,6 @@ class FSAirportsTest extends FSTest {
   }
 
   def checkAirport(airport: Future[FSAirport], code: String) {
-    import ExecutionContext.Implicits.global
     debug(airport)
     airport onComplete {
       case Failure(exception) => fail(exception.getMessage())
