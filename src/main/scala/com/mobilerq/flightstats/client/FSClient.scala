@@ -5,9 +5,8 @@ import dispatch._
 import dispatch.Defaults.executor
 import com.ning.http.client.RequestBuilder
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.joda.JodaModule
-import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.{ObjectMapper, DeserializationFeature}
 import org.joda.time.DateTime
 
 protected trait FSClient {
