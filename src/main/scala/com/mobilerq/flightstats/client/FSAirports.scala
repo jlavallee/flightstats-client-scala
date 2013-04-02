@@ -2,6 +2,7 @@ package com.mobilerq.flightstats.client
 
 import scala.concurrent.Future
 import dispatch._
+import dispatch.Defaults.executor
 import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.client._

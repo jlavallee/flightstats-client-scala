@@ -2,6 +2,7 @@ package com.mobilerq.flightstats.client
 
 import scala.concurrent.Future
 import dispatch._
+import dispatch.Defaults.executor
 import com.ning.http.client.RequestBuilder
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.databind.ObjectMapper

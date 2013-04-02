@@ -2,6 +2,7 @@ package com.mobilerq.flightstats.client
 
 import scala.concurrent.Future
 import dispatch._
+import dispatch.Defaults.executor
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.api.v1.delayindex.FSDelayIndexResponse
 
