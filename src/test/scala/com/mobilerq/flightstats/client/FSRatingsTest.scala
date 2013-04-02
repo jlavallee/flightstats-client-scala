@@ -30,7 +30,7 @@ class FSRatingsTest extends FSTest {
       case Success(FSRatingsForFlight(req, appendix, ratings)) => checkRatings(ratings)
       case x => fail("Whoops, got unexpected response " + x)
     }
-    Await.result(ratingsResponse, duration)
+    Await.ready(ratingsResponse, duration)
   }
 
   def checkRatings(ratings: Seq[FSRating]) {

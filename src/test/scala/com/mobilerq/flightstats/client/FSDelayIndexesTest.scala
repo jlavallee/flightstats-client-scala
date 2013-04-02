@@ -45,7 +45,7 @@ class FSDelayIndexesTest extends FSTest {
           assertNotNull(delayIndex)
       }
     }
-    Await.result(delayIndex, duration)
+    Await.ready(delayIndex, duration)
   }
 
 }

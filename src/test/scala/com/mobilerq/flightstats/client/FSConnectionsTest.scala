@@ -48,7 +48,7 @@ class FSConnectionsTest extends FSTest {
       case Success(connections) => checkConnections(connections)
       case x => fail("Whoops, got unexpected response " + x)
     }
-    Await.result(connectionsResponse, duration)
+    Await.ready(connectionsResponse, duration)
   }
 
   def checkConnections(connections: FSConnectionsResponse) {

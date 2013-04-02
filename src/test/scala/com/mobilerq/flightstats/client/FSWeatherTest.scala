@@ -47,6 +47,8 @@ class FSWeatherTest extends FSTest {
       }
       case x => fail("Whoops, got unexpected response " + x)
     }
+
+    Await.ready(weatherResponse, duration)
   }
 
   def checkMetar(weather: FSMetar) {

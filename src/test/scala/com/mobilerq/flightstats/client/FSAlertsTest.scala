@@ -76,6 +76,6 @@ class FSAlertsTest extends FSTest {
           exerciseCaseClass(result)
       }
     }
-    Await.result(alert, duration)
+    Await.ready(alert, duration)
   }
 }

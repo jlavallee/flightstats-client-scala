@@ -67,7 +67,7 @@ class FSAirportsTest extends FSTest {
           list.foreach{ exerciseCaseClass(_) }
       }
     }
-    Await.result(airportList, duration)
+    Await.ready(airportList, duration)
   }
 
   def checkAirport(airport: Future[FSAirport], code: String) {
@@ -80,6 +80,6 @@ class FSAirportsTest extends FSTest {
           assertEquals(code, airport.fs)
       }
     }
-    Await.result(airport, duration)
+    Await.ready(airport, duration)
   }
 }

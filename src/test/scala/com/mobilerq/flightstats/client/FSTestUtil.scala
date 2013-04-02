@@ -17,7 +17,7 @@ object FSTestUtil extends FSTest {
         assertNotNull(status.flightStatus)
       }
     }
-    Await.result(status, duration)
+    Await.ready(status, duration)
   }
 
   def checkFlightStatuses(statuses: Future[FSFlightStatusesResponse]) {
@@ -29,7 +29,7 @@ object FSTestUtil extends FSTest {
         assertTrue(statuses.flightStatuses.length > 0)
       }
     }
-    Await.result(statuses, duration)
+    Await.ready(statuses, duration)
   }
 
   def checkFlightTrack(track: Future[FSFlightTrackResponse]) {
@@ -42,7 +42,7 @@ object FSTestUtil extends FSTest {
         assertNotNull(track.flightTrack)
       }
     }
-    Await.result(track, duration)
+    Await.ready(track, duration)
   }
 
   def checkFlightTracks(tracks: Future[FSFlightTracksResponse]) {
@@ -54,6 +54,6 @@ object FSTestUtil extends FSTest {
         assertTrue(tracks.flightTracks.length > 0)
       }
     }
-    Await.result(tracks, duration)
+    Await.ready(tracks, duration)
   }
 }
