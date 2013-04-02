@@ -1,6 +1,5 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
 import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}

@@ -36,8 +36,6 @@ import com.ning.http.client.RequestBuilder
   * This client makes use of Dispatch and Jackson
   * to provide a dead-simple asynchronous client for FlightStats API.
   *
-  * See the excellent Dispatch docs for a primer on working with the
-  * Promises returned by API methods.
   *
   * @see
   *  <ul>

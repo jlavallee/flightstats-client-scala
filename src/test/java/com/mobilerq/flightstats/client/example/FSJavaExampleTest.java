@@ -17,7 +17,7 @@ import com.mobilerq.flightstats.client.FSAirports;
 import com.mobilerq.flightstats.client.FSTestClients;
 
 /* This "test" doesn't really test anything, it just shows examples of
- * how to handle the Promises returned by Dispatch in Java
+ * how to handle the Futures returned by Dispatch in Java
  *
  */
 public class FSJavaExampleTest {

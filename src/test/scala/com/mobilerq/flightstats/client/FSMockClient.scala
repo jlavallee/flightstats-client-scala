@@ -1,12 +1,10 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
 import com.ning.http.client.RequestBuilder
 import io.Source
-import scala.concurrent.{CanAwait, Future, ExecutionContext}
-import scala.util.Try
+import scala.concurrent.{CanAwait, Future, ExecutionContext, Await}
 import scala.concurrent.duration.Duration
-import scala.concurrent.Await
+import scala.util.Try
 
 trait FSMockClient extends FSClientBase with FSStaticTestJson {
 
