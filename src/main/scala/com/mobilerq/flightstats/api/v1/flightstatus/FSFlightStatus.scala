@@ -27,10 +27,10 @@ case class FSFlightStatusRequest (
 
 case class FSFlightStatus (
   flightId: Long,
-  carrierFsCode: String,
+  carrierFsCode: Option[String],
   flightNumber: String,
-  departureAirportFsCode: String,
-  arrivalAirportFsCode: String,
+  departureAirportFsCode: Option[String],
+  arrivalAirportFsCode: Option[String],
   departureDate: FSDate,
   arrivalDate: FSDate,
   status: String,
@@ -61,7 +61,8 @@ class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
       status.departureDate, status.arrivalDate, status.status,
       status.schedule, status.operationalTimes, status.codeshares,
       status.flightDurations, status.airportResources, status.flightEquipment)
-  with FlightAppendixHelper {
+  with FlightAppendixHelper
+  with CarrierAppendixHelper {
   override val codeshares = status.codeshares map { _ map { new RichCodeshare(_, appendix)} }
 }
 

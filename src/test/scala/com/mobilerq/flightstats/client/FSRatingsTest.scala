@@ -5,7 +5,7 @@ import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
-import com.mobilerq.flightstats.api.v1.ratings.{FSRating, FSRatingsForFlight, FSRatingsForRoute}
+import com.mobilerq.flightstats.api.v1.ratings._
 
 class FSRatingsTest extends FSTest {
   val ratings = FSTestClients.ratings
@@ -18,19 +18,29 @@ class FSRatingsTest extends FSTest {
   @Test def forFlight =
     checkRatingsResponse(ratings.forFlight("AA", "100"))
 
+  @Test def forFlightRich = {
+    val r: RichRatingsForFlight = Await.result(ratings.forFlight("AA", "100"), duration)
+    assertEquals(Some("John F. Kennedy International Airport"),
+        r.ratings(0).departureAirport flatMap {_.name})
+  }
+
   @Test def forRoute =
     checkRatingsResponse(ratings.forRoute("PDX", "JFK"))
 
+  @Test def forRouteRich = {
+    val r: RichRatingsForRoute = Await.result(ratings.forRoute("PDX", "JFK"), duration)
+    assertEquals(Some("Portland International Airport"),
+        r.ratings(0).departureAirport flatMap {_.name})
+  }
 
   def checkRatingsResponse(ratingsResponse: Future[AnyRef]) {
     debug(ratingsResponse)
-    ratingsResponse onComplete {
+    Await.result(ratingsResponse, duration) match {
       case Failure(exception) => fail(exception.getMessage())
-      case Success(FSRatingsForRoute(req, appendix, ratings)) => checkRatings(ratings)
-      case Success(FSRatingsForFlight(req, appendix, ratings)) => checkRatings(ratings)
+      case FSRatingsForRoute(req, appendix, ratings) => checkRatings(ratings)
+      case FSRatingsForFlight(req, appendix, ratings) => checkRatings(ratings)
       case x => fail("Whoops, got unexpected response " + x)
     }
-    Await.ready(ratingsResponse, duration)
   }
 
   def checkRatings(ratings: Seq[FSRating]) {

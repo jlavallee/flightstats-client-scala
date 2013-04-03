@@ -31,10 +31,10 @@ case class FSFlightTrackRequest (
 
 case class FSFlightTrack (
   flightId: Long,
-  carrierFsCode: String,
+  carrierFsCode: Option[String],
   flightNumber: String,
-  departureAirportFsCode: String,
-  arrivalAirportFsCode: String,
+  departureAirportFsCode: Option[String],
+  arrivalAirportFsCode: Option[String],
   departureDate: FSDate,
   equipment: String,
   bearing: BigDecimal,
@@ -65,3 +65,4 @@ class RichFlightTrack(flightTrack: FSFlightTrack, val appendix: FSAppendix)
       flightTrack.positions, flightTrack.waypoints
       )
   with FlightAppendixHelper
+  with CarrierAppendixHelper

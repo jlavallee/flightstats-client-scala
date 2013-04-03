@@ -26,9 +26,9 @@ class FSFlightStatusByFlightTest extends FSTest {
     val response = Await.result(statuses.flightStatus(285645279), duration)
     val status = response.flightStatus
     val appendix = response.appendix
-    assertEquals(Some("AA"), appendix.airlinesMap.get(status.carrierFsCode) flatMap {_.iata})
-    assertEquals(Some("LHR"), appendix.airportsMap.get(status.arrivalAirportFsCode) flatMap {_.iata})
-    assertEquals(Some("JFK"), appendix.airportsMap.get(status.departureAirportFsCode) flatMap {_.iata})
+    assertEquals(Some("AA"), status.carrierFsCode flatMap {appendix.airlinesMap.get(_)} flatMap {_.iata})
+    assertEquals(Some("LHR"), status.arrivalAirportFsCode flatMap {appendix.airportsMap.get(_)} flatMap {_.iata})
+    assertEquals(Some("JFK"), status.departureAirportFsCode flatMap {appendix.airportsMap.get(_)} flatMap {_.iata})
   }
 
   @Test def flightStatusRich {

@@ -216,18 +216,30 @@ case class FSPosition (
 
 trait FlightAppendixHelper {
   def appendix: FSAppendix
-  def carrierFsCode: String
-  def arrivalAirportFsCode: String
-  def departureAirportFsCode: String
-
-  def carrier: Option[FSAirline] =
-    appendix.airlinesMap.get(carrierFsCode)
+  def arrivalAirportFsCode: Option[String]
+  def departureAirportFsCode: Option[String]
 
   def arrivalAirport: Option[FSAirport] =
-    appendix.airportsMap.get(arrivalAirportFsCode)
+    arrivalAirportFsCode flatMap { appendix.airportsMap.get(_) }
 
   def departureAirport: Option[FSAirport] =
-    appendix.airportsMap.get(departureAirportFsCode)
+    departureAirportFsCode flatMap { appendix.airportsMap.get(_) }
+}
+
+trait CarrierAppendixHelper {
+  def appendix: FSAppendix
+  def carrierFsCode: Option[String]
+
+  def carrier: Option[FSAirline] =
+    carrierFsCode flatMap { appendix.airlinesMap.get(_) }
+}
+
+trait AirlineAppendixHelper {
+  def appendix: FSAppendix
+  def airlineFsCode: Option[String]
+
+  def airline: Option[FSAirline] =
+    airlineFsCode flatMap { appendix.airlinesMap.get(_) }
 }
 
 trait EquipmentAppendixHelper {
