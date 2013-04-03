@@ -68,6 +68,7 @@ class RichAppendix(appendix: FSAppendix) {
 
   def airportsMap = airports
   def airlinesMap = airlines
+  def equipmentMap = equipment
 
   private val airports : Map[String, FSAirport] = appendix.airports match {
     case None => Map.empty
@@ -79,6 +80,10 @@ class RichAppendix(appendix: FSAppendix) {
     case Some(airlines) => Map(airlines map { a => a.fs -> a }: _*)
   }
 
+  private val equipment : Map[String, FSEquipment] = appendix.equipment match {
+    case None => Map.empty
+    case Some(equipment) => Map(equipment map { e => e.iata -> e }: _*)
+  }
 }
 
 case class FSEquipment (
@@ -168,7 +173,8 @@ case class FSOperationalTimes (
 )
 
 case class FSCodeshare (
-  carrier: Option[FSAirline],
+  //carrier: Option[FSAirline],  // flight stats doesn't send this,
+    // it needs to be picked out of the appendix.  see RichCodeshare
   fsCode: Option[String],
   flightNumber: Option[String],
   relationship: Option[String]
@@ -207,3 +213,27 @@ case class FSPosition (
   source: Option[String],
   date: DateTime
 )
+
+trait FlightAppendixHelper {
+  def appendix: FSAppendix
+  def carrierFsCode: String
+  def arrivalAirportFsCode: String
+  def departureAirportFsCode: String
+
+  def carrier: Option[FSAirline] =
+    appendix.airlinesMap.get(carrierFsCode)
+
+  def arrivalAirport: Option[FSAirport] =
+    appendix.airportsMap.get(arrivalAirportFsCode)
+
+  def departureAirport: Option[FSAirport] =
+    appendix.airportsMap.get(departureAirportFsCode)
+}
+
+trait EquipmentAppendixHelper {
+  def appendix: FSAppendix
+  def equipmentCodes: Seq[String]
+
+  def equipments: Map[String, FSEquipment] =
+    appendix.equipmentMap
+}
