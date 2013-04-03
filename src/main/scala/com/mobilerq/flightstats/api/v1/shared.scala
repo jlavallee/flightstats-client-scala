@@ -61,7 +61,7 @@ class FSAirport (  // too many parameters for a case class...
 case class FSAppendix (
   airports: Option[Seq[FSAirport]],
   airlines: Option[Seq[FSAirline]],
-  equipment: Option[Seq[FSEquipment]]
+  equipments: Option[Seq[FSEquipment]]
 )
 
 class RichAppendix(appendix: FSAppendix) {
