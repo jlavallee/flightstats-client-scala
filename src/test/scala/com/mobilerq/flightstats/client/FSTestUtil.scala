@@ -7,53 +7,32 @@ import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSF
 
 object FSTestUtil extends FSTest {
 
-  def checkFlightStatus(status: Future[FSFlightStatusResponse]) {
-    debug(status)
-    status onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(status) => {
-        exerciseCaseClass(status)
-        assertNotNull(status)
-        assertNotNull(status.flightStatus)
-      }
-    }
-    Await.ready(status, duration)
+  def checkFlightStatus(response: Future[FSFlightStatusResponse]) {
+    debug(response)
+    val status = Await.result(response, duration)
+    exerciseCaseClass(status)
+    assertNotNull(status)
+    assertNotNull(status.flightStatus)
   }
 
-  def checkFlightStatuses(statuses: Future[FSFlightStatusesResponse]) {
-    debug(statuses)
-    statuses onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(statuses) => {
-        statuses.flightStatuses.foreach(exerciseCaseClass(_))
-        assertTrue(statuses.flightStatuses.length > 0)
-      }
-    }
-    Await.ready(statuses, duration)
+  def checkFlightStatuses(response: Future[FSFlightStatusesResponse]) {
+    debug(response)
+    val statuses = Await.result(response, duration)
+    assertTrue(statuses.flightStatuses.length > 0)
   }
 
-  def checkFlightTrack(track: Future[FSFlightTrackResponse]) {
-    debug(track)
-    track onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(track) => {
-        exerciseCaseClass(track)
-        assertNotNull(track)
-        assertNotNull(track.flightTrack)
-      }
-    }
-    Await.ready(track, duration)
+  def checkFlightTrack(response: Future[FSFlightTrackResponse]) {
+    debug(response)
+    val track = Await.result(response, duration)
+    exerciseCaseClass(track)
+    assertNotNull(track)
+    assertNotNull(track.flightTrack)
   }
 
-  def checkFlightTracks(tracks: Future[FSFlightTracksResponse]) {
-    debug(tracks)
-    tracks onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(tracks) => {
-        tracks.flightTracks.foreach(exerciseCaseClass(_))
-        assertTrue(tracks.flightTracks.length > 0)
-      }
-    }
-    Await.ready(tracks, duration)
+  def checkFlightTracks(response: Future[FSFlightTracksResponse]) {
+    debug(response)
+    val tracks = Await.result(response, duration)
+    tracks.flightTracks.foreach(exerciseCaseClass(_))
+    assertTrue(tracks.flightTracks.length > 0)
   }
 }

@@ -66,16 +66,12 @@ class FSAlertsTest extends FSTest {
   @Test def get =
     checkAlertRequest( alerts.get(119281424) )
 
-  def checkAlertRequest(alert: Future[AnyRef]) {
-    debug(alert)
+  def checkAlertRequest(future: Future[AnyRef]) {
+    debug(future)
 
-    alert onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(result) => {
-          assertNotNull(result)
-          exerciseCaseClass(result)
-      }
-    }
-    Await.ready(alert, duration)
+    val result = Await.result(future, duration)
+
+    assertNotNull(result)
+    exerciseCaseClass(result)
   }
 }

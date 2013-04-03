@@ -57,29 +57,19 @@ class FSAirportsTest extends FSTest {
     checkAirportList(airports.withinRadius(-122, 45, 50))
 
 
-  def checkAirportList(airportList: Future[Seq[FSAirport]]) {
-    debug(airportList)
-    airportList onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(list) => {
-          assertNotNull(list)
-          assertTrue(list.length > 0)
-          list.foreach{ exerciseCaseClass(_) }
-      }
-    }
-    Await.ready(airportList, duration)
+  def checkAirportList(future: Future[Seq[FSAirport]]) {
+    debug(future)
+    val airportList = Await.result(future, duration)
+    assertNotNull(airportList)
+    assertTrue(airportList.length > 0)
+    airportList.foreach{ exerciseCaseClass(_) }
   }
 
-  def checkAirport(airport: Future[FSAirport], code: String) {
-    debug(airport)
-    airport onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(airport) => {
-          assertNotNull(airport)
-          exerciseCaseClass(airport)
-          assertEquals(code, airport.fs)
-      }
-    }
-    Await.ready(airport, duration)
+  def checkAirport(future: Future[FSAirport], code: String) {
+    debug(future)
+    val airport = Await.result(future, duration)
+    assertNotNull(airport)
+    exerciseCaseClass(airport)
+    assertEquals(code, airport.fs)
   }
 }

@@ -30,25 +30,18 @@ class FSWeatherTest extends FSTest {
 
   def checkWeatherResponse(weatherResponse: Future[AnyRef]) {
     debug(weatherResponse)
-    weatherResponse onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(response) => {
-        exerciseCaseClass(response)
-        response match {
-          case FSWeatherMetar(req, appendix, metar) => checkMetar(metar)
-          case FSWeatherTaf(req, appendix, taf) => checkTaf(taf)
-          case FSWeatherZoneForecast(req, appendix, weather) => checkZoneForecast(weather)
-          case FSWeatherAll(req, appendix, metar, taf, zoneForcast) => {
-            checkMetar(metar)
-            checkTaf(taf)
-            checkZoneForecast(zoneForcast)
-            }
+    val response = Await.result(weatherResponse, duration);
+    exerciseCaseClass(response)
+    response match {
+      case FSWeatherMetar(req, appendix, metar) => checkMetar(metar)
+      case FSWeatherTaf(req, appendix, taf) => checkTaf(taf)
+      case FSWeatherZoneForecast(req, appendix, weather) => checkZoneForecast(weather)
+      case FSWeatherAll(req, appendix, metar, taf, zoneForcast) => {
+        checkMetar(metar)
+        checkTaf(taf)
+        checkZoneForecast(zoneForcast)
         }
-      }
-      case x => fail("Whoops, got unexpected response " + x)
     }
-
-    Await.ready(weatherResponse, duration)
   }
 
   def checkMetar(weather: FSMetar) {

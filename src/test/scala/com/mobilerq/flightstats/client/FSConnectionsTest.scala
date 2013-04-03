@@ -43,12 +43,8 @@ class FSConnectionsTest extends FSTest {
 
   def checkConnectionsResponse(connectionsResponse: Future[FSConnectionsResponse]) {
     debug(connectionsResponse)
-    connectionsResponse onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(connections) => checkConnections(connections)
-      case x => fail("Whoops, got unexpected response " + x)
-    }
-    Await.ready(connectionsResponse, duration)
+
+    checkConnections(Await.result(connectionsResponse, duration))
   }
 
   def checkConnections(connections: FSConnectionsResponse) {

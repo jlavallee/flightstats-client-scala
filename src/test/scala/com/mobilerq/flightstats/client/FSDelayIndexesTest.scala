@@ -36,16 +36,10 @@ class FSDelayIndexesTest extends FSTest {
   @Test def byState =
     checkAirportDelays(delayIndexes.byState("OR"))
 
-  def checkAirportDelays(delayIndex: Future[FSDelayIndexResponse]) {
-    debug(delayIndex)
+  def checkAirportDelays(future: Future[FSDelayIndexResponse]) {
+    debug(future)
 
-    delayIndex onComplete {
-      case Failure(exception) => fail(exception.getMessage())
-      case Success(delayIndex) => {
-          assertNotNull(delayIndex)
-      }
-    }
-    Await.ready(delayIndex, duration)
+    assertNotNull(Await.result(future, duration))
   }
 
 }
