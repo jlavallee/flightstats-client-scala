@@ -47,17 +47,17 @@ case class FSWaypoint (
   lat: BigDecimal
 )
 
-class RichFlightTrackResponse(response: FSFlightTrackResponse)
+class RichFSFlightTrackResponse(response: FSFlightTrackResponse)
   extends FSFlightTrackResponse(response.request, response.appendix, response.flightTrack) {
-  override val flightTrack = new RichFlightTrack(response.flightTrack, response.appendix)
+  override val flightTrack = new RichFSFlightTrack(response.flightTrack, response.appendix)
 }
 
-class RichFlightTracksResponse(response: FSFlightTracksResponse)
+class RichFSFlightTracksResponse(response: FSFlightTracksResponse)
   extends FSFlightTracksResponse(response.request, response.appendix, response.flightTracks) {
-  override val flightTracks = response.flightTracks map { new RichFlightTrack(_, response.appendix) }
+  override val flightTracks = response.flightTracks map { new RichFSFlightTrack(_, response.appendix) }
 }
 
-class RichFlightTrack(flightTrack: FSFlightTrack, val appendix: FSAppendix)
+class RichFSFlightTrack(flightTrack: FSFlightTrack, val appendix: FSAppendix)
   extends FSFlightTrack(flightTrack.flightId, flightTrack.carrierFsCode,
       flightTrack.flightNumber, flightTrack.departureAirportFsCode,
       flightTrack.arrivalAirportFsCode, flightTrack.departureDate,

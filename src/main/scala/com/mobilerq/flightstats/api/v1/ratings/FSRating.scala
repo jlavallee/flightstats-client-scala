@@ -61,17 +61,17 @@ class FSRating ( // past case class limit of 22 parameters
   @JsonProperty("allStars") val allStars: BigDecimal
 )
 
-class RichRatingsForRoute(response: FSRatingsForRoute)
+class RichFSRatingsForRoute(response: FSRatingsForRoute)
   extends FSRatingsForRoute(response.request, response.appendix, response.ratings) {
-  override val ratings = response.ratings map { new RichRating(_, response.appendix)}
+  override val ratings = response.ratings map { new RichFSRating(_, response.appendix)}
 }
 
-class RichRatingsForFlight(response: FSRatingsForFlight)
+class RichFSRatingsForFlight(response: FSRatingsForFlight)
   extends FSRatingsForFlight(response.request, response.appendix, response.ratings) {
-  override val ratings = response.ratings map { new RichRating(_, response.appendix)}
+  override val ratings = response.ratings map { new RichFSRating(_, response.appendix)}
 }
 
-class RichRating(r: FSRating, val appendix: FSAppendix)
+class RichFSRating(r: FSRating, val appendix: FSAppendix)
   extends FSRating(r.departureAirportFsCode,
       r.arrivalAirportFsCode,
       r.airlineFsCode,

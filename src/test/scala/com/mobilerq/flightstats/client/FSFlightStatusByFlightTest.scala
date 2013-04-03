@@ -32,7 +32,7 @@ class FSFlightStatusByFlightTest extends FSTest {
   }
 
   @Test def flightStatusRich {
-    val response: Future[RichFlightStatusResponse] = statuses.flightStatus(285645279)
+    val response: Future[RichFSFlightStatusResponse] = statuses.flightStatus(285645279)
     checkFlightStatus(response)
     val flightStatus = Await.result(response, duration).flightStatus
     assertEquals(Some("AA"), flightStatus.carrier flatMap { _.iata })
@@ -44,7 +44,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightStatuses(statuses.flightStatusDepartingOnDate("AA","100", date))
 
   @Test def flightStatusDepartingOnDateRich {
-    val response: Future[RichFlightStatusesResponse] = statuses.flightStatusDepartingOnDate("AA","100", date)
+    val response: Future[RichFSFlightStatusesResponse] = statuses.flightStatusDepartingOnDate("AA","100", date)
 
     checkFlightStatuses(response)
     Await.result(response, duration).flightStatuses.foreach({ s =>
@@ -60,7 +60,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightTrack(statuses.flightTrack(285645279))
 
   @Test def flightTrackRich = {
-    val response: Future[RichFlightTrackResponse] = statuses.flightTrack(285645279)
+    val response: Future[RichFSFlightTrackResponse] = statuses.flightTrack(285645279)
     checkFlightTrack(response)
     val flightTrack = Await.result(response, duration).flightTrack
     assertEquals(Some("AA"), flightTrack.carrier flatMap { _.iata })
@@ -72,7 +72,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     checkFlightTracks(statuses.flightTracksDepartingOnDate("AA", "100", date))
 
   @Test def flightTracksDepartingOnDateRich {
-    val response: Future[RichFlightTracksResponse] = statuses.flightTracksDepartingOnDate("AA", "100", date)
+    val response: Future[RichFSFlightTracksResponse] = statuses.flightTracksDepartingOnDate("AA", "100", date)
 
     checkFlightTracks(response)
     Await.result(response, duration).flightTracks.foreach({ t =>

@@ -10,26 +10,26 @@ import scala.concurrent.Future
 package object v1 {
 
   implicit def enrichAppendix(appendix: FSAppendix) =
-    new RichAppendix(appendix)
+    new RichFSAppendix(appendix)
 
   implicit def enrichFlightStatusResponseFuture(future: Future[FSFlightStatusResponse]) =
-    for(r <- future) yield { new RichFlightStatusResponse(r) }
+    for(r <- future) yield { new RichFSFlightStatusResponse(r) }
 
   implicit def enrichFlightStatusesResponseFuture(future: Future[FSFlightStatusesResponse]) =
-    for(r <- future) yield { new RichFlightStatusesResponse(r) }
+    for(r <- future) yield { new RichFSFlightStatusesResponse(r) }
 
   implicit def enrichFlightTrackResponseFuture(future: Future[FSFlightTrackResponse]) =
-    for(r <- future) yield { new RichFlightTrackResponse(r) }
+    for(r <- future) yield { new RichFSFlightTrackResponse(r) }
 
   implicit def enrichFlightTracksResponseFuture(future: Future[FSFlightTracksResponse]) =
-    for(r <- future) yield { new RichFlightTracksResponse(r) }
+    for(r <- future) yield { new RichFSFlightTracksResponse(r) }
 
   implicit def enrichRatingsForRoute(future: Future[FSRatingsForRoute]) =
-    for(r <- future) yield { new RichRatingsForRoute(r) }
+    for(r <- future) yield { new RichFSRatingsForRoute(r) }
 
   implicit def enrichRatingsForFlight(future: Future[FSRatingsForFlight]) =
-    for(r <- future) yield { new RichRatingsForFlight(r) }
+    for(r <- future) yield { new RichFSRatingsForFlight(r) }
 
   implicit def enrichConnections(future: Future[FSConnectionsResponse]) =
-    for(r <- future) yield { new RichConnectionsResponse(r) }
+    for(r <- future) yield { new RichFSConnectionsResponse(r) }
 }

@@ -42,19 +42,19 @@ case class FSFlightStatus (
   flightEquipment: FSFlightEquipment
 )
 
-class RichFlightStatusResponse(response: FSFlightStatusResponse)
+class RichFSFlightStatusResponse(response: FSFlightStatusResponse)
   extends FSFlightStatusResponse(response.request, response.appendix, response.flightStatus) {
 
-  override val flightStatus = new RichFlightStatus(response.flightStatus, response.appendix)
+  override val flightStatus = new RichFSFlightStatus(response.flightStatus, response.appendix)
 }
 
-class RichFlightStatusesResponse(response: FSFlightStatusesResponse)
+class RichFSFlightStatusesResponse(response: FSFlightStatusesResponse)
   extends FSFlightStatusesResponse(response.request, response.appendix, response.flightStatuses) {
 
-  override val flightStatuses = response.flightStatuses map { new RichFlightStatus(_, response.appendix) }
+  override val flightStatuses = response.flightStatuses map { new RichFSFlightStatus(_, response.appendix) }
 }
 
-class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
+class RichFSFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
   extends FSFlightStatus(  // gosh this is nasty, is there a better way?
       status.flightId, status.carrierFsCode, status.flightNumber,
       status.departureAirportFsCode, status.arrivalAirportFsCode,
@@ -63,5 +63,5 @@ class RichFlightStatus(status: FSFlightStatus, val appendix: FSAppendix)
       status.flightDurations, status.airportResources, status.flightEquipment)
   with FlightAppendixHelper
   with CarrierAppendixHelper {
-  override val codeshares = status.codeshares map { _ map { new RichCodeshare(_, appendix)} }
+  override val codeshares = status.codeshares map { _ map { new RichFSCodeshare(_, appendix)} }
 }

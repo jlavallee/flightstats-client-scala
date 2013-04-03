@@ -75,12 +75,12 @@ case class FSRequestedAirportOrMetro (
   metro: FSRequested[String]
 )
 
-class RichConnectionsResponse(r: FSConnectionsResponse)
+class RichFSConnectionsResponse(r: FSConnectionsResponse)
   extends FSConnectionsResponse(r.request, r.appendix, r.flights) {
-  override val flights = r.flights map { new RichFlight(_, r.appendix)}
+  override val flights = r.flights map { new RichFSFlight(_, r.appendix)}
 }
 
-class RichFlight(f: FSFlight, val appendix: FSAppendix)
+class RichFSFlight(f: FSFlight, val appendix: FSAppendix)
   extends FSFlight(
     f.departureAirportFsCode,
     f.arrivalAirportFsCode,
@@ -99,10 +99,10 @@ class RichFlight(f: FSFlight, val appendix: FSAppendix)
     f.flightLegs
   )
   with FlightAppendixHelper {
-  override val flightLegs = f.flightLegs map { new RichFlightLeg(_, appendix) }
+  override val flightLegs = f.flightLegs map { new RichFSFlightLeg(_, appendix) }
 }
 
-class RichFlightLeg(fl: FSFlightLeg, val appendix: FSAppendix)
+class RichFSFlightLeg(fl: FSFlightLeg, val appendix: FSAppendix)
   extends FSFlightLeg(
     fl.departureAirportFsCode,
     fl.arrivalAirportFsCode,

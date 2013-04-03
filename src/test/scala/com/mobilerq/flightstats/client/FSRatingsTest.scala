@@ -19,7 +19,7 @@ class FSRatingsTest extends FSTest {
     checkRatingsResponse(ratings.forFlight("AA", "100"))
 
   @Test def forFlightRich = {
-    val r: RichRatingsForFlight = Await.result(ratings.forFlight("AA", "100"), duration)
+    val r: RichFSRatingsForFlight = Await.result(ratings.forFlight("AA", "100"), duration)
     assertEquals(Some("John F. Kennedy International Airport"),
         r.ratings(0).departureAirport flatMap {_.name})
     assertEquals(Some("American Airlines"), r.ratings(0).airline map {_.name})
@@ -29,7 +29,7 @@ class FSRatingsTest extends FSTest {
     checkRatingsResponse(ratings.forRoute("PDX", "JFK"))
 
   @Test def forRouteRich = {
-    val r: RichRatingsForRoute = Await.result(ratings.forRoute("PDX", "JFK"), duration)
+    val r: RichFSRatingsForRoute = Await.result(ratings.forRoute("PDX", "JFK"), duration)
     assertEquals(Some("Portland International Airport"),
         r.ratings(0).departureAirport flatMap {_.name})
     assertEquals(Some("Air France"), r.ratings(0).airline map {_.name})

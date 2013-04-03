@@ -21,7 +21,7 @@ class FSFlightStatusByAirportTest extends FSTest {
     checkFlightStatuses(statuses.departureStatus("PDX", date))
 
   @Test def departureStatusRich {
-    val response: Future[RichFlightStatusesResponse] = statuses.departureStatus("PDX", date)
+    val response: Future[RichFSFlightStatusesResponse] = statuses.departureStatus("PDX", date)
 
     Await.result(response, duration).flightStatuses.foreach({ s => assertEquals(Some("PDX"), s.departureAirport flatMap { _.iata }) })
   }

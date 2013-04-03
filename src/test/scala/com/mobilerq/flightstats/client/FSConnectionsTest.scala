@@ -20,7 +20,7 @@ class FSConnectionsTest extends FSTest {
     checkConnectionsResponse(connections.directByArrivalAndDate("PDX", date))
 
   @Test def directByArrivalAndDateRich = {
-    val c: RichConnectionsResponse = Await.result(connections.directByArrivalAndDate("PDX", date), duration)
+    val c: RichFSConnectionsResponse = Await.result(connections.directByArrivalAndDate("PDX", date), duration)
     assertEquals(Some("Portland International Airport"),
         c.flights(0).arrivalAirport flatMap {_.name})
     assertEquals(Some("Portland International Airport"),
