@@ -57,11 +57,10 @@ class FSAirport (  // too many parameters for a case class...
   @JsonProperty("weatherUrl") val weatherUrl: Option[String]
 )
 
-
 case class FSAppendix (
   airports: Option[Seq[FSAirport]],
   airlines: Option[Seq[FSAirline]],
-  equipment: Option[Seq[FSEquipment]]
+  equipments: Option[Seq[FSEquipment]]
 )
 
 class RichAppendix(appendix: FSAppendix) {
@@ -80,9 +79,9 @@ class RichAppendix(appendix: FSAppendix) {
     case Some(airlines) => Map(airlines map { a => a.fs -> a }: _*)
   }
 
-  private val equipment : Map[String, FSEquipment] = appendix.equipment match {
+  private val equipment : Map[String, FSEquipment] = appendix.equipments match {
     case None => Map.empty
-    case Some(equipment) => Map(equipment map { e => e.iata -> e }: _*)
+    case Some(equipments) => Map(equipments map { e => e.iata -> e }: _*)
   }
 }
 
@@ -246,6 +245,14 @@ trait EquipmentAppendixHelper {
   def appendix: FSAppendix
   def equipmentCodes: Seq[String]
 
-  def equipments: Map[String, FSEquipment] =
-    appendix.equipmentMap
+  def equipments: Seq[FSEquipment] =
+    equipmentCodes flatMap { appendix.equipmentMap.get(_) }
+}
+
+class RichCodeshare(cs: FSCodeshare, val appendix: FSAppendix)
+  extends FSCodeshare(cs.fsCode, cs.flightNumber, cs.relationship) {
+  def carrier: Option[FSAirline] = fsCode match {
+    case None => None
+    case Some(fsCode) => appendix.airlinesMap.get(fsCode)
+  }
 }

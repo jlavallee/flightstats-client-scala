@@ -2,6 +2,7 @@ package com.mobilerq.flightstats.api
 
 import scala.language.implicitConversions
 import com.mobilerq.flightstats.api.v1.ratings._
+import com.mobilerq.flightstats.api.v1.connections._
 import com.mobilerq.flightstats.api.v1.flightstatus._
 import dispatch.Defaults.executor
 import scala.concurrent.Future
@@ -28,4 +29,7 @@ package object v1 {
 
   implicit def enrichRatingsForFlight(future: Future[FSRatingsForFlight]) =
     for(r <- future) yield { new RichRatingsForFlight(r) }
+
+  implicit def enrichConnections(future: Future[FSConnectionsResponse]) =
+    for(r <- future) yield { new RichConnectionsResponse(r) }
 }
