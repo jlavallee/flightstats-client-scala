@@ -11,21 +11,21 @@ package object v1 {
   implicit def enrichAppendix(appendix: FSAppendix) =
     new RichAppendix(appendix)
 
-  implicit def enrichFlightStatusResponseFuture(promise: Future[FSFlightStatusResponse]) =
-    for(r <- promise) yield { new RichFlightStatusResponse(r) }
+  implicit def enrichFlightStatusResponseFuture(future: Future[FSFlightStatusResponse]) =
+    for(r <- future) yield { new RichFlightStatusResponse(r) }
 
-  implicit def enrichFlightStatusesResponseFuture(promise: Future[FSFlightStatusesResponse]) =
-    for(r <- promise) yield { new RichFlightStatusesResponse(r) }
+  implicit def enrichFlightStatusesResponseFuture(future: Future[FSFlightStatusesResponse]) =
+    for(r <- future) yield { new RichFlightStatusesResponse(r) }
 
-  implicit def enrichFlightTrackResponseFuture(promise: Future[FSFlightTrackResponse]) =
-    for(r <- promise) yield { new RichFlightTrackResponse(r) }
+  implicit def enrichFlightTrackResponseFuture(future: Future[FSFlightTrackResponse]) =
+    for(r <- future) yield { new RichFlightTrackResponse(r) }
 
-  implicit def enrichFlightTracksResponseFuture(promise: Future[FSFlightTracksResponse]) =
-    for(r <- promise) yield { new RichFlightTracksResponse(r) }
+  implicit def enrichFlightTracksResponseFuture(future: Future[FSFlightTracksResponse]) =
+    for(r <- future) yield { new RichFlightTracksResponse(r) }
 
-  implicit def enrichRatingsForRoute(f: Future[FSRatingsForRoute]) =
-    for(r <- f) yield { new RichRatingsForRoute(r) }
+  implicit def enrichRatingsForRoute(future: Future[FSRatingsForRoute]) =
+    for(r <- future) yield { new RichRatingsForRoute(r) }
 
-  implicit def enrichRatingsForFlight(f: Future[FSRatingsForFlight]) =
-    for(r <- f) yield { new RichRatingsForFlight(r) }
+  implicit def enrichRatingsForFlight(future: Future[FSRatingsForFlight]) =
+    for(r <- future) yield { new RichRatingsForFlight(r) }
 }
