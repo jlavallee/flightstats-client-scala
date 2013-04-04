@@ -7,6 +7,8 @@ import com.mobilerq.flightstats.api.v1._
 import com.mobilerq.flightstats.api.v1.flightstatus._
 import com.mobilerq.flightstats.client.FSTestUtil._
 import scala.concurrent.{Await, Future}
+import com.google.common.cache.CacheBuilder
+import com.ning.http.client.Request
 
 class FSFlightStatusByFlightTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-14T21:12:23.048-08:00")
@@ -29,6 +31,27 @@ class FSFlightStatusByFlightTest extends FSTest {
     assertEquals(Some("AA"), status.carrierFsCode flatMap {appendix.airlinesMap.get(_)} flatMap {_.iata})
     assertEquals(Some("LHR"), status.arrivalAirportFsCode flatMap {appendix.airportsMap.get(_)} flatMap {_.iata})
     assertEquals(Some("JFK"), status.departureAirportFsCode flatMap {appendix.airportsMap.get(_)} flatMap {_.iata})
+  }
+  @Test def flightStatusCaching = {
+    val cacheBuilder = CacheBuilder.newBuilder()
+                                   .maximumSize(100000)
+                                   .recordStats()
+    val cachingClient = new FSFlightStatusByFlight("anyId", "anyKey")
+                              with FSMockClient
+                              with FSCaching {
+      override protected val cache = cacheBuilder.build(loader)
+    }
+
+    val futureList = Future.sequence((0 until 10).map { x => cachingClient.flightStatus(285645279) })
+
+    Await.ready(futureList, duration)
+
+    //println(cachingClient.cacheStats)
+
+    assertEquals(1, cachingClient.cacheStats.missCount)
+    assertEquals(9, cachingClient.cacheStats.hitCount)
+    assertEquals(1, cachingClient.cacheStats.loadSuccessCount)
+    assertEquals(0, cachingClient.cacheStats.loadExceptionCount)
   }
 
   @Test def flightStatusRich {

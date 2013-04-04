@@ -1,15 +1,25 @@
 package com.mobilerq.flightstats.client
 
 import org.joda.time.DateTime
-import com.ning.http.client.RequestBuilder
+import com.ning.http.client.{Request, RequestBuilder}
 import com.mobilerq.flightstats.client._
 import com.mobilerq.flightstats.api.v1._
 import com.mobilerq.flightstats.api.v1.flightstatus._
+import com.google.common.cache.{CacheLoader, CacheBuilder}
+import scala.concurrent.Future
 
 /** Factory for [[com.mobilerq.flightstats.client.FSFlightStatusByFlight]] instances. */
 object FSFlightStatusByFlight {
   def apply(appId: String, appKey: String): FSFlightStatusByFlight = {
     new FSFlightStatusByFlight(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSFlightStatusByFlight(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override protected val cache = cacheBuilder.build(loader)
+    }
   }
 }
 
