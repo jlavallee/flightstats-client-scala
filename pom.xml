@@ -29,6 +29,7 @@
   </developers>
 
   <properties>
+    <target.dir>target</target.dir>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <encoding>UTF-8</encoding>
@@ -106,6 +107,8 @@
   </dependencies>
 
   <build>
+    <outputDirectory>${project.basedir}/${target.dir}/classes</outputDirectory>
+    <testOutputDirectory>${project.basedir}/${target.dir}/test-classes</testOutputDirectory>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -265,6 +268,12 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+        <id>eclipse</id>
+        <properties>
+            <target.dir>target-eclipse</target.dir>
+        </properties>
     </profile>
   </profiles>
 </project>
