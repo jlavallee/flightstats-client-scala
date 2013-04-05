@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
 import com.mobilerq.flightstats.api.v1.connections._
+import com.google.common.cache.CacheBuilder
 
 class FSConnectionsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-22T00:00:00.000Z")
@@ -13,6 +14,11 @@ class FSConnectionsTest extends FSTest {
 
   @Test def factory: Unit = FSConnections("id", "key") match {
     case o: FSConnections => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSConnections("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSConnections with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 

@@ -5,11 +5,20 @@ import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.client._
 import com.mobilerq.flightstats.api.v1.weather.{FSWeatherMetar, FSWeatherTaf, FSWeatherZoneForecast, FSWeatherAll}
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSWeather]] instances. */
 object FSWeather {
   def apply(appId: String, appKey: String): FSWeather = {
     new FSWeather(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSWeather(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override protected val cache = cacheBuilder.build(loader)
+    }
   }
 }
 

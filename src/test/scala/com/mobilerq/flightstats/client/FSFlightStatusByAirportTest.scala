@@ -6,6 +6,7 @@ import com.mobilerq.flightstats.api.v1.flightstatus._
 import com.mobilerq.flightstats.client.FSTestUtil._
 import org.joda.time.DateTime
 import scala.concurrent.{Await, Future}
+import com.google.common.cache.CacheBuilder
 
 class FSFlightStatusByAirportTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-12T21:12:23.048-08:00")
@@ -14,6 +15,11 @@ class FSFlightStatusByAirportTest extends FSTest {
 
   @Test def factory: Unit = FSFlightStatusByAirport("id", "key") match {
     case o: FSFlightStatusByAirport => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSFlightStatusByAirport("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSFlightStatusByAirport with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 

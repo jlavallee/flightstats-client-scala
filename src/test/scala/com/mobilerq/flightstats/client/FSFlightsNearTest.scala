@@ -9,12 +9,18 @@ import org.joda.time.DateTime
 import com.mobilerq.flightstats.api.v1.flightstatus.FSFlightsNearBoundingBox
 import com.mobilerq.flightstats.api.v1.flightstatus.FSFlightsNearPointAndDistance
 import com.mobilerq.flightstats.api.v1.flightstatus.FSFlightPosition
+import com.google.common.cache.CacheBuilder
 
 class FSFlightsNearTest extends FSTest {
   def flightsNear = FSTestClients.flightsNear
 
   @Test def factory: Unit = FSFlightsNear("id", "key") match {
     case o: FSFlightsNear => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSFlightsNear("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSFlightsNear with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 

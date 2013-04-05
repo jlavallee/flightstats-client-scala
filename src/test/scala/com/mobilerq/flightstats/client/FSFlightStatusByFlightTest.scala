@@ -20,6 +20,11 @@ class FSFlightStatusByFlightTest extends FSTest {
     case x => fail("didn't get what we expected: " + x)
   }
 
+  @Test def factoryWithCaching: Unit = FSFlightStatusByFlight("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSFlightStatusByFlight with FSCaching => Unit
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def flightStatus =
     checkFlightStatus(statuses.flightStatus(285645279))
 
@@ -32,6 +37,7 @@ class FSFlightStatusByFlightTest extends FSTest {
     assertEquals(Some("LHR"), status.arrivalAirportFsCode flatMap {appendix.airportsMap.get(_)} flatMap {_.iata})
     assertEquals(Some("JFK"), status.departureAirportFsCode flatMap {appendix.airportsMap.get(_)} flatMap {_.iata})
   }
+
   @Test def flightStatusCaching = {
     val cacheBuilder = CacheBuilder.newBuilder()
                                    .maximumSize(100000)
@@ -45,8 +51,6 @@ class FSFlightStatusByFlightTest extends FSTest {
     val futureList = Future.sequence((0 until 10).map { x => cachingClient.flightStatus(285645279) })
 
     Await.ready(futureList, duration)
-
-    //println(cachingClient.cacheStats)
 
     assertEquals(1, cachingClient.cacheStats.missCount)
     assertEquals(9, cachingClient.cacheStats.hitCount)

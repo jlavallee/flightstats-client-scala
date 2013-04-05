@@ -5,6 +5,7 @@ import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
+import com.google.common.cache.CacheBuilder
 
 class FSAlertsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-14T21:12:23.048-08:00")
@@ -13,6 +14,11 @@ class FSAlertsTest extends FSTest {
 
   @Test def factory: Unit = FSAlerts("id", "key") match {
     case o: FSAlerts => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSAlerts("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSAlerts with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 

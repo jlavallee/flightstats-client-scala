@@ -6,12 +6,18 @@ import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
 import com.mobilerq.flightstats.api.v1.ratings._
+import com.google.common.cache.CacheBuilder
 
 class FSRatingsTest extends FSTest {
   val ratings = FSTestClients.ratings
 
   @Test def factory: Unit = FSRatings("id", "key") match {
     case o: FSRatings => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSRatings("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSRatings with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 

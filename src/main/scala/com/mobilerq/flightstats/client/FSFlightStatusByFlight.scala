@@ -5,8 +5,7 @@ import com.ning.http.client.{Request, RequestBuilder}
 import com.mobilerq.flightstats.client._
 import com.mobilerq.flightstats.api.v1._
 import com.mobilerq.flightstats.api.v1.flightstatus._
-import com.google.common.cache.{CacheLoader, CacheBuilder}
-import scala.concurrent.Future
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSFlightStatusByFlight]] instances. */
 object FSFlightStatusByFlight {

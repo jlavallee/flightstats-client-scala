@@ -5,11 +5,20 @@ import dispatch._
 import dispatch.Defaults.executor
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.api.v1.delayindex.FSDelayIndexResponse
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSDelayIndexes]] instances. */
 object FSDelayIndexes {
   def apply(appId: String, appKey: String): FSDelayIndexes = {
     new FSDelayIndexes(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSDelayIndexes(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override protected val cache = cacheBuilder.build(loader)
+    }
   }
 }
 

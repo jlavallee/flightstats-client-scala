@@ -6,11 +6,20 @@ import dispatch.Defaults.executor
 import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.api.v1.alerts.{FSGetAlert, FSCreateAlert}
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSAlerts]] instances. */
 object FSAlerts {
   def apply(appId: String, appKey: String): FSAlerts = {
     new FSAlerts(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSAlerts(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override protected val cache = cacheBuilder.build(loader)
+    }
   }
 }
 
