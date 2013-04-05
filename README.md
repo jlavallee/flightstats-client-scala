@@ -84,6 +84,24 @@ for(r <- response) yield {
 }
 ```
 
+## Caching:
+
+All clients support caching using a user supplied [guava][5] `CacheBuilder`.  All Client factories
+accept a [guava][5] `CacheBuilder` as a third argument (after `appId` and `appKey`).  You can specify the cache properties (for example, the expiration policy) before constructing the client.
+
+```scala
+val cacheBuilder = CacheBuilder.newBuilder()
+                               .expireAfterAccess(10, TimeUnit.MINUTES)
+                               .maximumSize(1000)
+                               .recordStats()
+
+val client = FSFlightStatusByFlight(appId, appKey, cacheBuilder)
+
+// do some stuff
+
+val cacheStats = client.cacheStats  // NOTE you must have called .recordStats() on the builder in order for stats to have been collected
+```
+
 ## Running the tests:
 
 The tests run against static JSON test files captured from [FlightStats][1] API.  You can run the tests against [FlightStats][1] live API by supplying your credentials as properties:
@@ -98,3 +116,4 @@ If you would like to capture new static JSON test files, add `-Dtest.capture=tru
 [2]: https://github.com/dispatch/reboot
 [3]: http://jackson.codehaus.org
 [4]: http://dispatch.databinder.net/Dispatch.html
+[5]: https://code.google.com/p/guava-libraries/
