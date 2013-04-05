@@ -44,6 +44,46 @@ Responses are modeled as case classes wherever possible.  The three response obj
 
 No method on any response object should ever return `null` - if one does, please submit a bug.
 
+## Appendix Helpers:
+
+Many of the [FlightStats][1] APIs return an appendix along with the response, containing
+details about airports or airlines.  Users need to look up the details of an airport or
+airline in the appendix (for example, to fetch the name).
+
+`flightstats-client-scala` provies a few utilities for helping out with this.
+
+The `RichFSAppendix` adds lookup methods to the appendix.  An implicit conversion from
+`FSAppendix` -> `RichFSAppendix` is provided in the `com.mobilerq.flightstats.api.v1` package
+object.  Example usage:
+
+```scala
+import com.mobilerq.flightstats.api.v1._   // get the implicit conversions
+
+val response = statuses.flightStatus(285645279)
+
+for(r <- response) yield {
+  val carrierName = r.flightStatus.carrierFsCode flatMap { r.appendix.airlinesMap.get(_) }
+  val arrivalAirportName = r.flightStatus.arrivalAirportFsCode flatMap { r.appendix.airportsMap.get(_) }
+}
+```
+
+Looking things up in the appendix is still a bit of a pain, so there are rich response types
+that can be used for greater convenience.  Implicit conversions are provided for most response
+types that include an appendix.  Note that you must explicitly require the rich type on the
+response, as the compiler cannot figure out that the future needs to be converted for you.  If
+you can improve on this, please send a pull request!  Example usage:
+
+```scala
+import com.mobilerq.flightstats.api.v1._
+
+val response: Future[RichFSFlightStatusResponse] = statuses.flightStatus(285645279)
+
+for(r <- response) yield {
+  val carrierName = r.flightStatus.carrier map {_.name}
+  val arrivalAirportName = r.flightStatus.arrivalAirport map {_.name}
+}
+```
+
 ## Running the tests:
 
 The tests run against static JSON test files captured from [FlightStats][1] API.  You can run the tests against [FlightStats][1] live API by supplying your credentials as properties:
