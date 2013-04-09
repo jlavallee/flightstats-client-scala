@@ -17,7 +17,7 @@ object FSConnections {
     new FSConnections(appId, appKey)
       with FSClientReboot
       with FSCaching {
-        override protected val cache = cacheBuilder.build(loader)
+        override val cache = cacheBuilder.build(loader)
     }
   }
 }

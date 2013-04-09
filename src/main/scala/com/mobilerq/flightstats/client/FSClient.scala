@@ -63,7 +63,8 @@ trait FSCaching extends FSClientBase {
     }
   }
 
-  protected val cache: LoadingCache[CacheKey, Future[String]]
+  val cache: LoadingCache[CacheKey, Future[String]]
+
   protected val loader: CacheLoader[CacheKey, Future[String]] =
     new CacheLoader[CacheKey, Future[String]]{
       def load(key: CacheKey) = getWithCreds(addParams(key.req))
@@ -71,12 +72,6 @@ trait FSCaching extends FSClientBase {
 
   override protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Future[T] =
     for ( a <- cache.get(new CacheKey(url))) yield mapFromJson(t, a)
-
-  /** Return guava cache statistics.
-    *
-    * NOTE: as of guava 12.0 stats collection must be turned on using CacheBuilder.recordStats()
-    */
-  def cacheStats = cache.stats
 }
 
 /** implements JSON mapping using Jackson, ignoring unknown properties */

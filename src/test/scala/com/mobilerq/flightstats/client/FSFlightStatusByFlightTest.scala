@@ -45,17 +45,17 @@ class FSFlightStatusByFlightTest extends FSTest {
     val cachingClient = new FSFlightStatusByFlight("anyId", "anyKey")
                               with FSMockClient
                               with FSCaching {
-      override protected val cache = cacheBuilder.build(loader)
+      override val cache = cacheBuilder.build(loader)
     }
 
     val futureList = Future.sequence((0 until 10).map { x => cachingClient.flightStatus(285645279) })
 
     Await.ready(futureList, duration)
 
-    assertEquals(1, cachingClient.cacheStats.missCount)
-    assertEquals(9, cachingClient.cacheStats.hitCount)
-    assertEquals(1, cachingClient.cacheStats.loadSuccessCount)
-    assertEquals(0, cachingClient.cacheStats.loadExceptionCount)
+    assertEquals(1, cachingClient.cache.stats.missCount)
+    assertEquals(9, cachingClient.cache.stats.hitCount)
+    assertEquals(1, cachingClient.cache.stats.loadSuccessCount)
+    assertEquals(0, cachingClient.cache.stats.loadExceptionCount)
   }
 
   @Test def flightStatusRich {
