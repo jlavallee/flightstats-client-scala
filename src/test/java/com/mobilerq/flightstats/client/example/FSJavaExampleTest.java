@@ -46,7 +46,7 @@ public class FSJavaExampleTest {
                 @Override
                 public Throwable apply(Try<FSAirport> arg0) {
                     if(arg0.isFailure()){
-                        
+                        // handle failure
                     }
                     // do something with arg0
                     return null;
@@ -93,7 +93,6 @@ public class FSJavaExampleTest {
                     public boolean isDefinedAt(Throwable arg0) {
                         return true;
                     }
-                    
                 },
                 executionContext
             );
