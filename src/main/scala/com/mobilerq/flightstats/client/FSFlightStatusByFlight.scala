@@ -1,15 +1,24 @@
 package com.mobilerq.flightstats.client
 
-import dispatch._
 import org.joda.time.DateTime
-import com.ning.http.client.RequestBuilder
+import com.ning.http.client.{Request, RequestBuilder}
 import com.mobilerq.flightstats.client._
-import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
+import com.mobilerq.flightstats.api.v1._
+import com.mobilerq.flightstats.api.v1.flightstatus._
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSFlightStatusByFlight]] instances. */
 object FSFlightStatusByFlight {
   def apply(appId: String, appKey: String): FSFlightStatusByFlight = {
     new FSFlightStatusByFlight(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSFlightStatusByFlight(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override val cache = cacheBuilder.build(loader)
+    }
   }
 }
 
@@ -23,7 +32,8 @@ object FSFlightStatusByFlight {
   *
   * @see <a target="_top" href="https://developer.flightstats.com/api-docs/flightstatus/v2/flight">FlightStats Flight Status & Track by Flight API Documentation</a>
   */
-abstract class FSFlightStatusByFlight(protected val appId: String, protected val appKey: String) extends FSClientBase {
+abstract class FSFlightStatusByFlight(protected val appId: String, protected val appKey: String)
+  extends FSClientBase with FSFlightStatusHelpers with FSFlightTrackHelpers {
   // https://api.flightstats.com/flex/flightstatus/rest/v2/json
   protected def api = fsHost / "flex" / "flightstatus" / "rest" / "v2" / "json"
 
@@ -69,17 +79,4 @@ abstract class FSFlightStatusByFlight(protected val appId: String, protected val
     */
   def flightTracksDepartingOnDate(carrier: String, flight: String, date: DateTime, args: ArgMap = Map.empty) =
     tracks( api / "flight" / "tracks" / carrier / flight / "dep" / date <<? args )
-
-
-  private def status(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightStatusResponse], url)
-
-  private def statuses(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightStatusesResponse], url)
-
-  private def track(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightTrackResponse], url)
-
-  private def tracks(url: RequestBuilder) =
-    getAndDeserialize(classOf[FSFlightTracksResponse], url)
 }

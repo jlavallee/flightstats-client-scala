@@ -1,15 +1,26 @@
 package com.mobilerq.flightstats.client
 
+import scala.concurrent.Future
 import dispatch._
+import dispatch.Defaults.executor
 import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.client._
 import com.mobilerq.flightstats.api.v1.{FSAirport, FSAirportHolder, FSAirportsHolder}
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSAirports]] instances. */
 object FSAirports {
   def apply(appId: String, appKey: String): FSAirports = {
     new FSAirports(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSAirports(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override val cache = cacheBuilder.build(loader)
+    }
   }
 }
 
@@ -31,91 +42,91 @@ abstract class FSAirports(protected val appId: String, protected val appKey: Str
     *
     * /v1/json/active GET
     */
-  def active(args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def active(args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "active" <<? args)
 
   /** Active airports for date
     *
     * /v1/json/active/{year}/{month}/{day} GET
     */
-  def activeOnDate(date: DateTime, args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def activeOnDate(date: DateTime, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "active" / date <<? args)
 
   /** All airports (active and inactive)
     *
     * /v1/json/all GET
     */
-  def all(args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def all(args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "all" <<? args)
 
   /** Current airport by code (code type chosen via precedence order)
     *
     * /v1/json/{code}/today GET
     */
-  def byCode(code: String, args: ArgMap = Map.empty): Promise[FSAirport] =
+  def byCode(code: String, args: ArgMap = Map.empty): Future[FSAirport] =
     airportFor(api / code / "today" <<? args)
 
   /** Airport on date by code (code type chosen via precedence order)
     *
     * /v1/json/{code}/{year}/{month}/{day} GET
     */
-  def onDateByCode(date: DateTime, code: String, args: ArgMap = Map.empty): Promise[FSAirport] =
+  def onDateByCode(date: DateTime, code: String, args: ArgMap = Map.empty): Future[FSAirport] =
     airportFor(api / code / date <<? args)
 
   /** Airports by city code
     *
     * /v1/json/cityCode/{cityCode} GET
     */
-  def byCityCode(code: String, args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def byCityCode(code: String, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "cityCode" / code <<? args)
 
   /** Airports by country code
     *
     * /v1/json/countryCode/{countryCode} GET
     */
-  def byCountryCode(code: String, args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def byCountryCode(code: String, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "countryCode" / code <<? args)
 
   /** Airport by FlightStats code
     *
     * /v1/json/fs/{code} GET
     */
-  def byFlightStatsCode(code: String, args: ArgMap = Map.empty): Promise[FSAirport] =
+  def byFlightStatsCode(code: String, args: ArgMap = Map.empty): Future[FSAirport] =
     airportFor(api / "fs" / code <<? args)
 
   /** Airports by IATA code
     *
     * /v1/json/iata/{iataCode} GET
     */
-  def byIataCode(code: String, args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def byIataCode(code: String, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "iata" / code <<? args)
 
   /** Airport by IATA code on date
     *
     * /v1/json/iata/{iataCode}/{year}/{month}/{day} GET
     */
-  def byIataCodeOnDate(code: String, date: DateTime, args: ArgMap = Map.empty): Promise[FSAirport] =
+  def byIataCodeOnDate(code: String, date: DateTime, args: ArgMap = Map.empty): Future[FSAirport] =
     airportFor(api / "iata" / code / date <<? args)
 
   /** Airports by ICAO code
     *
     * /v1/json/icao/{icaoCode} GET
     */
-  def byIcaoCode(code: String, args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def byIcaoCode(code: String, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "icao" / code <<? args)
 
   /** Airport by ICAO code on date
     *
     * /v1/json/icao/{icaoCode}/{year}/{month}/{day} GET
     */
-  def byIcaoCodeOnDate(code: String, date: DateTime, args: ArgMap = Map.empty): Promise[FSAirport] =
+  def byIcaoCodeOnDate(code: String, date: DateTime, args: ArgMap = Map.empty): Future[FSAirport] =
     airportFor(api / "icao" / code / date <<? args)
 
   /** Airports within radius of location
     *
     * /v1/json/withinRadius/{longitude}/{latitude}/{radiusMiles} GET
     */
-  def withinRadius(long: Integer, lat: Integer, radius: Integer, args: ArgMap = Map.empty): Promise[Seq[FSAirport]] =
+  def withinRadius(long: Integer, lat: Integer, radius: Integer, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "withinRadius" / long.toString() / lat.toString() / radius.toString() <<? args)
 
   private def airportsFor(url: RequestBuilder) =

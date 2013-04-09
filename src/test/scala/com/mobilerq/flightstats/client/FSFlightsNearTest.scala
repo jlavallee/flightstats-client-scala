@@ -1,6 +1,7 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
@@ -8,6 +9,7 @@ import org.joda.time.DateTime
 import com.mobilerq.flightstats.api.v1.flightstatus.FSFlightsNearBoundingBox
 import com.mobilerq.flightstats.api.v1.flightstatus.FSFlightsNearPointAndDistance
 import com.mobilerq.flightstats.api.v1.flightstatus.FSFlightPosition
+import com.google.common.cache.CacheBuilder
 
 class FSFlightsNearTest extends FSTest {
   def flightsNear = FSTestClients.flightsNear
@@ -17,20 +19,23 @@ class FSFlightsNearTest extends FSTest {
     case x => fail("didn't get what we expected: " + x)
   }
 
+  @Test def factoryWithCaching: Unit = FSFlightsNear("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSFlightsNear with FSCaching => Unit
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def boundingBox =
     checkFlightsNear(flightsNear.boundingBox(45.0, -125.0, 40.0, -120.0))
 
   @Test def pointAndDistance =
     checkFlightsNear(flightsNear.pointAndDistance(45.000, -122.00, 25))
 
-  def checkFlightsNear(promise: Promise[AnyRef]) {
-    val either = promise.either
+  def checkFlightsNear(flightsNear: Future[AnyRef]) {
+    debug(flightsNear)
 
-    debug(either)
-
-    either() match {
-      case Left(exception) => fail(exception.getMessage)
-      case Right(x) => {
+    flightsNear onComplete {
+      case Failure(exception) => fail(exception.getMessage)
+      case Success(x) => {
         exerciseCaseClass(x)
         x match {
           case FSFlightsNearBoundingBox(req, appendix, flightPositions) => checkFlightPositions(flightPositions)

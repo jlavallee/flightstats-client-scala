@@ -5,11 +5,20 @@ import org.joda.time.DateTime
 import com.ning.http.client.RequestBuilder
 import com.mobilerq.flightstats.client._
 import com.mobilerq.flightstats.api.v1.ratings.{FSRatingsForFlight, FSRatingsForRoute}
+import com.google.common.cache.CacheBuilder
 
 /** Factory for [[com.mobilerq.flightstats.client.FSRatings]] instances. */
 object FSRatings {
   def apply(appId: String, appKey: String): FSRatings = {
     new FSRatings(appId, appKey) with FSClientReboot
+  }
+
+  def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
+    new FSRatings(appId, appKey)
+      with FSClientReboot
+      with FSCaching {
+        override val cache = cacheBuilder.build(loader)
+    }
   }
 }
 

@@ -31,12 +31,15 @@ case class FSFlightTrackRequest (
 
 case class FSFlightTrack (
   flightId: Long,
-  carrierFsCode: String,
+  carrierFsCode: Option[String],
   flightNumber: String,
-  departureAirportFsCode: String,
-  arrivalAirportFsCode: String,
+  tailNumber: Option[String],
+  callSign: Option[String],
+  departureAirportFsCode: Option[String],
+  arrivalAirportFsCode: Option[String],
   departureDate: FSDate,
-  equipment: String,
+  equipment: Option[String],
+  delayMinutes: Option[Int],
   bearing: BigDecimal,
   positions: Seq[FSPosition],
   waypoints: Option[Seq[FSWaypoint]]
@@ -46,3 +49,32 @@ case class FSWaypoint (
   lon: BigDecimal,
   lat: BigDecimal
 )
+
+class RichFSFlightTrackResponse(response: FSFlightTrackResponse)
+  extends FSFlightTrackResponse(response.request, response.appendix, response.flightTrack) {
+  override val flightTrack = new RichFSFlightTrack(response.flightTrack, response.appendix)
+}
+
+class RichFSFlightTracksResponse(response: FSFlightTracksResponse)
+  extends FSFlightTracksResponse(response.request, response.appendix, response.flightTracks) {
+  override val flightTracks = response.flightTracks map { new RichFSFlightTrack(_, response.appendix) }
+}
+
+class RichFSFlightTrack(flightTrack: FSFlightTrack, val appendix: FSAppendix)
+  extends FSFlightTrack(
+      flightTrack.flightId,
+      flightTrack.carrierFsCode,
+      flightTrack.flightNumber,
+      flightTrack.tailNumber,
+      flightTrack.callSign,
+      flightTrack.departureAirportFsCode,
+      flightTrack.arrivalAirportFsCode,
+      flightTrack.departureDate,
+      flightTrack.equipment,
+      flightTrack.delayMinutes,
+      flightTrack.bearing,
+      flightTrack.positions,
+      flightTrack.waypoints
+    )
+  with FlightAppendixHelper
+  with CarrierAppendixHelper

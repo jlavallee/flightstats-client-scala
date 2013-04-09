@@ -1,9 +1,11 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
 import org.junit.Test
 import org.junit.Assert._
 import com.mobilerq.flightstats.api.v1.delayindex.FSDelayIndexResponse
+import com.google.common.cache.CacheBuilder
 
 class FSDelayIndexesTest extends FSTest {
 
@@ -11,6 +13,11 @@ class FSDelayIndexesTest extends FSTest {
 
   @Test def factory: Unit = FSDelayIndexes("id", "key") match {
     case o: FSDelayIndexes => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSDelayIndexes("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSDelayIndexes with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 
@@ -35,17 +42,10 @@ class FSDelayIndexesTest extends FSTest {
   @Test def byState =
     checkAirportDelays(delayIndexes.byState("OR"))
 
-  def checkAirportDelays(delayIndexPromise: Promise[FSDelayIndexResponse]) {
-    val delayIndex = delayIndexPromise.either
+  def checkAirportDelays(future: Future[FSDelayIndexResponse]) {
+    debug(future)
 
-    debug(delayIndex)
-
-    delayIndex() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(delayIndex) => {
-          assertNotNull(delayIndex)
-      }
-    }
+    assertNotNull(Await.result(future, duration))
   }
 
 }

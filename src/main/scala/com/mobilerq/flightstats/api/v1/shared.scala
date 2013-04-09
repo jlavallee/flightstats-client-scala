@@ -57,17 +57,17 @@ class FSAirport (  // too many parameters for a case class...
   @JsonProperty("weatherUrl") val weatherUrl: Option[String]
 )
 
-
 case class FSAppendix (
   airports: Option[Seq[FSAirport]],
   airlines: Option[Seq[FSAirline]],
   equipments: Option[Seq[FSEquipment]]
 )
 
-class RichAppendix(appendix: FSAppendix) {
+class RichFSAppendix(appendix: FSAppendix) {
 
   def airportsMap = airports
   def airlinesMap = airlines
+  def equipmentMap = equipment
 
   private val airports : Map[String, FSAirport] = appendix.airports match {
     case None => Map.empty
@@ -79,6 +79,10 @@ class RichAppendix(appendix: FSAppendix) {
     case Some(airlines) => Map(airlines map { a => a.fs -> a }: _*)
   }
 
+  private val equipment : Map[String, FSEquipment] = appendix.equipments match {
+    case None => Map.empty
+    case Some(equipments) => Map(equipments map { e => e.iata -> e }: _*)
+  }
 }
 
 case class FSEquipment (
@@ -168,7 +172,8 @@ case class FSOperationalTimes (
 )
 
 case class FSCodeshare (
-  carrier: Option[FSAirline],
+  //carrier: Option[FSAirline],  // flight stats doesn't send this,
+    // it needs to be picked out of the appendix.  see RichFSCodeshare
   fsCode: Option[String],
   flightNumber: Option[String],
   relationship: Option[String]
@@ -207,3 +212,47 @@ case class FSPosition (
   source: Option[String],
   date: DateTime
 )
+
+trait FlightAppendixHelper {
+  def appendix: FSAppendix
+  def arrivalAirportFsCode: Option[String]
+  def departureAirportFsCode: Option[String]
+
+  def arrivalAirport: Option[FSAirport] =
+    arrivalAirportFsCode flatMap { appendix.airportsMap.get(_) }
+
+  def departureAirport: Option[FSAirport] =
+    departureAirportFsCode flatMap { appendix.airportsMap.get(_) }
+}
+
+trait CarrierAppendixHelper {
+  def appendix: FSAppendix
+  def carrierFsCode: Option[String]
+
+  def carrier: Option[FSAirline] =
+    carrierFsCode flatMap { appendix.airlinesMap.get(_) }
+}
+
+trait AirlineAppendixHelper {
+  def appendix: FSAppendix
+  def airlineFsCode: Option[String]
+
+  def airline: Option[FSAirline] =
+    airlineFsCode flatMap { appendix.airlinesMap.get(_) }
+}
+
+trait EquipmentAppendixHelper {
+  def appendix: FSAppendix
+  def equipmentCodes: Seq[String]
+
+  def equipments: Seq[FSEquipment] =
+    equipmentCodes flatMap { appendix.equipmentMap.get(_) }
+}
+
+class RichFSCodeshare(cs: FSCodeshare, val appendix: FSAppendix)
+  extends FSCodeshare(cs.fsCode, cs.flightNumber, cs.relationship) {
+  def carrier: Option[FSAirline] = fsCode match {
+    case None => None
+    case Some(fsCode) => appendix.airlinesMap.get(fsCode)
+  }
+}

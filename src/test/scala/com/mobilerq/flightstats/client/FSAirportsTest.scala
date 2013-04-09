@@ -1,10 +1,12 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
 import org.joda.time.DateTime
 import com.mobilerq.flightstats.api.v1.FSAirport
+import scala.concurrent.{Await, Future, ExecutionContext}
+import scala.util.{Success, Failure}
+import com.google.common.cache.CacheBuilder
 
 class FSAirportsTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-05T21:12:23.048-08:00")
@@ -13,6 +15,11 @@ class FSAirportsTest extends FSTest {
 
   @Test def factory: Unit = FSAirports("id", "key") match {
     case o: FSAirports => Unit // what we expect
+    case x => fail("didn't get what we expected: " + x)
+  }
+
+  @Test def factoryWithCaching: Unit = FSAirports("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSAirports with FSCaching => Unit
     case x => fail("didn't get what we expected: " + x)
   }
 
@@ -56,29 +63,19 @@ class FSAirportsTest extends FSTest {
     checkAirportList(airports.withinRadius(-122, 45, 50))
 
 
-  def checkAirportList(airportListPromise: Promise[Seq[FSAirport]]) {
-    val airportList = airportListPromise.either
-    debug(airportList)
-    airportList() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(list) => {
-          assertNotNull(list)
-          assertTrue(list.length > 0)
-          list.foreach{ exerciseCaseClass(_) }
-      }
-    }
+  def checkAirportList(future: Future[Seq[FSAirport]]) {
+    debug(future)
+    val airportList = Await.result(future, duration)
+    assertNotNull(airportList)
+    assertTrue(airportList.length > 0)
+    airportList.foreach{ exerciseCaseClass(_) }
   }
 
-  def checkAirport(airportPromise: Promise[FSAirport], code: String) {
-    val airport = airportPromise.either
-    debug(airport)
-    airport() match {
-      case Left(exception) => fail(exception.getMessage())
-      case Right(airport) => {
-          assertNotNull(airport)
-          exerciseCaseClass(airport)
-          assertEquals(code, airport.fs)
-      }
-    }
+  def checkAirport(future: Future[FSAirport], code: String) {
+    debug(future)
+    val airport = Await.result(future, duration)
+    assertNotNull(airport)
+    exerciseCaseClass(airport)
+    assertEquals(code, airport.fs)
   }
 }

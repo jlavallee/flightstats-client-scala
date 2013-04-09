@@ -2,7 +2,7 @@ package com.mobilerq.flightstats.api.v1.ratings
 
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import java.net.URL
-import com.mobilerq.flightstats.api.v1.{FSAppendix, FSRequested, FSAirport, FSRequestedAirline}
+import com.mobilerq.flightstats.api.v1._
 
 case class FSRatingsForRoute (
   request: FSRatingsForRouteRequest,
@@ -35,9 +35,7 @@ case class FSRatingsForFlightRequest (
 
 @JsonCreator
 class FSRating ( // past case class limit of 22 parameters
-  @JsonProperty("departureAirport") val departureAirport: Option[FSAirport],
   @JsonProperty("departureAirportFsCode") val departureAirportFsCode: Option[String],
-  @JsonProperty("arrivalAirport") val arrivalAirport: Option[FSAirport],
   @JsonProperty("arrivalAirportFsCode") val arrivalAirportFsCode: Option[String],
   @JsonProperty("airlineFsCode") val airlineFsCode: Option[String],
   @JsonProperty("flightNumber") val flightNumber: Option[String],
@@ -62,3 +60,29 @@ class FSRating ( // past case class limit of 22 parameters
   @JsonProperty("allDelayStars") val allDelayStars: BigDecimal,
   @JsonProperty("allStars") val allStars: BigDecimal
 )
+
+class RichFSRatingsForRoute(response: FSRatingsForRoute)
+  extends FSRatingsForRoute(response.request, response.appendix, response.ratings) {
+  override val ratings = response.ratings map { new RichFSRating(_, response.appendix)}
+}
+
+class RichFSRatingsForFlight(response: FSRatingsForFlight)
+  extends FSRatingsForFlight(response.request, response.appendix, response.ratings) {
+  override val ratings = response.ratings map { new RichFSRating(_, response.appendix)}
+}
+
+class RichFSRating(r: FSRating, val appendix: FSAppendix)
+  extends FSRating(r.departureAirportFsCode,
+      r.arrivalAirportFsCode,
+      r.airlineFsCode,
+      r.flightNumber, r.codeshares,
+      r.directs, r.observations, r.ontime,
+      r.late15, r.late30, r.late45,
+      r.cancelled, r.directs, r.ontimePercent,
+      r.delayObservations, r.delayMean, r.delayStandardDeviation,
+      r.delayMin, r.delayMax,
+      r.allOntimeCumulative, r.allOntimeStars,
+      r.allDelayCumulative, r.allDelayCumulative,
+      r.allStars)
+  with FlightAppendixHelper
+  with AirlineAppendixHelper

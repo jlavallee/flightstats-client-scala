@@ -1,11 +1,12 @@
 package com.mobilerq.flightstats.client
 
-import dispatch.Promise
 import org.junit.Test
 import org.junit.Assert._
-import com.mobilerq.flightstats.api.v1.flightstatus.{FSFlightStatusResponse, FSFlightStatusesResponse, FSFlightTrackResponse, FSFlightTracksResponse}
+import com.mobilerq.flightstats.api.v1.flightstatus._
 import com.mobilerq.flightstats.client.FSTestUtil._
 import org.joda.time.DateTime
+import scala.concurrent.{Await, Future}
+import com.google.common.cache.CacheBuilder
 
 class FSFlightStatusByAirportTest extends FSTest {
   val date: DateTime = DateTime.parse("2013-01-12T21:12:23.048-08:00")
@@ -17,8 +18,19 @@ class FSFlightStatusByAirportTest extends FSTest {
     case x => fail("didn't get what we expected: " + x)
   }
 
+  @Test def factoryWithCaching: Unit = FSFlightStatusByAirport("id", "key", CacheBuilder.newBuilder()) match {
+    case o: FSFlightStatusByAirport with FSCaching => Unit
+    case x => fail("didn't get what we expected: " + x)
+  }
+
   @Test def departureStatus =
     checkFlightStatuses(statuses.departureStatus("PDX", date))
+
+  @Test def departureStatusRich {
+    val response: Future[RichFSFlightStatusesResponse] = statuses.departureStatus("PDX", date)
+
+    Await.result(response, duration).flightStatuses.foreach({ s => assertEquals(Some("PDX"), s.departureAirport flatMap { _.iata }) })
+  }
 
   @Test def arrivalStatus =
     checkFlightStatuses(statuses.arrivalStatus("PDX", date))

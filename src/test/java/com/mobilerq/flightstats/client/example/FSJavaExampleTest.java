@@ -4,62 +4,67 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import scala.concurrent.Await;
+import scala.concurrent.ExecutionContext;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
 import scala.runtime.AbstractFunction1;
 import scala.runtime.AbstractPartialFunction;
-import scala.util.Either;
+import scala.util.Try;
 
 import com.mobilerq.flightstats.api.v1.FSAirport;
 import com.mobilerq.flightstats.client.FSAirports;
 import com.mobilerq.flightstats.client.FSTestClients;
 
-import dispatch.Promise;
-
 /* This "test" doesn't really test anything, it just shows examples of
- * how to handle the Promises returned by Dispatch in Java
+ * how to handle the Futures returned by Dispatch in Java
  *
  */
 public class FSJavaExampleTest {
-
+    ExecutionContext executionContext = scala.concurrent.ExecutionContext$.MODULE$.global();
     FSAirports airports = FSTestClients.airports();
 
     @Test
-    public void usingApply(){
-        Promise<FSAirport> promise = airports.byCode("PDX",
+    public void usingApply() throws Exception {
+        Future<FSAirport> future = airports.byCode("PDX",
                 scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
         // this call blocks
-        FSAirport airport = promise.apply();
+        FSAirport airport = Await.result(future, Duration.apply("1 minute"));
 
         assertNotNull(airport);
     }
 
     @Test
     public void onComplete(){
-        Promise<FSAirport> promise = airports.byCode("PDX",
+        Future<FSAirport> future = airports.byCode("PDX",
                 scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
-        promise.onComplete(
-            new AbstractFunction1<Either<Throwable, FSAirport>, FSAirport>(){
+        future.onComplete(
+            new AbstractFunction1<Try<FSAirport>, Throwable>(){
+
                 @Override
-                public FSAirport apply(Either<Throwable, FSAirport> arg0) {
-                    if(arg0.isRight()){
-                        return arg0.right().get();
-                    }else{
-                        throw new RuntimeException(arg0.left().get());
+                public Throwable apply(Try<FSAirport> arg0) {
+                    if(arg0.isFailure()){
+                        // handle failure
                     }
+                    // do something with arg0
+                    return null;
                 }
-            });
+            },
+            executionContext
+        );
     }
 
     /*
-     * this test shows what's necessary to handle success on the promise returned by airports.byCode
+     * this test shows what's necessary to handle success on the future returned by airports.byCode
      */
     @Test
     public void onSuccess(){
-        Promise<FSAirport> promise = airports.byCode("PDX",
+        Future<FSAirport> future = airports.byCode("PDX",
                 scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
-        promise.onSuccess(
+        future.onSuccess(
             new AbstractPartialFunction<FSAirport, FSAirport>(){
                 @Override
                 public FSAirport apply(FSAirport arg0) {
@@ -69,29 +74,28 @@ public class FSJavaExampleTest {
                 public boolean isDefinedAt(FSAirport arg0) {
                     return true;
                 }
-            });
+            },
+            executionContext
+        );
     }
 
     /*
-     * this test shows what's necessary to handle failure on the promise returned by airports.byCode
+     * this test shows what's necessary to handle failure on the future returned by airports.byCode
      */
     @Test
     public void onFailure(){
-        Promise<Either<Throwable, FSAirport>> promise = airports.byCode("blarg!",
-                scala.collection.immutable.Map$.MODULE$.<String, String>empty())
-                .either();
+        Future<FSAirport> future = airports.byCode("blarg!",
+                scala.collection.immutable.Map$.MODULE$.<String, String>empty());
 
-        promise.onFailure(
-            new AbstractPartialFunction<Throwable, FSAirport>(){
-                @Override
-                public FSAirport apply(Throwable arg0) {
-                    return null;
-                }
-                @Override
-                public boolean isDefinedAt(Throwable arg0) {
-                    return true;
-                }
-            });
+        future.onFailure(
+                new AbstractPartialFunction<Throwable, FSAirport>(){
+                    @Override
+                    public boolean isDefinedAt(Throwable arg0) {
+                        return true;
+                    }
+                },
+                executionContext
+            );
     }
 
 }
