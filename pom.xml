@@ -292,10 +292,10 @@
       </build>
     </profile>
     <profile>
-        <id>eclipse</id>
-        <properties>
-            <target.dir>target-eclipse</target.dir>
-        </properties>
+      <id>eclipse</id>
+      <properties>
+        <target.dir>target-eclipse</target.dir>
+      </properties>
     </profile>
   </profiles>
 </project>
