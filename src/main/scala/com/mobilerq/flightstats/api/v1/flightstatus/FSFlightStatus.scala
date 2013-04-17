@@ -33,7 +33,7 @@ case class FSFlightStatus (
   arrivalAirportFsCode: Option[String],
   departureDate: FSDate,
   arrivalDate: FSDate,
-  status: String,
+  status: Status,
   schedule: FSSchedule,
   operationalTimes: FSOperationalTimes,
   codeshares: Option[Seq[FSCodeshare]],
