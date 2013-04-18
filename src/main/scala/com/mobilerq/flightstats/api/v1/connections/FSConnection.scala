@@ -22,8 +22,8 @@ case class FSFlight (
   distanceMiles: Integer,
   flightDurationMinutes: Integer,
   layoverDurationMinutes: Integer,
-  flightType: String,  // TODO: create FSFlightType enum
-  serviceType: String, // TODO: create FSServiceType enum
+  flightType: FlightType,
+  serviceType: SimpleServiceType,
   online: Boolean,
   flightLegs: Seq[FSFlightLeg]
 )
