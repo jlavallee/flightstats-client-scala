@@ -64,22 +64,17 @@ case class FSAppendix (
 )
 
 class RichFSAppendix(appendix: FSAppendix) {
-
-  def airportsMap = airports
-  def airlinesMap = airlines
-  def equipmentMap = equipment
-
-  private val airports : Map[String, FSAirport] = appendix.airports match {
+  val airportsMap : Map[String, FSAirport] = appendix.airports match {
     case None => Map.empty
     case Some(airports) => Map(airports map { a => a.fs -> a }: _*)
   }
 
-  private val airlines : Map[String, FSAirline] = appendix.airlines match {
+  val airlinesMap : Map[String, FSAirline] = appendix.airlines match {
     case None => Map.empty
     case Some(airlines) => Map(airlines map { a => a.fs -> a }: _*)
   }
 
-  private val equipment : Map[String, FSEquipment] = appendix.equipments match {
+  val equipmentMap : Map[String, FSEquipment] = appendix.equipments match {
     case None => Map.empty
     case Some(equipments) => Map(equipments map { e => e.iata -> e }: _*)
   }
