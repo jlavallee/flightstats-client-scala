@@ -4,7 +4,7 @@ import com.ning.http.client.RequestBuilder
 import com.zeroclue.flightstats.api.v1.flightstatus._
 import scala.concurrent.Future
 
-trait FSFlightStatusHelpers extends FSClient {
+trait FSFlightStatusHelpers extends JsonHttpClient {
   protected def status(url: RequestBuilder): Future[FSFlightStatusResponse]  =
     getAndDeserialize(classOf[FSFlightStatusResponse], url)
 
@@ -12,7 +12,7 @@ trait FSFlightStatusHelpers extends FSClient {
     getAndDeserialize(classOf[FSFlightStatusesResponse], url)
 }
 
-trait FSFlightTrackHelpers extends FSClient {
+trait FSFlightTrackHelpers extends JsonHttpClient {
   protected def track(url: RequestBuilder): Future[FSFlightTrackResponse] =
     getAndDeserialize(classOf[FSFlightTrackResponse], url)
 

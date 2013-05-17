@@ -14,12 +14,16 @@ protected trait FSClient {
   protected def api: RequestBuilder  // base URL for API
   protected def appId: String
   protected def appKey: String
+}
+
+protected trait JsonHttpClient {
   protected def getAndDeserialize[T](t: Class[T], url: RequestBuilder): Future[T]
   protected def getWithCreds(url: RequestBuilder): Future[String]
   protected def mapFromJson[T](t: Class[T], json: String): T
 }
 
-protected trait FSClientBase extends FSClient with JacksonMapper {
+protected trait FSClientBase extends FSClient with JsonHttpClient {
+  self: FSClient with JsonHttpClient =>
   private val HOST = "api.flightstats.com"
   protected def fsHost = host(HOST).secure
 
@@ -44,13 +48,15 @@ protected class EnhancedRequestVerbs(override val subject: RequestBuilder) exten
 }
 
 /** implements HTTP support using Dispatch Reboot */
-trait FSClientReboot extends FSClient {
+trait HttpClientReboot {
+  self: JsonHttpClient =>
   override protected def getWithCreds(url: RequestBuilder): Future[String] =
       Http( url OK as.String)
 }
 
 /** implements caching using the supplied cache */
-trait FSCaching extends FSClientBase {
+trait FSCaching {
+  self: FSClientBase with JsonHttpClient =>
 
   class CacheKey(val req: RequestBuilder) {
     val url = req.build().getUrl()
@@ -75,7 +81,8 @@ trait FSCaching extends FSClientBase {
 }
 
 /** implements JSON mapping using Jackson, ignoring unknown properties */
-trait JacksonMapper extends FSClient {
+trait JacksonMapper {
+  self: JsonHttpClient =>
   override protected def mapFromJson[T](t: Class[T], json: String): T =
     JacksonMapper.mapper.readValue(json, t)
 }

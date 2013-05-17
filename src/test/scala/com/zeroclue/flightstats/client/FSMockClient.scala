@@ -6,7 +6,9 @@ import scala.concurrent.{CanAwait, Future, ExecutionContext, Await}
 import scala.concurrent.duration.Duration
 import scala.util.Try
 
-trait FSMockClient extends FSClientBase with FSStaticTestJson {
+trait FSMockClient extends FSClientBase
+  with FSStaticTestJson
+  with JacksonMapper {
 
   override protected def getWithCreds(url: RequestBuilder): Future[String] =
     new Future[String] {

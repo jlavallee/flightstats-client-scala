@@ -10,12 +10,15 @@ import com.google.common.cache.CacheBuilder
 /** Factory for [[com.zeroclue.flightstats.client.FSDelayIndexes]] instances. */
 object FSDelayIndexes {
   def apply(appId: String, appKey: String): FSDelayIndexes = {
-    new FSDelayIndexes(appId, appKey) with FSClientReboot
+    new FSDelayIndexes(appId, appKey)
+      with HttpClientReboot
+      with JacksonMapper
   }
 
   def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
     new FSDelayIndexes(appId, appKey)
-      with FSClientReboot
+      with HttpClientReboot
+      with JacksonMapper
       with FSCaching {
         override val cache = cacheBuilder.build(loader)
     }

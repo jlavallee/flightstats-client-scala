@@ -10,12 +10,15 @@ import com.google.common.cache.CacheBuilder
 /** Factory for [[com.zeroclue.flightstats.client.FSConnections]] instances. */
 object FSConnections {
   def apply(appId: String, appKey: String): FSConnections = {
-    new FSConnections(appId, appKey) with FSClientReboot
+    new FSConnections(appId, appKey)
+      with HttpClientReboot
+      with JacksonMapper
   }
 
   def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
     new FSConnections(appId, appKey)
-      with FSClientReboot
+      with HttpClientReboot
+      with JacksonMapper
       with FSCaching {
         override val cache = cacheBuilder.build(loader)
     }

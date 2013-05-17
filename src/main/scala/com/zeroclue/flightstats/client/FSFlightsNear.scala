@@ -11,12 +11,15 @@ import com.google.common.cache.CacheBuilder
 /** Factory for [[com.zeroclue.flightstats.client.FSFlightsNear]] instances. */
 object FSFlightsNear {
   def apply(appId: String, appKey: String): FSFlightsNear = {
-    new FSFlightsNear(appId, appKey) with FSClientReboot
+    new FSFlightsNear(appId, appKey)
+      with HttpClientReboot
+      with JacksonMapper
   }
 
   def apply(appId: String, appKey: String, cacheBuilder: CacheBuilder[Object, Object]) = {
     new FSFlightsNear(appId, appKey)
-      with FSClientReboot
+      with HttpClientReboot
+      with JacksonMapper
       with FSCaching {
         override val cache = cacheBuilder.build(loader)
     }

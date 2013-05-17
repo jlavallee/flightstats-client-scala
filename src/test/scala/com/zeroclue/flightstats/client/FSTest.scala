@@ -149,7 +149,8 @@ class FSTestClients { }
 
 trait FSTestRun extends FSClientBase
     with FSStaticTestJson
-    with FSClientReboot {
+    with JacksonMapper
+    with HttpClientReboot {
   val capture = sys.props.get("test.capture")
 
   override protected def getWithCreds(url: RequestBuilder) : Future[String] = {
@@ -189,7 +190,8 @@ trait FSStaticTestJson {
   }
 }
 
-trait StrictJacksonMapper extends FSClient {
+trait StrictJacksonMapper {
+  self: JsonHttpClient =>
   override protected def mapFromJson[T](t: Class[T], json: String): T =
     StrictJacksonMapper.mapper.readValue(json, t)
 }
