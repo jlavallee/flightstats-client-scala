@@ -2,7 +2,6 @@ package com.zeroclue.flightstats.client
 
 import dispatch._
 import org.joda.time.DateTime
-import com.ning.http.client.RequestBuilder
 import com.zeroclue.flightstats.client._
 import com.zeroclue.flightstats.api.v1.ratings.{FSRatingsForFlight, FSRatingsForRoute}
 import com.google.common.cache.CacheBuilder

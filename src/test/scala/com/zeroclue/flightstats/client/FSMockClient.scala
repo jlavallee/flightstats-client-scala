@@ -1,6 +1,6 @@
 package com.zeroclue.flightstats.client
 
-import com.ning.http.client.RequestBuilder
+import dispatch.Req
 import io.Source
 import scala.concurrent.{CanAwait, Future, ExecutionContext, Await}
 import scala.concurrent.duration.Duration
@@ -10,7 +10,7 @@ trait FSMockClient extends FSClientBase
   with FSStaticTestJson
   with JacksonMapper {
 
-  override protected def getWithCreds(url: RequestBuilder): Future[String] =
+  override protected def getWithCreds(url: Req): Future[String] =
     new Future[String] {
       private val contents = Try(Source.fromFile(filePathForUrl(url), "utf-8").mkString)
       override def value = Some(contents)

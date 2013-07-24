@@ -1,7 +1,7 @@
 package com.zeroclue.flightstats
 
 import scala.language.implicitConversions
-import com.ning.http.client.RequestBuilder
+import dispatch.Req
 
 /**
   * ===Client for FlightStats===
@@ -47,8 +47,8 @@ import com.ning.http.client.RequestBuilder
   *
   */
 package object client {
-  type ArgMap = Map[String, String]
+  type ArgMap = Traversable[(String, String)]
 
-  implicit def implyRequestVerbs(builder: RequestBuilder) =
+  implicit def implyRequestVerbs(builder: Req) =
     new EnhancedRequestVerbs(builder)
 }

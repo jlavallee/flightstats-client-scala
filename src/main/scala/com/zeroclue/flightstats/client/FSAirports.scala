@@ -4,7 +4,6 @@ import scala.concurrent.Future
 import dispatch._
 import dispatch.Defaults.executor
 import org.joda.time.DateTime
-import com.ning.http.client.RequestBuilder
 import com.zeroclue.flightstats.client._
 import com.zeroclue.flightstats.api.v1.{FSAirport, FSAirportHolder, FSAirportsHolder}
 import com.google.common.cache.CacheBuilder
@@ -132,9 +131,9 @@ abstract class FSAirports(protected val appId: String, protected val appKey: Str
   def withinRadius(long: Integer, lat: Integer, radius: Integer, args: ArgMap = Map.empty): Future[Seq[FSAirport]] =
     airportsFor(api / "withinRadius" / long.toString() / lat.toString() / radius.toString() <<? args)
 
-  private def airportsFor(url: RequestBuilder) =
+  private def airportsFor(url: Req) =
     for ( a <- getAndDeserialize(classOf[FSAirportsHolder], url) ) yield a.airports
 
-  private def airportFor(url: RequestBuilder) =
+  private def airportFor(url: Req) =
     for ( a <- getAndDeserialize(classOf[FSAirportHolder], url) ) yield a.airport
 }

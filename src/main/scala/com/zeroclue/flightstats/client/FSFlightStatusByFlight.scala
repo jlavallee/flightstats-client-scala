@@ -1,7 +1,6 @@
 package com.zeroclue.flightstats.client
 
 import org.joda.time.DateTime
-import com.ning.http.client.{Request, RequestBuilder}
 import com.zeroclue.flightstats.client._
 import com.zeroclue.flightstats.api.v1._
 import com.zeroclue.flightstats.api.v1.flightstatus._

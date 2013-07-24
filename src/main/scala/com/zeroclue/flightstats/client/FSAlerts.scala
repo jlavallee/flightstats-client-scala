@@ -4,7 +4,6 @@ import scala.concurrent.Future
 import dispatch._
 import dispatch.Defaults.executor
 import org.joda.time.DateTime
-import com.ning.http.client.RequestBuilder
 import com.zeroclue.flightstats.api.v1.alerts.{FSGetAlert, FSCreateAlert}
 import com.google.common.cache.CacheBuilder
 
@@ -88,9 +87,9 @@ abstract class FSAlerts(protected val appId: String, protected val appKey: Strin
     get(api / "get" / ruleId.toString())
 
 
-  private def create(url: RequestBuilder) =
+  private def create(url: Req) =
     for ( r <- getAndDeserialize(classOf[FSCreateAlert], url) ) yield r
 
-  private def get(url: RequestBuilder) =
+  private def get(url: Req) =
     for ( r <- getAndDeserialize(classOf[FSGetAlert], url) ) yield r
 }

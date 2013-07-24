@@ -1,9 +1,9 @@
 package com.zeroclue.flightstats.client
 
+import dispatch.Req
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Future, ExecutionContext}
 import org.junit.Assert._
-import com.ning.http.client.{FluentStringsMap, RequestBuilder}
 import java.io.{File => JFile, PrintWriter => JPrintWriter}
 import java.util.concurrent.{Executors => JExecutors}
 import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
@@ -153,9 +153,9 @@ trait FSTestRun extends FSClientBase
     with HttpClientReboot {
   val capture = sys.props.get("test.capture")
 
-  override protected def getWithCreds(url: RequestBuilder) : Future[String] = {
+  override protected def getWithCreds(url: Req) : Future[String] = {
     import ExecutionContext.Implicits.global
-    println("URL: " + url.build().getRawUrl())
+    println("URL: " + url.toRequest.getRawUrl)
     for (x <- super.getWithCreds(url)) yield {
       capture match {
         case Some(v) if v.toBoolean => capture(url, x)
@@ -165,7 +165,7 @@ trait FSTestRun extends FSClientBase
   }
 
   // Write the string to a file & return it.  This is pretty awful.
-  def capture(url: RequestBuilder, contents: String): String = {
+  def capture(url: Req, contents: String): String = {
     val filePath = filePathForUrl(url)
     val dirPath = filePath.substring(0, filePath.lastIndexOf("/"))
     (new JFile(dirPath)).mkdirs()
@@ -183,8 +183,8 @@ trait FSStaticTestJson {
   private def urlPath2filePath(path: String): String =
     path.split('/').mkString(JFile.separator)
 
-  def filePathForUrl(url: RequestBuilder): String = {
-    val queryPathWithHost =  url.build().getUrl().split("://")(1) // yuck!
+  def filePathForUrl(url: Req): String = {
+    val queryPathWithHost =  url.toRequest.getUrl.split("://")(1) // yuck!
     val queryPathWithoutHost = queryPathWithHost.substring(queryPathWithHost.indexOf("/"))
     urlPath2filePath(startDir + queryPathWithoutHost) + ".json"
   }

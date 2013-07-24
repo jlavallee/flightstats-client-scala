@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.zeroclue.flightstats.client</groupId>
   <artifactId>flightstats-client-scala</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>A scala client for FlightStats API</description>
   <inceptionYear>2013</inceptionYear>
@@ -105,7 +105,7 @@
     <dependency>
       <groupId>net.databinder.dispatch</groupId>
       <artifactId>dispatch-core_${scala.version}</artifactId>
-      <version>0.10.1</version>
+      <version>0.11.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>

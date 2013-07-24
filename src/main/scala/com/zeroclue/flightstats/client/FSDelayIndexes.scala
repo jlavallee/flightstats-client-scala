@@ -3,7 +3,6 @@ package com.zeroclue.flightstats.client
 import scala.concurrent.Future
 import dispatch._
 import dispatch.Defaults.executor
-import com.ning.http.client.RequestBuilder
 import com.zeroclue.flightstats.api.v1.delayindex.FSDelayIndexResponse
 import com.google.common.cache.CacheBuilder
 
@@ -75,7 +74,7 @@ abstract class FSDelayIndexes(protected val appId: String, protected val appKey:
     delays(api / "state" / code <<? args)
 
 
-  private def delays(url: RequestBuilder) =
+  private def delays(url: Req) =
     for ( r <- getAndDeserialize(classOf[FSDelayIndexResponse], url) ) yield r
 
 }

@@ -2,7 +2,6 @@ package com.zeroclue.flightstats.client
 
 import dispatch._
 import org.joda.time.DateTime
-import com.ning.http.client.RequestBuilder
 import com.zeroclue.flightstats.client._
 import com.zeroclue.flightstats.api.v1.connections.FSConnectionsResponse
 import com.google.common.cache.CacheBuilder
@@ -95,7 +94,7 @@ abstract class FSConnections(protected val appId: String, protected val appKey: 
   def betweenLocationsByDepartureDate(departureCode: String, arrivalCode: String, date: DateTime, args: ArgMap = Map.empty) =
     flights(api / "connecting" / "from" / departureCode / "to" / arrivalCode / "departing" / date)
 
-  private def flights(url: RequestBuilder) =
+  private def flights(url: Req) =
     getAndDeserialize(classOf[FSConnectionsResponse], url)
 
 }
